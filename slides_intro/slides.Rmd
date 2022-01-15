@@ -1,0 +1,184 @@
+---
+title: "<br> Introdução à Programação em R"
+subtitle: "L Programa De Verão"
+author: "<br><br> Nathália Demetrio  <br> Geovana Lopes <br> Alex Kushima <br><br>"
+date: "jan/2021"
+output:
+    xaringan::moon_reader:
+        css: [default, rladies, rladies-fonts]
+        lib_dir: libs
+        nature:
+            ratio: "16:9"
+            highlightStyle: github
+            highlightLines: true
+            countIncrementalSlides: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      fig.align = "center", 
+                      message = FALSE, 
+                      warning = FALSE, 
+                      comment = "  #>", 
+                      collapse = T)
+```
+
+
+
+# Agenda do Curso
+
+- Dia 1 - Da instalação à minha primeira análise no R
+
+<br>
+- Dia 2 - Entendendo tipos e estruturas de dados no R
+
+<br>
+- Dia 3 - Importando e exportando dados, ferramentas da linguagem R e minha primeira biblioteca
+
+<br>
+- Dia 4 - R para ciência de dados: tidyverse - 80% do trabalho com 20% das funções
+
+<br>
+- Dia 5 - R para ciência de dados: os outros 80% do tidyverse + ggplot
+
+<br>
+- Dia 6 - Aula 6 -  ggplot2, outras bibliotecas do tidyverse, dicas e o grand finale: como fazer memes no R \o/
+
+
+
+---
+# Agenda Dia 1 - Da instalação à minha primeira análise no R
+
+- Apresentações 
+
+- Contextualizando o R
+
+- Instalando o R e a IDE Rstudio
+
+- Um tour pelo Rstudio
+
+- R como calculadora
+
+- Operadores lógicos
+
+- Entendendo funções
+
+- Criando objetos
+
+
+
+---
+# Agenda Dia 2 - Entendendo tipos e estruturas de dados no R
+
+- Revisão 
+
+- Tipos/Estruturas de dados 
+
+- Análises estatísticas básicas 
+
+
+
+
+---
+
+# Agenda Dia 3 - Importando e exportando dados, ferramentas da linguagem R e minha primeira biblioteca
+
+- Revisando Estruturas de Dados
+ 
+- Hands-on 
+
+- Importação/exportação de arquivos
+
+- .Rproj
+
+- Estruturas de controle (versão clean)
+
+- Funções (versão clean)
+
+- Utilizando bibliotecas
+
+- minha primeira biblioteca
+
+
+
+
+---
+# Agenda Dia 4 - R para ciência de dados: tidyverse - 80% do trabalho com 20% das funções (+ rmarkdown) 
+
+- Revisão da linguagem R via mapa conceitual
+
+- Workflow da Ciência de Dados 
+
+- O que são dados Tidy 
+
+- Utilizando a gramática Pipe
+
+- As bibliotecas do tidyverse
+
+- Explorando a base de dados titanic
+
+- Meu primeiro Rmarkdown: do .R para o .Rmd
+
+
+
+
+
+---
+# Agenda Dia 5 - R para ciência de dados: os outros 80% do tidyverse (+ggplot)
+
+-  Correção Quiz
+
+- .Rproj e .Rmd (Rmarkdown)
+
+- primeiros passos no ggplot2
+
+
+
+
+---
+# Agenda Dia 6 - ggplot2, outras bibliotecas do tidyverse, dicas e o grand finale: como fazer memes no R \o/
+
+- ggplot2 e outras bibliotecas do tidyverse 
+
+- mais bibliotecas legais
+
+- memeR
+
+- check-out
+
+
+
+
+---
+
+# Referências
+
+- [R for Data Science, by by Garrett Grolemund, Hadley Wickham](https://r4ds.had.co.nz/)
+
+- [Cheat Sheets RStudio](https://rstudio.com/resources/cheatsheets/)
+
+- [#rstats (twitter)](https://twitter.com/hashtag/rstats) 
+
+- [R-Ladies São Paulo](https://github.com/rladies/meetup-presentations_sao-paulo)
+
+- [Curso-R](https://www.curso-r.com/)
+
+- [R Brasil (Telegram)](https://t.me/rbrasiloficial) 
+
+- [Biblioteca swirl - curso interativo](https://swirlstats.com/)
+
+- [R Memes For Statistical Fiends](https://www.facebook.com/Rmemes0/)
+
+
+
+---
+# Obrigade !!!
+
+
+```{r , echo=FALSE, out.width='30%', fig.align = "center", fig.cap=""}
+ knitr::include_graphics("figs/R_Memes_bye_bye.jpg")
+```
+
+
+ 
