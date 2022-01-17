@@ -1,8 +1,8 @@
 ---
 title: "<br> Introdução à Programação em R"
-subtitle: "L Programa De Verão"
-author: "<br><br> Nathália Demetrio  <br> Geovana Lopes <br> Alex Kushima <br><br>"
-date: "jan/2021"
+subtitle: "Programa De Verão"
+author: "<br><br> Nathália Demetrio "
+date: "jan/2022"
 output:
     xaringan::moon_reader:
         css: [default, rladies, rladies-fonts]
