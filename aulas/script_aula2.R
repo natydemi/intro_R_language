@@ -47,6 +47,7 @@
             #coerção da classe numérica para a de texto
             class(paste(ex_vetor_numerical)) #`paste()` concatena objetos
         
+            
 # Estruturas de Dados -----
     
     #como os objetos podem ser organizados em termos de estrutura
@@ -373,36 +374,6 @@
             
     #Para tirar dúvidas sobre como consultar os diferentes tipos de objetos no R consulte o help `?Extract` ou `?Syntax`            
     
-                
-# Analises Básicas  -----
-
-    #base para exemplo
-    mtcars
-                
-        #`head()` - que retorna as primeiras linhas da base de dados, ou similarmente a função `tail()` que contempla as últimas linhas:
-        head(mtcars)
-        tail(mtcars)
-        
-        
-        #`str()` - exibe a estrutura interna de um objeto, no caso da base de dados que estamos trabalhando p.e., temos: a estrutura dos dados (data.frame), o número de linhas (32 observações) e colunas (11 variáveis), além da classe de cada uma das colunas, e uma amostra das primeiras observações de cada uma das colunas: 
-        str(mtcars)
-        
-        
-        # `summary()` - é uma função genérica usada para produzir resumos de resultados segundo várias funções descritivas, no caso de variáveis numéricas, por exemplo: 
-        summary(mtcars)
-                    
-        cor(mtcars)
-         
-        #plot
-        plot(mtcars)
-        
-        #boxplot
-        boxplot(mtcars)
-
-        #regressão
-            fit <- lm(qsec ~ ., data = mtcars)  
-            summary(fit)
-            plot(fit)
 
 
 # :::::::::::: hands-on ----------------------------------------------------------------
@@ -418,5 +389,4 @@
             #? exporte os resultados em um csv
             #? onde esse csv está?
 
-    #para consultar mais estatísticas: help(package=stats) 
 

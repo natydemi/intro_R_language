@@ -118,6 +118,7 @@
     # 6) rode uma análise estatística da base iris original e da base que vc criou
     #   você observou alguma mudança significativa?
     
+        
 # :::::::::::: hands-on pt.2 -----
   # em duplas zip o repositório criado e envie para a sua dupla
   # sua dupla deve conseguir abrir a pasta e rodar toda a sua análise sem ter problemas com os diretórios 
