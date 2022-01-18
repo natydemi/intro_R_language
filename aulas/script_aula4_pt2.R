@@ -2,7 +2,6 @@
 # Introdução à Programação em R
 # Nathália Demetrio
 
-
     library(tidyverse)
 
 # Tidying -----
@@ -223,6 +222,7 @@
 
         #https://github.com/rladies/meetup-presentations_sao-paulo
 
+        
 # :::::::::::: Refs -----
         
   #Repo R-Ladies, alguns meetups recomendados: #1, #5 e #6:
