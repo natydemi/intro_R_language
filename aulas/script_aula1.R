@@ -9,14 +9,21 @@
     #compartilhar agenda
     #combinar dinamica das aulas
 
-# Contextualização  -----
+
+# Primeiros passos  -----
+
+  # Contextualização
     # https://www.r-project.org/
 
-# Da Instalação ao `Hello World`  -----
+  # Da Instalação ao `Hello World`
     # https://cloud.r-project.org
 
-# A IDE Rstudio  -----
+  # A IDE Rstudio 
     # https://www.rstudio.com/
+
+  # Alternativa ao Desktop: Rstudio Cloud 
+    #https://rstudio.cloud/
+
 
 # Um tour pelo Rstudio  -----
     #Console - painel onde os comandos são executados interativamente;  
@@ -28,6 +35,7 @@
     #Packages - gerenciamento das bibliotecas instaladas;
     #Plots - visualização dos gráficos gerados; e
     #Viewer - visualização dos relatórios e aplicativos gerados.
+
 
 # R como calculadora  -----
     #Textos precedidos por # são comentários (note a mudança na cor do texto)
@@ -67,12 +75,13 @@
         (2 * { 2 * [ 2 * (4-3)]})
 
         
-# :::::::::::: check-point -------------------------------------------------------------
+# ::::: check-point -------------------------------------------------------------
     # @s elun@s devem criar um script, 
     # salva-lo contendo uma mensagem comentada, 
     # fechar o script e abri-lo novamente
         
-        
+       
+         
 # Operadores lógicos -----
         
     #Podemos também trabalhar com operadores lógicos no R, tendo como saída TRUE ou FALSE.
@@ -98,6 +107,7 @@
     #para resgatar algum comando já digitado no Console, você pode utilizar a tecla ‘seta para cima’    
     
 
+        
 # Entendendo funções  -----
 
     #Uma função no R é de um conjunto de instruções organizadas visando executar uma tarefa.
@@ -136,7 +146,8 @@
     #link com apanhado de funções organizadas por temas: 
         #http://www.sr.bham.ac.uk/~ajrs/R/r-function_list.html
     
-            
+           
+         
 # Criando objetos  -----
 
     #Objetos no R são elementos que podem ser armazenados em variáveis, como dados e funções
@@ -155,6 +166,8 @@
     #Atribuição: a recomendação é trabalhar com <- para atribuições de objetos, 
     # e = para a especificação de parâmetros de funções, e evitar o `->`
         
+    #Para inserir o símbolo de atribuição `<-` no RStudio podemos utilizar o atalho 'alt + -'.
+        
     #Ao criar objetos passamos a ter a informação que estes carregam salvos na memória, e podemos chama-los  
        sqrt(Objeto) 
         
@@ -163,6 +176,7 @@
        a <- 3; a
        #resultado de operações entre elementos
        b <- 5 + a ; b
+       
        #excluindo o objeto a
        rm(a); a
        
@@ -174,8 +188,6 @@
    #Para listar todos os objetos disponíveis na sessão podemos utilizar a função `ls()`
    #Enquanto que para excluir algum destes objetos temos a função `rm(nome_do_objeto)`
    
-   #Para inserir o símbolo de atribuição `<-` no RStudio podemos utilizar o atalho 'alt + -'.
-       
    # Regras para nomear objetos    
        #É possível trabalhar com objetos nomeados com sintaxes não padrão, porém é necessário utilizar aspas
        #definindo o objeto com sintaxe não padrão
@@ -204,7 +216,8 @@
        pi <- 0
        pi
 
-# :::::::::::: hands-on ----------------------------------------------------------------
+       
+# ::::: hands-on ----------------------------------------------------------------
     # @s alun@s devem criar um objeto chamado c, e outro chamado f, em que:
        # 1) o c irá receber como input uma temperatura em graus celsius, digitado pelo usuário
        # 2) e o f será uma fórmula que tem o c como um dos seus valores
@@ -215,11 +228,13 @@
        #    investigue o uso das funções class() e as.numeric() para solucionar o problema
 
 
-# Analises Básicas  -----
+# Estatísticas Descritivas Básicas  -----
 
     #base para exemplo
     mtcars
-                
+        
+        View(mtcars)
+       
         #`head()` - que retorna as primeiras linhas da base de dados, ou similarmente a função `tail()` que contempla as últimas linhas:
         head(mtcars)
         tail(mtcars)
@@ -246,5 +261,5 @@
             plot(fit)
 
 
-    #para consultar mais estatísticas: help(package=stats) 
+    #para consultar mais funções estatísticas: help(package=stats) 
 
