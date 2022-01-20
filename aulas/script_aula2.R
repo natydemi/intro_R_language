@@ -405,16 +405,19 @@
 
 
 # :::::::::::: hands-on (base mtcars) ----------------------------------------------------------------
-    #considerando a base mtcars
-        #? exclua as variáveis que estão atrapalhando a visão dos demais boxplots?
-        #? como ver o resultado médio de uma variável apenas? #dica: mean()
-        #? qual a média das primeiras 10 linhas da base? 
-        #? quantas linhas possuem vs e am igual a 0?
+    #para os exercícios abaixo, pode ser interessante revisitar a aplicação
+    # de estatísticas descritivas feita no final do script da aula 1
+                
+    #1.considerando a base mtcars
+        #1.1. exclua as variáveis que estão atrapalhando a visão dos demais boxplots?
+        #1.2. como ver o resultado médio de uma variável apenas? #dica: mean()
+        #1.3. qual a média das primeiras 10 linhas da base? 
+        #1.4. quantas linhas possuem vs e am igual a 0?
     
-        #em uma nova base de dados chamada mtcars_new:
-            #? arredonde a variável qsec para 1 casa decimal 
-            #? transforme a variável vs em character
-            #? exporte os resultados em um csv
-            #? onde esse csv está?
+    #2.em uma nova base de dados chamada mtcars_new:
+        #2.1 arredonde a variável qsec para 1 casa decimal 
+        #2.2 transforme a variável vs em character
+    
+    #3. (questão bônus): exporte os resultados em um csv, onde este csv está?
 
 
