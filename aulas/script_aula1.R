@@ -4,11 +4,13 @@
 
 
 # Apresentações  -----
-    #apresentações
-    #comentar form
-    #compartilhar agenda
+    #professora e monitoras
+    #revisar forms
     #combinar dinamica das aulas
 
+# Agenda -----
+  #contextualizar temas
+  #dialetos do R: Rbase, tidyverse, data.table
 
 # Primeiros passos  -----
 
@@ -143,9 +145,6 @@
     #Podemos também obter ajuda considerando tópicos de modo mais geral, por meio das funções `help.search()` ou `??`.
         ??median
         
-    #link com apanhado de funções organizadas por temas: 
-        #http://www.sr.bham.ac.uk/~ajrs/R/r-function_list.html
-    
            
          
 # Criando objetos  -----
@@ -217,7 +216,7 @@
        pi
 
        
-# ::::: hands-on ----------------------------------------------------------------
+# ::::: hands-on (criação de objetos) -----
     # @s alun@s devem criar um objeto chamado c, e outro chamado f, em que:
        # 1) o c irá receber como input uma temperatura em graus celsius, digitado pelo usuário
        # 2) e o f será uma fórmula que tem o c como um dos seus valores
@@ -228,7 +227,7 @@
        #    investigue o uso das funções class() e as.numeric() para solucionar o problema
 
 
-# Estatísticas Descritivas Básicas  -----
+# ::::: hands-on guiado (base mtcars) -----
 
     #base para exemplo
     mtcars

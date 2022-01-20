@@ -404,17 +404,15 @@
     
 
 
-# :::::::::::: hands-on ----------------------------------------------------------------
+# :::::::::::: hands-on (base mtcars) ----------------------------------------------------------------
     #considerando a base mtcars
         #? exclua as variáveis que estão atrapalhando a visão dos demais boxplots?
-                boxplot(mtcars)
-        #? como ver o resultado médio de uma variável apenas?
-                summary(mtcars)
+        #? como ver o resultado médio de uma variável apenas? #dica: mean()
         #? qual a média das primeiras 10 linhas da base? 
         #? quantas linhas possuem vs e am igual a 0?
     
         #em uma nova base de dados chamada mtcars_new:
-            #? arredonde a variável qsec para 1 casa decimal
+            #? arredonde a variável qsec para 1 casa decimal 
             #? transforme a variável vs em character
             #? exporte os resultados em um csv
             #? onde esse csv está?
