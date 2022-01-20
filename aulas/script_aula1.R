@@ -253,12 +253,25 @@
         
         #boxplot
         boxplot(mtcars)
-
-        #regressão
-            fit <- lm(qsec ~ ., data = mtcars)  
-            summary(fit)
-            plot(fit)
+        
+        #como esta base faz parte do repertório básico do R, 
+        # não a visualizamos na aba `Environment`, salvo se fizermos:
+        data("mtcars")
 
 
     #para consultar mais funções estatísticas: help(package=stats) 
 
+        #regressão: um exemplo em que ajustamos a variável qsec 
+        # em função da variável carb:
+        fit <- lm(qsec ~ carb, data = mtcars)  
+        summary(fit)
+        plot(fit)
+        
+        #excluindo o modelo
+        rm(fit)
+        
+        # agora a variável qsec em função de todas as demais:
+        fit <- lm(qsec ~ ., data = mtcars)  
+        summary(fit)
+        plot(fit)
+        
