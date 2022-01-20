@@ -4,7 +4,7 @@
 
 
 # Tipos de Dados  -----
-    #No R existem seis tipos de dados, que basicamente indicam como os objetos são armazenados (*low-level*)
+    # No R existem seis tipos de dados, que basicamente indicam como os objetos são armazenados (*low-level*)
         # character - textos ou strings:  `"a"` ou `"isto é um teste"` (sempre entre aspas simples ou duplas)
         # numeric (ou double ): valores decimais - `6` ou `19.4`
         # integer: números naturais -`2L` ou `0L` (o `L` diz para o R armazenar o objeto como inteiro)
@@ -34,23 +34,27 @@
         #tentativa de cálculo com um objeto de texto 
         log(x)
         
-    #Uma característica de armazenamento dos objetos no R, é que eles respeitam a seguinte hierarquia de coerção: 
-        #character > complex > numeric > integer > logical > raw
+    #Uma característica de armazenamento dos objetos no R, 
+    # é que eles respeitam a seguinte hierarquia de coerção: 
+        # character > complex > numeric > integer > logical > raw
         
+    
     #Ou seja, se tentarmos colocar tipos diferentes de objetos em um mesmo vetor 
     #o R irá modificar o tipo dos objetos de modo que todos passem a pertencer à mesma classe. 
+    #falaremos de vetores na próxima seção, mas adiantando que   
+    #a forma mais usual para criar um vetor no R é por meio da função `c()`
         #Algumas funções inclusive fazem a mudança na classe do objeto de forma automática:
             #coerção da classe lógica para inteira
-            class(length(ex_vetor_logical)) #`length()` retorna o tamanho do objeto
+            class(length(c(TRUE, FALSE))) #`length()` retorna o tamanho do objeto
             #coerção da classe inteira para numérica
-            class(cos(ex_vetor_integer)) #`cos()` retorna o cosseno de um número
+            class(cos(c(3L, 5L, 8L))) #`cos()` retorna o cosseno de um número
             #coerção da classe numérica para a de texto
-            class(paste(ex_vetor_numerical)) #`paste()` concatena objetos
+            class(paste(1:3, 3:1)) #`paste()` concatena objetos
         
             
 # Estruturas de Dados -----
     
-    #como os objetos podem ser organizados em termos de estrutura
+    #como os objetos podem ser organizados em termos de estrutura?
         #Vetores atômicos
             #estrutura mais básica do R, se caracterizam por uma única dimensão, e guardam objetos de um mesmo tipo. 
         #Matrizes
@@ -222,7 +226,7 @@
             #Visto ser um caso particular dos vetores a forma de acesso é a mesma. 
             #Podemos utilizar funções como: `is.factor`/`is.ordered` e `as.factor`/`as.ordered`
                 
-        #>>> DATAS -----  
+        # >>> DATAS -----  
             #O R possui uma classe própria para objetos que armazenam datas. 
             # para transformar um elemento nesta classe podemos utilizar `as.Date()`
                 ex_date <- as.Date(c("1988-03-25", "2019-03-25"))
@@ -247,13 +251,14 @@
                 ex_date[1] - ex_date[2]
 
                                 
-    #> MATRIZES / ARRAYS -----
-        x <- 1:8
+    #> MATRIZES -----
         
         #criando uma matriz a partir da atribuição de dimensões
+        x <- 1:8
         dim(x) <- c(2,4); x
         
         #ou definindo uma matriz a partir do número de linhas
+        x <- 1:8
         matrix(x, nrow = 2)
 
         #pelo número de colunas
@@ -262,27 +267,19 @@
         #ou ainda, ambos
         ex_matriz <- matrix(x, 2, 4); ex_matriz   
         
-        #arrays
-        ex_array <- array(x, dim = c(2, 2, 2)); ex_array
-        
         #CONSULTA
             #matriz
             ex_matriz[1,1] 
-            #array - consulta do valor contido no cruzamento do primeiro elemento das três dimensões
-            ex_array[1,1,1]
-            #array - consulta do valor contido no primeiro elemento da terceira dimensão
-            ex_array[ , ,1]
             
             #podemos também consultar informações como a dimensão do objeto 
-            dim(ex_array)
+            dim(ex_matriz)
             
         #CLASSE
             class(ex_matriz)
-            class(ex_array)
-            
+
         #OPERAÇÕES
             #operações entre objetos
-            rep(2,4) * ex_array
+            rep(2,4) * ex_matriz
             
             #matriz transposta
             t(ex_matriz)     
@@ -290,6 +287,29 @@
             #multiplicação matricial
             ex_matriz %*% t(ex_matriz)
             
+    #> ARRAYS -----
+        
+        #criando uma matriz a partir da atribuição de dimensões
+        x <- 1:8
+        dim(x) <- c(2,2,2); x
+        
+        #arrays
+        x <- 1:8
+        ex_array <- array(x, dim = c(2, 2, 2)); ex_array
+        
+        #CONSULTA
+            #array - consulta do valor contido no cruzamento do primeiro elemento das três dimensões
+            ex_array[1,1,1]
+            #array - consulta do valor contido no primeiro elemento da terceira dimensão
+            ex_array[ , ,1]
+            
+        #CLASSE
+        class(ex_array)
+        
+        #OPERAÇÕES
+        #operações entre objetos
+        rep(2,4) * ex_array
+        
             
     #> DATA FRAMES -----
         #é possível criar data frames diretamente
@@ -316,7 +336,7 @@
         #CONSULTA
             #vetores de índice:
             ex_df[2,2]
-            ex_df[c(2,4),]
+            ex_df[c(2,4), ]
             ex_df[1,1:2]
             
             #nomenclatura:
@@ -379,7 +399,9 @@
 # :::::::::::: hands-on ----------------------------------------------------------------
     #considerando a base mtcars
         #? exclua as variáveis que estão atrapalhando a visão dos demais boxplots?
+                boxplot(mtcars)
         #? como ver o resultado médio de uma variável apenas?
+                summary(mtcars)
         #? qual a média das primeiras 10 linhas da base? 
         #? quantas linhas possuem vs e am igual a 0?
     
