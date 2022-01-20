@@ -227,7 +227,7 @@
        #    investigue o uso das funções class() e as.numeric() para solucionar o problema
 
 
-# ::::: hands-on guiado (base mtcars) -----
+# ::::: aplicação de algumas funções descritivas na base mtcars -----
 
     #base para exemplo
     mtcars
