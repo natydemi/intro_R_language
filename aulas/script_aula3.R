@@ -9,7 +9,7 @@
         #REPASSAR CAPITULO DE ESTRUTURA DA AULA 1 
 
 
-# Revisando - Manipulação de dados com o Rbase -----
+# :::::::::::: aplicação de estatísticas descritivas (base state) -----
     state.abb
     state.area
     state.center
@@ -120,8 +120,8 @@
     
         
 # :::::::::::: hands-on pt.2 -----
-  # em duplas zip o repositório criado e envie para a sua dupla
-  # sua dupla deve conseguir abrir a pasta e rodar toda a sua análise sem ter problemas com os diretórios 
+  # zip o repositório criado e dê unzip em outra pasta
+  # você deve conseguir rodar toda a sua análise sem necessitar alterar o código 
         
         
 # Estruturas de controle -----
