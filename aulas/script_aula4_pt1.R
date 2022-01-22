@@ -30,7 +30,7 @@
         titanic <- dplyr::as_tibble(titanic)
     
 
-# Manipulação -----
+# Manipulação (Rbase vs. tidyverse) -----
     #Visualizar
         #View(titanic)
         #view(titanic)
@@ -122,8 +122,14 @@
                
     # se eu quiser reescrever o objeto com as alterações feitas, 
     # basta colocar `titanic <- `no início da sequência de comandos
-            
 
+# :::::::::::: hands-on -----
+    #No RStudio Learn Primers: #https://rstudio.cloud/learn/primers 
+    # faça os exercícios propostos na aba `Work with Data`,
+    # priorizando a seção `Derive Information with dplyr`
+    # https://rstudio.cloud/learn/primers/2.3
+                
+                
 # :::::::::::: Refs -----
                
     # Link cheatsheets: 

@@ -163,6 +163,8 @@
         
     #exercício: replique os exemplos das páginas do `dplyr`, `lubridate`, `stringr` e `forcats`
             
+            
+            
 # Visualização -----
        
     #https://ggplot2.tidyverse.org/,
