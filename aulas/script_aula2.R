@@ -182,7 +182,7 @@
             #Fatores são vetores que possuem um número limitado de categorias (níveis), logo 
             #são "armazenados" como inteiros. Na prática fatores são variáveis categóricas, 
             #e são tratadas de forma diferenciada em algumas análises (como nos modelos de regressão)
-                ex_fator <- factor(LETTERS[1:5])
+                ex_fator <- as.factor(LETTERS[1:5])
                 ex_fator
                 #os fatores são armazenados de acordo com os tipos de objetos discutidos
                 typeof(ex_fator)

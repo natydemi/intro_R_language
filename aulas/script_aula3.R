@@ -3,11 +3,15 @@
 # Nathália Demetrio
 
 
-# Revisando - Estruturas de Dados -----
+# Revisando -----
+  #Estruturas de Dados
     #No R existem 6 tipos de dados, em geral trabalhamos com 4: character > numeric > integer > logical
     #Estes dados podem ser organizados em 5 estruturas: vetor atômico, matriz, array, data.frame e listas
         #REPASSAR CAPITULO DE ESTRUTURA DA AULA 1 
 
+  #IDE Rstudio:
+    #Vá em `Tools > Global Options` e personalize o RStudio
+    # considerando itens como `Appearance` ou `Pane Layout`
 
 # :::::::::::: aplicação de estatísticas descritivas (base state) -----
     state.abb
@@ -67,7 +71,7 @@
         #Visualize a versão final do dataset criado
           View(state)
           
-# :::::::::::: hands-on pt.0 -----
+# :::::::::::: hands-on (exportação) -----
           
         #exporte os dados em um arquivo .csv
         write.csv(state, "base_exportada.csv")
@@ -76,7 +80,10 @@
         getwd()
         
         #qual a função que altera o diretório
+        #C:\\Users\\natyd\\Desktop
+        #setwd("C:/Users/natyd/Desktop")
         setwd()
+        
         
         #delete o objeto state e releia o arquivo
         rm(state)
@@ -102,13 +109,14 @@
     #para consultar funções relacionadas pesquise os tópicos `??read` e `??write`.
 
 
-# .Rproj -----
+# Projeto: arquivo .Rproj -----
     #Existe ainda uma terceira alternativa: trabalhar com a opção de projetos do RStudio (`.RProj`). 
     #Nesta, o diretório em que o arquivo `.RProj` estiver salvo, passa a ser a pasta raiz da análise. 
     #Para criar um projeto no RStudio, é necessário clicar no ícone superior à direita:
     
+    #dica: use o pacote usethis::create_project()
         
-# :::::::::::: hands-on pt.1 -----
+# :::::::::::: hands-on (projeto) -----
     # 1) crie um projeto em um novo repositório, 
     # 2) salve um script chamado "aula_2_hands_on.R" neste repo
     # 3) no script escreva um programa que tire uma amostra aleatória de tamanho 50 da base de dados iris, 
@@ -119,7 +127,7 @@
     #   você observou alguma mudança significativa?
     
         
-# :::::::::::: hands-on pt.2 -----
+# :::::::::::: hands-on (importação) -----
   # zip o repositório criado e dê unzip em outra pasta
   # você deve conseguir rodar toda a sua análise sem necessitar alterar o código 
         
@@ -128,6 +136,7 @@
     #Estruturas de controle são blocos de programação que, baseado em parâmetros pré-definidos, 
     #define a direção a seguir. o R possui todas as funções usualmente existentes em outras linguagens
     #Contudo, vamos primeiro listar os principais operadores lógicos disponíveis no R:
+        
         
         #retorna TRUE (T) ou FALSE (F) se:
             !x #não
@@ -142,15 +151,23 @@
     #Voltando as estruturas de controle, considerando fluxos condicionais e de repetição, temos:
         
         #if: se a declaração for verdade, então os comandos dentro das chaves `{}` serão executados: 
-            x <- 1
+            x <- 0
+            
             if(x != 0){
                 print(x+1)
             }
+            
+            #
+            
+            if(x != 0){
+              print(x+1)
+            } else{print("não faça nada")}
             
     
         #if-else: similar ao comando `if()` porém seguido de um segundo bloco, que será avaliado se, 
         #e somente se, o resultado do primeiro bloco for `FALSE`: 
             x <- 15
+            
             if (x<=10) {
                 print("x é menor ou igual a 10")
             } else if (x>10 & x<20) {
@@ -160,23 +177,28 @@
             }
     
         #ifelse: versão mais simples, em que especificamos ambas as ações como parametro de uma função
+            
             x <- "olar"
+            
             ifelse(x == "olar", "flor.do.campo", "xovens")
 
             
         #for: uma sequência de instruções que são repetidas com cada um dos elementos especificados:
             x <- 1:3
+            
             for(i in x){
                 print(i)
             }
 
             #Podemos não utilizar as chaves caso as instruções sejam dadas em até uma linha após o `for`:
             x <- 1:3
+            
             for(i in x) print(i)
             
     
         #nested loops: De modo similar ao anterior temos o caso dos loops aninhados:
             x <- 1:2; y <- c(1,10)
+            
             for(i in seq(x)){
                 for(j in seq(y)) print(x[i]*y[j])
             }
@@ -205,7 +227,13 @@
             #    corpo da função
             #}
             
-            #exemplo
+            #ex. 1
+            mean_nath <- function(vetor){
+               output <- sum(vetor)/length(vetor)
+               return(output)
+            }
+            
+            #ex. 2
             celcius_fahrenheit <- function(temp_c){
                 temp_f <- (temp_c * 9/5) + 32
                 temp_f #ou, equivalentemente, return(temp_f)
@@ -253,6 +281,11 @@
     #Idealmente, todas as dependências devem ser especificadas e passadas como argumentos da função.
         
 
+# :::::::::::: hands-on (funções) -----
+  #No RStudio Learn Primers: #https://rstudio.cloud/learn/primers 
+  # faça os exercícios propostos na aba `Write Functions`,
+  # priorizando a seção `Function Basics`, `Control Flow` e `Loops`
+        
 # Bibliotecas -----
     #Bibliotecas tratam-se de uma coleção de funções, dados e códigos compilados
     #A instalação destas bibliotecas/pacotes, pode ser feita pelo comando `install.packages("nome_do_pacote")`
@@ -289,11 +322,21 @@
           
 # :::::::::::: Refs -----
             
-  # Rstudio Learn (material em inglês) 
-    # https://rstudio.cloud/learn/primers/1.2
-          
-  #	Point-and-click Rbase
+  #	Point-and-click - Rbase
     # precisa instalar várias bibliotecas
     # install.packages("Rcmdr")
     # library(Rcmdr)
+
+  # Na IDE do Rstudio investigue a aba `Tutorial` 
+    # (usualmente acima, à direita, próximo a aba `Environment`)
+    #Note que ao iniciar algum dos tutoriais a aba `Jobs`, 
+    # usualmente próxima a aba `Console`, ficará ocupada 
+    # até que você feche o treinamento - clicando
+    # no botão `stop`, da aba `Tutorial` ou `Jobs`
+    #Note também que no fim do tutorial há um link
+    # para a página de Tutorials da RStudio
+    # Investigando está página, você encontrará o 
+    # RStudio primers, quecom vários tutoriais interativos
+    
+    # https://rstudio.cloud/learn/primers
             
