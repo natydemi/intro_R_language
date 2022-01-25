@@ -5,15 +5,17 @@
 # Workflow da Ciência de Dados -----
     # https://r4ds.had.co.nz/introduction.html
 
-# Dados tidy  -----
-    #o que são dados tidy?
-        #https://escoladedados.org/tutoriais/tidy-data-dados-arrumados-e-5-problemas-comuns/
-    #o que é um tibble?
-        #https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html
+# o que são dados tidy?  -----
+    #https://escoladedados.org/tutoriais/tidy-data-dados-arrumados-e-5-problemas-comuns/
+
+# o que é um tibble?  -----
+    #https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html
     
-# A gramática Pipe e o tidyverse -----
-    # o operador pipe: https://www.curso-r.com/blog/2018-07-03-tutorial-pipe/
-    # o universo tidyverse: https://www.tidyverse.org/ 
+# O que é o operador pipe?  -----
+    # https://www.curso-r.com/blog/2018-07-03-tutorial-pipe/
+
+# O universo tidyverse -----
+    # https://www.tidyverse.org/ 
 
 # ::::: practice: Rbase vs. tidyverse (base titanic) -----
 
