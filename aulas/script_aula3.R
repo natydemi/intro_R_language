@@ -327,7 +327,7 @@
     # install.packages("Rcmdr")
     # library(Rcmdr)
 
-  # Na IDE do Rstudio investigue a aba `Tutorial` 
+  # Na IDE do Rstudio investigue a aba `Tutorial` (precisa ter o RStudio mais recente)
     # (usualmente acima, à direita, próximo a aba `Environment`)
     #Note que ao iniciar algum dos tutoriais a aba `Jobs`, 
     # usualmente próxima a aba `Console`, ficará ocupada 
@@ -336,7 +336,7 @@
     #Note também que no fim do tutorial há um link
     # para a página de Tutorials da RStudio
     # Investigando está página, você encontrará o 
-    # RStudio primers, quecom vários tutoriais interativos
+    # RStudio primers, que com vários tutoriais interativos
     
     # https://rstudio.cloud/learn/primers
             

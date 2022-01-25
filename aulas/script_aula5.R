@@ -12,6 +12,7 @@
     #em portugues
     # https://jonnyphillips.github.io/Ciencia_de_Dados/Graficos.html
 
+    # https://github.com/krzjoa/awesome-r-dataviz
 
 #Rmarkdown -----
     #https://rmarkdown.rstudio.com/lesson-1.html

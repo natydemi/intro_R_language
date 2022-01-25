@@ -52,8 +52,9 @@
             mutate(value = round(value,0)) %>% 
             spread(indicator, value)
 
-    #exercício: replique TODOS os exemplos da cheatsheet do pacote tidyr
-    
+  #hands-on -----
+      # replique TODOS os exemplos da cheatsheet do pacote tidyr
+      # https://rstudio.cloud/learn/primers/4
 # Importação -----
 
     #https://readr.tidyverse.org/
@@ -167,7 +168,8 @@
             
 # Visualização -----
        
-    #https://ggplot2.tidyverse.org/,
+    #https://ggplot2.tidyverse.org/
+    #https://rstudio.cloud/learn/primers/3
     #https://beatrizmilz.github.io/aMostra-IME-2019-DataVis/#33
             
     #ex. cheatsheet
@@ -221,9 +223,8 @@
             
 
 # Comunicação -----
-
-        #https://github.com/rladies/meetup-presentations_sao-paulo
-
+  # https://github.com/rladies/meetup-presentations_sao-paulo
+  # https://rmarkdown.rstudio.com/lesson-1
         
 # :::::::::::: Refs -----
         
