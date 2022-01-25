@@ -13,7 +13,7 @@
     #Vá em `Tools > Global Options` e personalize o RStudio
     # considerando itens como `Appearance` ou `Pane Layout`
 
-# :::::::::::: aplicação de estatísticas descritivas (base state) -----
+# ::::: practice: manuseando dados (bases state) -----
     state.abb
     state.area
     state.center
@@ -71,7 +71,7 @@
         #Visualize a versão final do dataset criado
           View(state)
           
-# :::::::::::: hands-on (exportação) -----
+# ::::: hands-on: exportação de base de dados -----
           
         #exporte os dados em um arquivo .csv
         write.csv(state, "base_exportada.csv")
@@ -116,7 +116,7 @@
     
     #dica: use o pacote usethis::create_project()
         
-# :::::::::::: hands-on (projeto) -----
+# ::::: hands-on: criação de projetos -----
     # 1) crie um projeto em um novo repositório, 
     # 2) salve um script chamado "aula_2_hands_on.R" neste repo
     # 3) no script escreva um programa que tire uma amostra aleatória de tamanho 50 da base de dados iris, 
@@ -127,7 +127,7 @@
     #   você observou alguma mudança significativa?
     
         
-# :::::::::::: hands-on (importação) -----
+# ::::: hands-on: importação de base de dados -----
   # zip o repositório criado e dê unzip em outra pasta
   # você deve conseguir rodar toda a sua análise sem necessitar alterar o código 
         
@@ -281,7 +281,7 @@
     #Idealmente, todas as dependências devem ser especificadas e passadas como argumentos da função.
         
 
-# :::::::::::: hands-on (funções) -----
+# ::::: hands-on: funções -----
   #No RStudio Learn Primers: #https://rstudio.cloud/learn/primers 
   # faça os exercícios propostos na aba `Write Functions`,
   # priorizando a seção `Function Basics`, `Control Flow` e `Loops`
@@ -320,7 +320,7 @@
         #link bibliotecas: https://cran.r-project.org/web/views/
         #link bibliotecas: https://awesome-r.com/
           
-# :::::::::::: Refs -----
+# ::::: Refs -----
             
   #	Point-and-click - Rbase
     # precisa instalar várias bibliotecas

@@ -2,25 +2,21 @@
 # Introdução à Programação em R
 # Nathália Demetrio
 
-
-# Reviews/Tips -----
-    #review
-
 # Workflow da Ciência de Dados -----
     # https://r4ds.had.co.nz/introduction.html
 
 # Dados tidy  -----
     #o que são dados tidy?
         #https://escoladedados.org/tutoriais/tidy-data-dados-arrumados-e-5-problemas-comuns/
-    #tibble?
+    #o que é um tibble?
         #https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html
     
 # A gramática Pipe e o tidyverse -----
     # o operador pipe: https://www.curso-r.com/blog/2018-07-03-tutorial-pipe/
-    # tidyverse: https://www.tidyverse.org/ 
+    # o universo tidyverse: https://www.tidyverse.org/ 
 
-# Trabalhando com os dados do titanic
-    
+# ::::: practice: Rbase vs. tidyverse (base titanic) -----
+
     install.packages("titanic")
     install.packages("tidyverse")
     library(tidyverse)
@@ -38,10 +34,9 @@
         titanic <- dplyr::as_tibble(titanic)
     
 
-# Manipulação titanic (Rbase vs. tidyverse) -----
-    #Visualizar
+    #Primeiras views
         #View(titanic)
-        #view(titanic)
+        #view(titanic) # msm coisa, mas com letra minuscula
         titanic %>% view()
         
         #str(titanic)
@@ -136,7 +131,7 @@
     # se eu quiser reescrever o objeto com as alterações feitas, 
     # basta colocar `titanic <- `no início da sequência de comandos
 
-# Manipulação base iris (tidyverse) -------------------------------------
+# ::::: practice: explorando dplyr (base iris) -------------------------------------
 
     data("iris")
      
@@ -145,6 +140,8 @@
     
        
    iris_tidy <- iris %>% 
+       #arrange(desc(Sepal.Width)) %>% 
+       arrange(-Sepal.Width) %>% 
         #filter(Sepal.Length > 5 & Sepal.Width < 4) %>% 
         filter(Sepal.Length > 5 | Sepal.Width < 4) %>%  
         slice(1:5) %>% 
@@ -162,38 +159,34 @@
         ggplot(aes(var_normalizada)) +
             geom_histogram()
    
-   iris %>% 
-       #arrange(desc(Sepal.Width))
-       arrange(-Sepal.Width)        
-                
-# :::::::::::: hands-on cheatsheet -----
-   #replicar os exemplos da cheatsheet do dplyr
-   #https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
 
-    filter(mtcars, mpg > 20)
-   
-
-        
-   
-# :::::::::::: hands-on -----
+# ::::: hands-on: manuseando dados (tidyverse - dplyr) -----
     #No RStudio Learn Primers: #https://rstudio.cloud/learn/primers 
     # faça os exercícios propostos na aba `Work with Data`,
     # priorizando a seção `Derive Information with dplyr`
     # https://rstudio.cloud/learn/primers/2.3
                 
-                
-# :::::::::::: Refs -----
-    # comparação de sintaxe
+# ::::: hands-on: cheatsheet (dplyr) -----
+   #replicar os exemplos da cheatsheet do dplyr
+   #https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
+   
+   
+# ::::: Refs -----
+    #comparação de sintaxe: Rbase vs. tidyverse vs. data.table
         # https://github.com/mayer79/data_preparation_r
                   
-    # Link cheatsheets: 
-       # https://rstudio.com/resources/cheatsheets/
+    #link cheatsheets no site da rstudio: 
+    #note que ao fim da página você encontrará algumas cheatsheets em português
+        # https://rstudio.com/resources/cheatsheets/
+
+    #livros
+        #(inglês)
+        # R for Data Science, by by Garrett Grolemund, Hadley Wickham:
+        # https://r4ds.had.co.nz/ 
            
-    #R for Data Science, by by Garrett Grolemund, Hadley Wickham:
-       # https://r4ds.had.co.nz/ 
-           
-    #Curso-R ~ material em português
-       # https://material.curso-r.com/pipe/ 
+        #(português)
+        # Curso-R ~ material em português
+        # https://livro.curso-r.com/
        
     
                

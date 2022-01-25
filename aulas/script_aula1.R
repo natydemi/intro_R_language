@@ -216,7 +216,7 @@
        pi
 
        
-# ::::: hands-on (criação de objetos) -----
+# ::::: hands-on: criação de objetos -----
     # @s alun@s devem criar um objeto chamado c, e outro chamado f, em que:
        # 1) o c irá receber como input uma temperatura em graus celsius, digitado pelo usuário
        # 2) e o f será uma fórmula que tem o c como um dos seus valores
@@ -227,51 +227,50 @@
        #    investigue o uso das funções class() e as.numeric() para solucionar o problema
 
 
-# ::::: aplicação de estatísticas descritivas (base mtcars) -----
-
+# ::::: practice: estatísticas descritivas (base mtcars)-----
     #base para exemplo
     mtcars
         
-        View(mtcars)
+      View(mtcars)
+     
+      #`head()` - que retorna as primeiras linhas da base de dados, ou similarmente a função `tail()` que contempla as últimas linhas:
+      head(mtcars)
+      tail(mtcars)
+      
+      
+      #`str()` - exibe a estrutura interna de um objeto, no caso da base de dados que estamos trabalhando p.e., temos: a estrutura dos dados (data.frame), o número de linhas (32 observações) e colunas (11 variáveis), além da classe de cada uma das colunas, e uma amostra das primeiras observações de cada uma das colunas: 
+      str(mtcars)
+      
+      
+      # `summary()` - é uma função genérica usada para produzir resumos de resultados segundo várias funções descritivas, no caso de variáveis numéricas, por exemplo: 
+      summary(mtcars)
+                  
+      cor(mtcars)
        
-        #`head()` - que retorna as primeiras linhas da base de dados, ou similarmente a função `tail()` que contempla as últimas linhas:
-        head(mtcars)
-        tail(mtcars)
-        
-        
-        #`str()` - exibe a estrutura interna de um objeto, no caso da base de dados que estamos trabalhando p.e., temos: a estrutura dos dados (data.frame), o número de linhas (32 observações) e colunas (11 variáveis), além da classe de cada uma das colunas, e uma amostra das primeiras observações de cada uma das colunas: 
-        str(mtcars)
-        
-        
-        # `summary()` - é uma função genérica usada para produzir resumos de resultados segundo várias funções descritivas, no caso de variáveis numéricas, por exemplo: 
-        summary(mtcars)
-                    
-        cor(mtcars)
-         
-        #plot
-        plot(mtcars)
-        
-        #boxplot
-        boxplot(mtcars)
-        
-        #como esta base faz parte do repertório básico do R, 
-        # não a visualizamos na aba `Environment`, salvo se fizermos:
-        data("mtcars")
+      #plot
+      plot(mtcars)
+      
+      #boxplot
+      boxplot(mtcars)
+      
+      #como esta base faz parte do repertório básico do R, 
+      # não a visualizamos na aba `Environment`, salvo se fizermos:
+      data("mtcars")
 
 
     #para consultar mais funções estatísticas: help(package=stats) 
 
-        #regressão: um exemplo em que ajustamos a variável qsec 
-        # em função da variável carb:
-        fit <- lm(qsec ~ carb, data = mtcars)  
-        summary(fit)
-        plot(fit)
-        
-        #excluindo o modelo
-        rm(fit)
-        
-        # agora a variável qsec em função de todas as demais:
-        fit <- lm(qsec ~ ., data = mtcars)  
-        summary(fit)
-        plot(fit)
+      #regressão: um exemplo em que ajustamos a variável qsec 
+      # em função da variável carb:
+      fit <- lm(qsec ~ carb, data = mtcars)  
+      summary(fit)
+      plot(fit)
+      
+      #excluindo o modelo
+      rm(fit)
+      
+      # agora a variável qsec em função de todas as demais:
+      fit <- lm(qsec ~ ., data = mtcars)  
+      summary(fit)
+      plot(fit)
         

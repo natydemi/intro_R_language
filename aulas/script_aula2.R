@@ -404,8 +404,8 @@
     
 
 
-# :::::::::::: hands-on (base mtcars) ----------------------------------------------------------------
-    #para os exercícios abaixo, pode ser interessante revisitar a aplicação
+# ::::: hands-on: manuseando dados ----------------------------------------------------------------
+    #para os exercícios abaixo, pode ser interessante revisitar a seção `practice`
     # de estatísticas descritivas feita no final do script da aula 1
                 
     #1.considerando a base mtcars
@@ -422,7 +422,7 @@
 
 
 
-# :::::::::::: Refs -----
+# ::::: Refs -----
                 
   # cheatsheet: Data Structures
   # https://intellipaat.com/mediaFiles/2019/02/Data-structure-in-R-Cheat-Sheet-.png
