@@ -8,13 +8,13 @@
 # o que são dados tidy?  -----
     #https://escoladedados.org/tutoriais/tidy-data-dados-arrumados-e-5-problemas-comuns/
 
-# o que é um tibble?  -----
+# o que é um tibble? (vs. data.frame)  -----
     #https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html
     
 # O que é o operador pipe?  -----
     # https://www.curso-r.com/blog/2018-07-03-tutorial-pipe/
 
-# O universo tidyverse -----
+# As bibliotecas do tidyverse -----
     # https://www.tidyverse.org/ 
 
 # ::::: practice: Rbase vs. tidyverse (base titanic) -----
