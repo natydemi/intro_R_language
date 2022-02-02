@@ -28,33 +28,33 @@ knitr::opts_chunk$set(echo = FALSE,
 
 # Agenda do Curso
 
-- Dia 1 - Da instalação à minha primeira análise no R
+- Dia 1 - Da instalação à primeira análise no R
 
 <br>
-- Dia 2 - Entendendo tipos e estruturas de dados no R
+- Dia 2 - Tipos e estruturas de dados no R
 
 <br>
-- Dia 3 - Importando e exportando dados, ferramentas da linguagem R e minha primeira biblioteca
+- Dia 3 - Importando dados, funções e bibliotecas
 
 <br>
-- Dia 4 - R para ciência de dados: tidyverse - 80% do trabalho com 20% das funções
+- Dia 4 - R para ciência de dados: tidyverse e dplyr
 
 <br>
-- Dia 5 - R para ciência de dados: os outros 80% do tidyverse + ggplot
+- Dia 5 - bibliotecas para análise de dados e primeiros passos no ggplot
 
 <br>
-- Dia 6 - Aula 6 -  ggplot2, outras bibliotecas do tidyverse, dicas e o grand finale: como fazer memes no R \o/
+- Dia 6 - R e algumas das suas (muitas) possibilidades
 
 
 
 ---
-# Agenda Dia 1 - Da instalação à minha primeira análise no R
+# Agenda Dia 1 - Da instalação à primeira análise no R
 
 - Apresentações 
 
 - Contextualizando o R
 
-- Instalando o R e a IDE Rstudio
+- Instalação o R e a IDE Rstudio
 
 - Um tour pelo Rstudio
 
@@ -66,31 +66,46 @@ knitr::opts_chunk$set(echo = FALSE,
 
 - Criando objetos
 
+- Primeiras estatísticas descritivas
 
 
 ---
-# Agenda Dia 2 - Entendendo tipos e estruturas de dados no R
+# Agenda Dia 2 - Tipos e estruturas de dados no R
 
-- Revisão 
+- Dialetos/sintaxes do R
 
-- Tipos/Estruturas de dados 
-
-- Análises estatísticas básicas 
+- Tipos de dados
+    + character
+    + numeric 
+    + integer
+    + logical
+    + complex
+    + raw
+    
+- Estruturas de dados
+    + vetores
+    + matrizes
+    + arrays
+    + data frames
+    + listas
+    
+- Trabalhando com dados: criação, consulta, classes e operações
 
 
 
 
 ---
 
-# Agenda Dia 3 - Importando e exportando dados, ferramentas da linguagem R e minha primeira biblioteca
+# Agenda Dia 3 - Importando dados, funções e bibliotecas
 
-- Revisando Estruturas de Dados
- 
-- Hands-on 
+- Revisão tipos/estruturas de Dados
+    + Fatores
+    + Datas
+    + Listas 
 
 - Importação/exportação de arquivos
 
-- .Rproj
+- Diretório de Trabalho e .Rproj
 
 - Estruturas de controle (versão clean)
 
@@ -98,54 +113,66 @@ knitr::opts_chunk$set(echo = FALSE,
 
 - Utilizando bibliotecas
 
-- minha primeira biblioteca
-
-
 
 
 ---
-# Agenda Dia 4 - R para ciência de dados: tidyverse - 80% do trabalho com 20% das funções (+ rmarkdown) 
+# Agenda Dia 4 - R para ciência de dados: tidyverse e dplyr 
 
-- Revisão da linguagem R via mapa conceitual
-
-- Workflow da Ciência de Dados 
+- RevisãoCiência de Dados, Estatística, Data Mining, e ... vs. R
 
 - O que são dados Tidy 
 
+- O que é um tibble? ( vs. data.frame)
+
+- O que é o operador Pipe?
+
 - Utilizando a gramática Pipe
 
-- As bibliotecas do tidyverse
+- As bibliotecas do Tidyverse
 
-- Explorando a base de dados titanic
+- practice: explorando a base de dados do titanic com o dplyr 
 
-- Meu primeiro Rmarkdown: do .R para o .Rmd
+- cheatsheet: o que são, onde encontrar e porque usar.
+
+
+
+
+---
+# Agenda Dia 5 - libs p/ análise de dados e 1ºs passos no ggplot
+
+-  Pacote skimr
+
+- Princípios de estatística para análise descritiva de dados
+
+- Mais bibliotecas do Tidyverse
+
+- Primeiros passos no ggplot
+
 
 
 
 
 
 ---
-# Agenda Dia 5 - R para ciência de dados: os outros 80% do tidyverse (+ggplot)
+# Agenda Dia 6 - R e algumas das suas (muitas) possibilidades
 
--  Correção Quiz
-
-- .Rproj e .Rmd (Rmarkdown)
-
-- primeiros passos no ggplot2
-
-
-
-
----
-# Agenda Dia 6 - ggplot2, outras bibliotecas do tidyverse, dicas e o grand finale: como fazer memes no R \o/
-
-- ggplot2 e outras bibliotecas do tidyverse 
-
-- mais bibliotecas legais
-
-- memeR
-
-- check-out
+ - Manipulação de Dados Avançada (dplyr::across)
+ 
+ - Pacotes para Data Mining (refs)
+ 
+ - Interoperabilidade R e Python (reticulate)
+ 
+ - Dashboards Estáticos (Rmarkdown e flexdashboard)
+ 
+ - Pacotes para Dataviz (esquisser e refs)
+ 
+ - Programação funcional (purrr)
+ 
+ - Modelagem no R (tidymodels)
+ 
+ - Dashboards Dinâmicos (Shiny)
+ 
+ - Comunidades a serem seguidas
 
 
 
@@ -165,8 +192,6 @@ knitr::opts_chunk$set(echo = FALSE,
 - [Curso-R](https://www.curso-r.com/)
 
 - [R Brasil (Telegram)](https://t.me/rbrasiloficial) 
-
-- [Biblioteca swirl - curso interativo](https://swirlstats.com/)
 
 - [R Memes For Statistical Fiends](https://www.facebook.com/Rmemes0/)
 
