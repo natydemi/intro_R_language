@@ -279,6 +279,10 @@
     #deixar que a função dependa de parâmetros externos ao seu próprio `environment`. 
     #Idealmente, todas as dependências devem ser especificadas e passadas como argumentos da função.
         
+        
+        #adicionar exemplos de formas de definir funções
+        # avengers %>% summarise(across(contains("Death"), ~ sum(is.na(.x)))) %>% glimpse
+        # avengers %>% summarise(across(contains("Death"), function(x) sum(is.na(x)))) %>% glimpse
 
 # ::::: hands-on: funções -----
   #No RStudio Learn Primers: #https://rstudio.cloud/learn/primers 

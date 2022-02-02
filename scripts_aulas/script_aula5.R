@@ -191,7 +191,18 @@
 
   #https://ggplot2.tidyverse.org/
   #https://beatrizmilz.github.io/aMostra-IME-2019-DataVis/#33
-  #em portugues: https://jonnyphillips.github.io/Ciencia_de_Dados/Graficos.html
+              
+  #livros/blogs
+    #excelente onboarding em portugues
+      #https://jonnyphillips.github.io/Ciencia_de_Dados/Graficos.html
+    #referencia oficial do pacote
+      #https://ggplot2-book.org/index.html
+    #foco nos comandos mais essenciais do ggplot2
+      #http://www.cookbook-r.com/Graphs/
+    #onboarding não apenas no ggplot mas em princípios de dataviz e no próprio R
+      #https://socviz.co/index.html#preface
+    #como organizar as ideias em torno de objetivos de análise + comandos ggplot
+      #https://clauswilke.com/dataviz/
   
                      
     #escrita completa    
@@ -254,6 +265,10 @@
         diamonds_new %>% 
             ggplot(aes(x = cut, fill = color)) + 
             geom_bar(position = "fill")
+        
+        
+    #ggplot + forcats
+        #https://wilkelab.org/SDS375/slides/getting-things-in-order.html#1
         
    #hands-on: https://rstudio.cloud/learn/primers/3
         
