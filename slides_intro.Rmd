@@ -40,7 +40,7 @@ knitr::opts_chunk$set(echo = FALSE,
 - Dia 4 - R para ciência de dados: tidyverse e dplyr
 
 <br>
-- Dia 5 - bibliotecas para análise de dados e primeiros passos no ggplot
+- Dia 5 - libs p/ análise de dados e 1ºs passos no ggplot
 
 <br>
 - Dia 6 - R e algumas das suas (muitas) possibilidades
