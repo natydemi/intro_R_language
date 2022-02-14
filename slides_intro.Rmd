@@ -202,7 +202,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 
 ```{r , echo=FALSE, out.width='30%', fig.align = "center", fig.cap=""}
- knitr::include_graphics("figs/R_Memes_bye_bye.jpg")
+ knitr::include_graphics("img/R_Memes_bye_bye.jpg")
 ```
 
 
