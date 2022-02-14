@@ -179,7 +179,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 ---
 
-# Referências
+# Algumas referências
 
 - [R for Data Science, by by Garrett Grolemund, Hadley Wickham](https://r4ds.had.co.nz/)
 
@@ -198,7 +198,7 @@ knitr::opts_chunk$set(echo = FALSE,
 
 
 ---
-# Obrigade !!!
+# Obrigada !!!
 
 
 ```{r , echo=FALSE, out.width='30%', fig.align = "center", fig.cap=""}
