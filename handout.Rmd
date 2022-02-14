@@ -1765,11 +1765,12 @@ Além das soluções e bibliotecas aqui comentados, é importante lembrar que o 
 - Hands-On Programming with R: https://rstudio-education.github.io/hopr/
 - Curso-R: https://www.curso-r.com/material/
 
-Vamos agora fazer um ciclo de análises considerando arquivos do Santander. 
 
-Boa sorte! 
 
 <!-- # Atividade Final -->
+
+<!-- Vamos agora fazer um ciclo de análises considerando os arquivos ...  -->
+
 <!-- Executar as tarefas a seguir usando o R no ambiente de treinamento. O objetivo é extrair informações relevantes das bases, de forma similar ao que seria feito no dia a dia de trabalho com a linguagem no ambiente de produção do banco, conectado ao Data Lake. -->
 <!-- Os passos compreendem importação, tratamento, análise e visualização dos dados. -->
 
