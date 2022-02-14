@@ -1761,9 +1761,26 @@ Vale ressaltar que muitas das soluções que envolvem Big Data no R são novas, 
 Além das soluções e bibliotecas aqui comentados, é importante lembrar que o R oferece muitas formas de completar uma mesma atividade. Sendo assim, é sempre recomendado que procure opções para otimizar sua rotina. Seguem abaixo as algumas referências open-source para o aprofundamento dos pontos aqui listados:
 
 - R for data science: https://r4ds.had.co.nz/introduction.html
+
 - Advanced R: http://adv-r.had.co.nz/
+
 - Hands-On Programming with R: https://rstudio-education.github.io/hopr/
 - Curso-R: https://www.curso-r.com/material/
+
+
+# Agradecimentos 
+
+Para citar algumas pessoas que colaboraram com este material, seja por meio de sugestões, revisões ou compartilhamento de materiais:
+
+- [Rladies São Paulo](https://linktr.ee/rladies_sp)
+
+
+- [Paulo Bittencourt Moura](https://www.linkedin.com/in/paulo-bittencourt-moura/) 
+
+- [Renan Rodrigo](https://www.linkedin.com/in/renangerbilo/) 
+
+- [Samuel Macêdo](https://www.linkedin.com/in/samuel-mac%C3%AAdo-755a8763/) 
+
 
 
 

@@ -1936,12 +1936,12 @@ RStudio: Projeto
   iris %&gt;% 
     sample_n(10) %&gt;% 
     sample_frac(0.5) 
-  #&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-  #&gt; 1          5.4         3.7          1.5         0.2     setosa
-  #&gt; 2          6.3         2.3          4.4         1.3 versicolor
-  #&gt; 3          6.3         2.5          5.0         1.9  virginica
-  #&gt; 4          5.0         3.3          1.4         0.2     setosa
-  #&gt; 5          7.7         3.8          6.7         2.2  virginica</code></pre>
+  #&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width   Species
+  #&gt; 1          5.0         3.4          1.5         0.2    setosa
+  #&gt; 2          4.8         3.1          1.6         0.2    setosa
+  #&gt; 3          4.4         3.2          1.3         0.2    setosa
+  #&gt; 4          6.5         3.0          5.5         1.8 virginica
+  #&gt; 5          7.4         2.8          6.1         1.9 virginica</code></pre>
 <ul>
 <li><strong>Combinando Bases</strong>
 <ul>
@@ -2317,10 +2317,20 @@ RMarkdown + Shiny
 <h1 number="6"><span class="header-section-number">6</span> Considerações Finais</h1>
 <p>Além das soluções e bibliotecas aqui comentados, é importante lembrar que o R oferece muitas formas de completar uma mesma atividade. Sendo assim, é sempre recomendado que procure opções para otimizar sua rotina. Seguem abaixo as algumas referências open-source para o aprofundamento dos pontos aqui listados:</p>
 <ul>
-<li>R for data science: <a href="https://r4ds.had.co.nz/introduction.html" class="uri">https://r4ds.had.co.nz/introduction.html</a></li>
-<li>Advanced R: <a href="http://adv-r.had.co.nz/" class="uri">http://adv-r.had.co.nz/</a></li>
-<li>Hands-On Programming with R: <a href="https://rstudio-education.github.io/hopr/" class="uri">https://rstudio-education.github.io/hopr/</a></li>
-<li>Curso-R: <a href="https://www.curso-r.com/material/" class="uri">https://www.curso-r.com/material/</a></li>
+<li><p>R for data science: <a href="https://r4ds.had.co.nz/introduction.html" class="uri">https://r4ds.had.co.nz/introduction.html</a></p></li>
+<li><p>Advanced R: <a href="http://adv-r.had.co.nz/" class="uri">http://adv-r.had.co.nz/</a></p></li>
+<li><p>Hands-On Programming with R: <a href="https://rstudio-education.github.io/hopr/" class="uri">https://rstudio-education.github.io/hopr/</a></p></li>
+<li><p>Curso-R: <a href="https://www.curso-r.com/material/" class="uri">https://www.curso-r.com/material/</a></p></li>
+</ul>
+</div>
+<div id="agradecimentos" class="section level1" number="7">
+<h1 number="7"><span class="header-section-number">7</span> Agradecimentos</h1>
+<p>Para citar algumas pessoas que colaboraram com este material, seja por meio de sugestões, revisões ou compartilhamento de materiais:</p>
+<ul>
+<li><p><a href="https://linktr.ee/rladies_sp">Rladies São Paulo</a></p></li>
+<li><p><a href="https://www.linkedin.com/in/paulo-bittencourt-moura/">Paulo Bittencourt Moura</a></p></li>
+<li><p><a href="https://www.linkedin.com/in/renangerbilo/">Renan Rodrigo</a></p></li>
+<li><p><a href="https://www.linkedin.com/in/samuel-mac%C3%AAdo-755a8763/">Samuel Macêdo</a></p></li>
 </ul>
 <!-- # Atividade Final -->
 <!-- Vamos agora fazer um ciclo de análises considerando os arquivos ...  -->
@@ -2339,8 +2349,8 @@ RMarkdown + Shiny
 <!-- - Construir um gráfico de pizza contendo as 5 empresas que mais transacionaram em quantidade no período. Quais foram essas empresas? -->
 <!-- - Fazer um gráfico de dispersão de idade da empresa X número de transações feitas desde a abertura dela. Existe alguma tendência? -->
 </div>
-<div id="apêndice---tratamento-de-exceções" class="section level1" number="7">
-<h1 number="7"><span class="header-section-number">7</span> Apêndice - Tratamento de exceções</h1>
+<div id="apêndice---tratamento-de-exceções" class="section level1" number="8">
+<h1 number="8"><span class="header-section-number">8</span> Apêndice - Tratamento de exceções</h1>
 <p>Chamamos de exceção qualquer condição anormal que possa aparecer quando estamos executando um programa de computador. Normalmente, esses erros acontecem por fatores externos do ponto de vista do código, como valores ou tipos não suportados passados para uma função, necessidade de leitura ou gravação de arquivos no sistema operacional, necessidade de conexão com a internet para obter algum dado.</p>
 <p>As linguagens costumam ter formas de tratar as exceções, ou seja, métodos e funções que possam ser usados para que o programa não quebre a execução, não apresente erros abruptos ou até mesmo continue a partir do ponto em que o erro ocorreu. O tratamento de exceções em R é feito utilizando a função tryCatch. A sintaxe da função é:</p>
 <pre class="r"><code>result = tryCatch(
