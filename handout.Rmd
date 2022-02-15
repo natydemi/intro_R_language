@@ -1770,7 +1770,7 @@ Além das soluções e bibliotecas aqui comentados, é importante lembrar que o 
 
 # Agradecimentos 
 
-Para citar algumas pessoas que colaboraram com este material, seja por meio de sugestões, revisões ou compartilhamento de materiais:
+Gostaria de citar algumas das pessoas que colaboraram com este material, seja por meio de sugestões, revisões ou compartilhamento de textos:
 
 - [Rladies São Paulo](https://linktr.ee/rladies_sp)
 
