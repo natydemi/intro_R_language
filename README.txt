@@ -18,7 +18,6 @@
 	• Geovana Lopes Batista
 	
 
-
 # 27º Programa De Verão (2020)
 # Pessoa monitora: 
 	• Geovana Lopes Batista
