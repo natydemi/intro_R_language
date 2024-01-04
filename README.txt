@@ -4,6 +4,21 @@
 # Ementa (link mais recente): https://www.ime.usp.br/verao/index.php/turmas/descricao/415
 
 
+# 31º Programa De Verão (2024)
+# Pessoas monitoras: 
+	• Agatha Priscila Alves Nogueira 
+	•  Alan da Silva
+	• Beatriz Proença Carvalho
+	• Natan Sant Anna Borges
+
+# 30º Programa De Verão (2023)
+# Pessoas monitoras: 
+	• Agatha Priscila Alves Nogueira 
+	• Bianca Aparecida Muniz Pereira
+	• George Othon Silva Santos
+	• Rodrigo Gonçalves Pinto
+
+
 # 29º Programa De Verão (2022)
 # Pessoas monitoras: 
 	• Ana Carolina Faleiros Camargo Moreno
