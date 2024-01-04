@@ -13,7 +13,7 @@
 	• Natan Sant Anna Borges
 
 # 30º Programa De Verão (2023)
-# Pessoas monitoras: 
+# Pessoas monitoras: https://www.ime.usp.br/verao/index.php/turmas/descricao/448
 	• Agatha Priscila Alves Nogueira 
 	• Bianca Aparecida Muniz Pereira
 	• George Othon Silva Santos
