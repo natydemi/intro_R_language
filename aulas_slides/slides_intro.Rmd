@@ -2,7 +2,7 @@
 title: "<br> Introdução à Programação em R"
 subtitle: "Programa De Verão"
 author: "<br><br> Nathália Demetrio "
-date: "jan/2022"
+date: "jan/2024"
 output:
     xaringan::moon_reader:
         css: [default, rladies, rladies-fonts]
