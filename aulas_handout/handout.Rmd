@@ -1,5 +1,5 @@
 ---
-title: "Intro à Linguagem R"
+title: "Introdução à Programação em R"
 
 output:
   html_document:
