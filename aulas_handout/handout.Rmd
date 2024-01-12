@@ -888,7 +888,7 @@ dados_mtcars <- mtcars
 
 > Para consultar as bases de dados disponibilizadas por default pelo R, e pelas bibliotecas carregadas na sessão corrente: `data()`. Para consultar as princípais funções estatísticas/machile learning disponíveis por default: `library(help = "stats")`.
 
-### Importação/Exportação
+## Importação/Exportação
 Visando facilitar a dinâmica, vamos primeiro exportar a base de dados criada no último capítulo `dados_mtcars`, e então vamos importar esta mesma base de dados novamente. Para exportar os dados precisamos especificar o nome e a extensão que o arquivo será salvo, por exemplo:
 
 ```{r}

@@ -412,14 +412,13 @@
         #1.1. exclua as variáveis que estão atrapalhando a visão dos demais boxplots?
         #1.2. como ver o resultado médio de uma variável apenas? #dica: mean()
         #1.3. qual a média das primeiras 10 linhas da base? 
-        #1.4. quantas linhas possuem vs e am igual a 0?
+        #1.4. quantas linhas possuem "vs" e "am" igual a 0?
     
-    #2.em uma nova base de dados chamada mtcars_new:
-        #2.1 arredonde a variável qsec para 1 casa decimal 
-        #2.2 transforme a variável vs em character
+    #2.em uma nova base de dados chamada mtcars_new, em que:
+        #2.1 a variável "qsec" esteja arredondada considerando  1 casa decimal 
+        #2.2 a variável "vs" seja transformada em character
     
     #3. (questão bônus): exporte os resultados em um csv, onde este csv está?
-
 
 
 # ::::: Refs -----

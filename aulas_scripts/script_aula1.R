@@ -2,7 +2,6 @@
 # Introdução à Programação em R
 # Nathália Demetrio
 
-
 # Apresentações  -----
     #professora e monitoras
     #revisar forms
@@ -91,7 +90,7 @@
         1 < 0 
         1 > 0 
         #menor/maior ou igual
-        1 <= 1 ; 1 >= 1 
+        1 <= 1 ; 1 > 1 
         
         #igual/diferente (igual são com DOIS simbolos seguidos)
         1 == 1 
