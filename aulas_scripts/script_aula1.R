@@ -2,6 +2,7 @@
 # Introdução à Programação em R
 # Nathália Demetrio
 
+
 # Apresentações  -----
     #professora e monitoras
     #revisar forms
@@ -55,7 +56,7 @@
         100 * 10 
         
         #potência
-        2^4 ; 2**4  
+        2^4 ; 2**4 # <- ; é quebra de linha 
         
         #resto da divisão de 10 por 3
         10 %% 3 
@@ -73,7 +74,7 @@
         #equação ok
         (2 * ( 2 * ( 2 * (4-3))))
         #equação não ok
-        (2 * { 2 * [ 2 * (4-3)]})
+        (2 * { 2 * [ 2 * (4-3)]}) # só deve usar parênteses
 
         
 # ::::: check-point -------------------------------------------------------------
@@ -90,7 +91,7 @@
         1 < 0 
         1 > 0 
         #menor/maior ou igual
-        1 <= 1 ; 1 > 1 
+        1 <= 1 ; 1 >= 1 
         
         #igual/diferente (igual são com DOIS simbolos seguidos)
         1 == 1 
@@ -99,7 +100,7 @@
     #No caso de digitarmos um comando incompleto no Console, o R mostrará o símbolo + 
     #Para iniciar um novo comando, desconsiderando comandos parciais anteriores, basta pressionar a tecla ‘Esc’. 
         #comando incompleto
-        8 ==
+        8 == # Tecla Esc sai do comando
             
     #no caso de comandos que o R não reconheça, ele retornará uma mensagem de erro
         #erro
@@ -164,7 +165,7 @@
     #Atribuição: a recomendação é trabalhar com <- para atribuições de objetos, 
     # e = para a especificação de parâmetros de funções, e evitar o `->`
         
-    #Para inserir o símbolo de atribuição `<-` no RStudio podemos utilizar o atalho 'alt + -'.
+    #Para inserir o símbolo de atribuição `<-` no RStudio podemos utilizar o atalho 'alt + -'. 
         
     #Ao criar objetos passamos a ter a informação que estes carregam salvos na memória, e podemos chama-los  
        sqrt(Objeto) 
@@ -181,7 +182,7 @@
        #operações entre outros objetos
        c <-  b * (-1); c
        #resultado da aplicação de funções
-       d <- abs(c); d
+       d <- abs(c); d # abs é valor absoluto (módulo)
        
    #Para listar todos os objetos disponíveis na sessão podemos utilizar a função `ls()`
    #Enquanto que para excluir algum destes objetos temos a função `rm(nome_do_objeto)`
@@ -225,7 +226,18 @@
        # 5) digite novamente a definição do objeto f, avalie a mensagem de erro, e 
        #    investigue o uso das funções class() e as.numeric() para solucionar o problema
 
-
+       # Solicita ao usuário que insira um valor
+       c <- readline(prompt = "Graus Celsios: ")
+       cat("Você digitou: ", c,"ºC", "\n")
+       # (0 °C × 9/5) + 32 = 32 °F ; Fórmula de conversão
+       f <- (c * 9/5) + 32 # Gera exceção: Error in c * 9 : argumento não-numérico para operador binário
+       class(c)
+       f <- (
+         as.numeric(c) * 9/5) + 32
+       class(f)
+       cat("Resultado: ", f,"ºF", "\n")
+       
+       
 # ::::: practice: estatísticas descritivas (base mtcars)-----
     #base para exemplo
     mtcars
