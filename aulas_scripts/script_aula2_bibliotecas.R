@@ -44,6 +44,6 @@
   # ou reinstalando o pacote de interesse - para consultar quais estão 
   # desatualizadas temos `old.packages()`.
   
-  #refs: 
+# ::::: Refs ----- 
   #link bibliotecas: https://cran.r-project.org/web/views/
   #link para consultar bibliotecas: https://r-universe.dev/

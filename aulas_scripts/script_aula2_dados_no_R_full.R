@@ -2,6 +2,11 @@
 # Introdução à Programação em R
 # Nathália Demetrio
 
+# O que você verá neste script: Tipos e Estruturas de Dados no R -----
+  #1) No R existem 6 tipos de dados, em geral trabalhamos com 4: 
+      #character > numeric > integer > logical
+  #2) Os dados podem ser organizados em 5 estruturas de dados: 
+      #vetor atômico, matriz, array, data.frame e listas
 
 # Tipos de Dados  -----
     # No R existem seis tipos de dados, que basicamente indicam como os objetos são armazenados (*low-level*)

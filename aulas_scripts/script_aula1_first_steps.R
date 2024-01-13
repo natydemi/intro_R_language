@@ -37,6 +37,9 @@
     #Plots - visualização dos gráficos gerados; e
     #Viewer - visualização dos relatórios e aplicativos gerados.
 
+  # Dica: 
+    #Vá em `Tools > Global Options` e personalize o RStudio
+    # considerando itens como `Appearance` ou `Pane Layout`
 
 # R como calculadora  -----
     #Textos precedidos por # são comentários (note a mudança na cor do texto)
@@ -226,7 +229,7 @@
        #    investigue o uso das funções class() e as.numeric() para solucionar o problema
 
 
-# ::::: practice: estatísticas descritivas (base mtcars)-----
+# ::::: practice: estatísticas descritivas (objeto/base mtcars)-----
     #base para exemplo
     mtcars
         

@@ -3,15 +3,6 @@
 # Nathália Demetrio
 
 
-# Revisando Estruturas de Dados -----
-    #No R existem 6 tipos de dados, em geral trabalhamos com 4: character > numeric > integer > logical
-    #Estes dados podem ser organizados em 5 estruturas: vetor atômico, matriz, array, data.frame e listas
-        #REPASSAR CAPITULO DE ESTRUTURA DA AULA 1 
-
-# Dicas IDE Rstudio -----
-  #Vá em `Tools > Global Options` e personalize o RStudio
-  # considerando itens como `Appearance` ou `Pane Layout`
-
 # ::::: practice: manuseando dados (bases state) -----
     state.abb
     state.area
