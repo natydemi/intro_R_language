@@ -185,6 +185,10 @@
                   ex_vetor_integer[names(ex_vetor_integer) != c("um","três")]
                   #acerto
                   ex_vetor_integer[!names(ex_vetor_integer) %in% c("um","três")]
+                    #perceba que o `%in%` é importante pois a comparação é feita
+                    # avaliando cada um dos elementos à esquerda, em cada um 
+                    # dos elementos à direita. Enquanto que os simbolos `==` e 
+                    # `!=` avaliam par a par
         
     # >>> FATORES -----
         #Fatores são vetores que possuem um número limitado de categorias (níveis), logo 

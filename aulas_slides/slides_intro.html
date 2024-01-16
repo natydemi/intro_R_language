@@ -39,10 +39,10 @@ class: center, middle, inverse, title-slide
 - Dia 1 - Da instalação à primeira análise no R
 
 &lt;br&gt;
-- Dia 2 - Tipos e estruturas de dados no R
+- Dia 2 - Bibliotecas &amp; Tipos e estruturas de dados no R
 
 &lt;br&gt;
-- Dia 3 - Importando dados, funções e bibliotecas
+- Dia 3 - Sintaxes para manipulação de dados &amp; Importação
 
 &lt;br&gt;
 - Dia 4 - R para ciência de dados: tidyverse e dplyr
@@ -78,63 +78,80 @@ class: center, middle, inverse, title-slide
 
 
 ---
-# Agenda Dia 2 - Tipos e estruturas de dados no R
+# Agenda Dia 2 - Bibliotecas &amp; Tipos e estruturas de dados no R
 
-- Dialetos/sintaxes do R
+- Primeiro contato com: 
+  + bibliotecas/pacotes no R
+  + dialetos/sintaxes de manipulação de dados do R
 
-- Tipos de dados
-    + character
-    + numeric 
-    + integer
-    + logical
-    + complex
-    + raw
+- Tipos de dados na estatística (classificação dos dados segundo suas propriedades): 
+  + nominal, ordinal, discreto e contínuo
+
+- Tipos de dados no R (como o dado é guardado internamente pelo R)
+  + prioritariamente: character, numeric, integer e logical 
+
+- Classes de dados no R (como o dado é entendido/processado pelo R)
+  + prioritariamente: character, double/numeric, integer e logical
+  + casos especiais: factor, ordered e date
     
-- Estruturas de dados
-    + vetores
-    + matrizes
-    + arrays
-    + data frames
-    + listas
-    
-- Trabalhando com dados: criação, consulta, classes e operações
+- Estruturas de dados no R (como o dado é organizado)
+  + prioritariamente: vetores e data frames
+
+
 
 
 
 
 ---
 
-# Agenda Dia 3 - Importando dados, funções e bibliotecas
+# Agenda Dia 3 - Sintaxes para manipulação de dados &amp; Importação
 
-- Revisão tipos/estruturas de Dados
-    + Fatores
-    + Datas
-    + Listas 
+- Revisando: tipos, classes e estruturas de Dados no R
+
+- Manipulando dados:
+  + criação, consulta, classes e operações para data.frames
+
+- Comparação de dialetos/sintaxes de manipulação de dados do R
+  + data.frame vs. tibble vs. data.table
+  
+- Primeiros passos tidyverse   
+ + Utilizando a gramática Pipe
 
 - Importação/exportação de arquivos
 
+
+
+
+
+
+
+
+---
+# Agenda Dia 4 - R para ciência de dados: tidyverse e dplyr 
+Importando dados, funções e bibliotecas
+
+- add: 
+
+
+- Explorando algumas das classes especiais:
+  + prioritariamente: factor, ordered e date
+  
 - Diretório de Trabalho e .Rproj
 
 - Estruturas de controle (versão clean)
 
 - Funções (versão clean)
 
-- Utilizando bibliotecas
 
-
-
----
-# Agenda Dia 4 - R para ciência de dados: tidyverse e dplyr 
-
-- RevisãoCiência de Dados, Estatística, Data Mining, e ... vs. R
+- Ciência de Dados, Estatística, Data Mining, e ... vs. R
 
 - O que são dados Tidy 
 
-- O que é um tibble? ( vs. data.frame)
+- (again) O que é um tibble? 
 
 - O que é o operador Pipe?
 
-- Utilizando a gramática Pipe
+- (again) Utilizando a gramática Pipe
 
 - As bibliotecas do Tidyverse
 
