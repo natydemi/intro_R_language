@@ -6,6 +6,7 @@
 
   #No R existem 6 tipos de dados, mas aqui iremos focar apenas em 4: 
     # character > numeric > integer > logical
+
   #E estes dados podem ser organizados segundo 5 estruturas, aqui apresentamos 2: 
     #vetor atômico e data.frame
   
@@ -190,7 +191,7 @@
                     # dos elementos à direita. Enquanto que os simbolos `==` e 
                     # `!=` avaliam par a par
         
-    # >>> FATORES -----
+    # >>> FATORES ----
         #Fatores são vetores que possuem um número limitado de categorias (níveis), logo 
         #são "armazenados" como inteiros. Na prática fatores são variáveis categóricas, 
         #e são tratadas de forma diferenciada em algumas análises (como nos modelos de regressão)
@@ -241,7 +242,7 @@
     # >>> DATAS -----  
         #O R possui uma classe própria para objetos que armazenam datas. 
         # para transformar um elemento nesta classe podemos utilizar `as.Date()`
-            ex_date <- as.Date(c("1988-03-25", "2019-03-25"))
+            ex_date <- as.Date(c("1988-03-25", "2024-03-25"))
             typeof(ex_date)
             class(ex_date)
             
@@ -295,15 +296,20 @@
       #CONSULTA
           #por vetores de índice:
           ex_df[2,2]
+          ex_df[2,]
+          
           ex_df[c(2,4), ]
+          
           ex_df[1,1:2]
           
           #por nomenclatura:
-          ex_df$idade
           ex_df[c("idade","classe")]
+          ex_df$idade
+
           
           #por vetores lógicos, e combinando as opções anteriores:
-          ex_df[ex_df$idade>30, 1]
+          ex_df[ex_df$idade>30 ,  ]
+          ex_df[ex_df$idade>30 , 1]
           
           #exemplos
           ex_df[rownames(ex_df)==4, ]
@@ -326,3 +332,6 @@
                 
   # cheatsheet: Data Structures
   # https://intellipaat.com/mediaFiles/2019/02/Data-structure-in-R-Cheat-Sheet-.png
+        
+
+          

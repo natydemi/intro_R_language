@@ -45,6 +45,8 @@
           
         #qual state.division possui a maior renda (`Income`)? E a menor?
           state[state$Income == 6315,"state.division"]
+          state[state$Income == max(state$Income), ]
+          state[state$Income == max(state$Income), c("state.division","state.name")]
           state[state$Income == max(state$Income),"state.division"]
           as.character(state[state$Income == max(state$Income),"state.division"])
 
@@ -64,14 +66,15 @@
 # ::::: hands-on: exportação de base de dados -----
           
         #exporte os dados em um arquivo .csv
-        write.csv(state, "base_exportada.csv")
+          write.csv(state, "base_exportada.csv")
+          write.csv(state, "C:\\Users\\natyd\\Desktop\\base_exportada.csv")
         
         #em qual diretório o arquivo se encontra?
-        getwd()
+          getwd()
         
         #qual a função que altera o diretório
         #C:\\Users\\natyd\\Desktop
-        #setwd("C:/Users/natyd/Desktop")
+        setwd("C:/Users/natyd/Desktop")
         setwd()
         
         
