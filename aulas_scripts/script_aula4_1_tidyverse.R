@@ -196,6 +196,7 @@
   # purrr: programação funcional
   # forcats: operações com variáveis categoricas
   # stringr: operações com strings
+  # lubridate: operações para trabalhar com datas
   
   #Adicionalmente, existem algumas bibliotecas que, apesar de não serem  
   # carregadas juntamente com os pacotes listados acima, são instaladas, estando 
@@ -203,7 +204,6 @@
   
   # readxl: leitura e escrita de arquivos .xls e .xlsx
   # haven: leitura e escrita de arquivos SPSS, Stata, e SAS
-  # lubridate: operações para trabalhar com datas
   # reza a lenda que este pacote passará para a primeira lista
   # até a versão 1.3.2 do tidyverse isto não ocorreu, mas cada nova 
   # versão, uma nova esperança! (sim, eu adoro esse pacote ;p)

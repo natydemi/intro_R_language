@@ -2,20 +2,6 @@
 # Introdução à Programação em R
 # Nathália Demetrio
 
-# Workflow da Ciência de Dados -----
-    # https://r4ds.had.co.nz/introduction.html
-
-# o que são dados tidy?  -----
-    #https://escoladedados.org/tutoriais/tidy-data-dados-arrumados-e-5-problemas-comuns/
-
-# o que é um tibble? (vs. data.frame)  -----
-    #https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html
-    
-# O que é o operador pipe?  -----
-    # https://www.curso-r.com/blog/2018-07-03-tutorial-pipe/
-
-# As bibliotecas do tidyverse -----
-    # https://www.tidyverse.org/ 
 
 # ::::: practice: Rbase vs. tidyverse (base titanic) -----
 
@@ -30,7 +16,7 @@
         tibble(titanic)
         #mas a função que transforma em tibble existe em vários pacotes,
         #inclusive essa mudança pode ser feita de outras formas, p.e.:
-        titanic <- as_tibble(titanic)
+        (titanic <- as_tibble(titanic))
         # se não tivessemos carregado a biblioteca do tidyverse, ou o dplyr,
         # a função precisaria ser chamada da seguinte forma:
         titanic <- dplyr::as_tibble(titanic)
@@ -62,6 +48,7 @@
             
             titanic %>% 
                 #filter(Sex == "male")
+                #filter(is.na(Age))
                 filter(Sex == "male", Age > 30 | is.na(Age))  
 
 
@@ -71,8 +58,9 @@
             
             titanic %>% 
                 #arrange(Sex, PassengerId) %>% 
-                arrange(Sex, -PassengerId) %>% 
-                arrange(Sex, desc(PassengerId)) %>% 
+                #arrange(Sex, -PassengerId) %>% 
+                #arrange(Sex, desc(PassengerId)) %>% 
+                arrange(desc(Age ), Name) %>% 
                 #arrange(desc(Sex)) #com -Sex dá erro, pois ñ faz sentido multiplicar um character por -1
                 filter(Sex == "male")
 
@@ -85,6 +73,7 @@
             
             titanic %>% 
                 #mutate(Survived = Survived +1 )
+                mutate(Survived * Age) %>%  glimpse()
                 #mutate(new_col = Age * Survived )
                 mutate(Survived_2 = ifelse(Survived == 1, "sobreviveu", "morreu")) %>% 
                 select(contains("Survived"))
@@ -113,6 +102,8 @@
                     mean(Fare, na.rm = T)
                 )
                
+            
+            # até aqui ------
 
             #exemplo com tudo: adicionando porcentagem
                 titanic %>% 
@@ -130,8 +121,7 @@
                     group_by(Survived) %>% 
                     mutate(p = n/sum(n))
                
-    # se eu quiser reescrever o objeto com as alterações feitas, 
-    # basta colocar `titanic <- `no início da sequência de comandos
+
 
 # ::::: practice: explorando dplyr (base iris) -------------------------------------
 
@@ -163,32 +153,17 @@
    
 
 # ::::: hands-on: manuseando dados (tidyverse - dplyr) -----
-    #No RStudio Learn Primers: #https://rstudio.cloud/learn/primers 
-    # faça os exercícios propostos na aba `Work with Data`,
-    # priorizando a seção `Derive Information with dplyr`
-    # https://rstudio.cloud/learn/primers/2.3
+    SUBSTITUIR PELA ABA TUTORIAL
+   #No Posit Recipes: #https://posit.cloud/learn/recipes  
+    # faça os exercícios propostos na coluna `Transform Tables`,
+   
                 
-# ::::: hands-on: cheatsheet (dplyr) -----
-   #replicar os exemplos da cheatsheet do dplyr
-   #https://github.com/rstudio/cheatsheets/blob/main/data-transformation.pdf
-   
-   
 # ::::: Refs -----
-    #comparação de sintaxe: Rbase vs. tidyverse vs. data.table
-        # https://github.com/mayer79/data_preparation_r
-                  
     #link cheatsheets no site da rstudio: 
     #note que ao fim da página você encontrará algumas cheatsheets em português
         # https://rstudio.com/resources/cheatsheets/
 
-    #livros
-        #(inglês)
-        # R for Data Science, by by Garrett Grolemund, Hadley Wickham:
-        # https://r4ds.had.co.nz/ 
-           
-        #(português)
-        # Curso-R ~ material em português
-        # https://livro.curso-r.com/
+
        
     
                
