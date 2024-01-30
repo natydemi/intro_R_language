@@ -10,7 +10,7 @@
 # são eles: Rbase, tidyverse e data.table.
 
 
-# ----- O tidyverse? -----
+# O tidyverse? -----
 
   # O tidyverse é um conjunto de bibliotecas que compartilham a 
   # mesma gramática, design e filosofia. No caso, o conceito de "dados tidy". 
@@ -231,7 +231,7 @@
 # disposição para poder seguir evoluindo na linguagem R :)
 
 
-# ----- > MÃO NA MASSA! -----
+# ::::: MÃO NA MASSA! -----
 
   # Uma das difereças ao se trabalhar com o universo tidyverse é que temos o  
   # tibble como alternativa ao data.frame. Vamos entender um pouco mais sobre 

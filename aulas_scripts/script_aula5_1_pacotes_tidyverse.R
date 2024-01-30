@@ -4,19 +4,22 @@
 
     library(tidyverse)
 
-# Tidying -----
+# Tidying (library tidyr) -----
     
-    #https://tidyr.tidyverse.org/
+  #https://tidyr.tidyverse.org/
+  
+  #Redimensionamento de dados - exemplos da cheatsheet
+    #case1 - table4a
     
-    
-    #case cheatsheet 
         table4a %>% 
             pivot_longer(cols = 2:3,
                          names_to = "year",
                          values_to = "cases") 
       
-        #note como ao fazer tal pivotagem, passamos a 
-        #poder utilizar o ggplot de forma mais fluída
+        #note como ao fazer tal redimensionamento, 
+        # também conhecido pivotagem, a aplicação de algumas funções
+        # passa a ser mais mais fluída.
+        # Como neste exemplo de ggplot: 
         table4a %>% 
         pivot_longer(cols = 2:3,
                      names_to = "year",
@@ -26,10 +29,10 @@
         
         # OBS: a função pivot_longer chamava gather em versões anteriores
     
-    #case1 - who
+    #case2 - who
         who 
         who %>% glimpse
-
+  
         who %>% 
             pivot_longer(cols = contains("new")) %>% 
             glimpse()   
@@ -40,30 +43,29 @@
           slice_max(value)   
         
         
-    #case2 - world_bank_pop 
+    #case3 - world_bank_pop 
     
       #note como podemos usar a pivotagem para facilitar a 
       #aplicação de calculos de interesse
         world_bank_pop
         world_bank_pop %>% glimpse
-
+  
         dados_world_bank_pop <- world_bank_pop %>%
           pivot_longer(cols = -(1:2), names_to = "year") %>%
           mutate(value = round(value,0)) %>%
           pivot_wider(names_from = year) 
 
-  #hands-on
-      # faça os exercícios sobre tidy do RStudio Learn
-      # https://rstudio.cloud/learn/primers/4
+    #exercício: replique os exemplos da cheatsheet
+      #https://rstudio.github.io/cheatsheets/html/tidyr.html
         
-# Importação -----
+# Importação (library readr) -----
 
     #https://readr.tidyverse.org/
 
     #case2 - world_bank_pop
         #export
-            dados_world_bank_pop %>% 
-            write_csv("dados_world_bank_pop.csv")
+            dados_world_bank_pop %>%
+              write_csv("dados_world_bank_pop.csv")
             #ou write_csv(dados_world_bank_pop, "dados_world_bank_pop.csv")
             
         #excluindo dataset
@@ -84,15 +86,15 @@
             #ou "dados_world_bank_pop.csv" %>% read_csv(col_names = TRUE)
             
   #hands-on: consulte o help das funções: col_skip e col_double, o que elas fazem? 
+  #exercício: replique os exemplos da cheatsheet
+    #https://rstudio.github.io/cheatsheets/html/data-import.html      
             
             
-            
-# Manipulação (dplyr) -----
+# Manipulação (library dplyr) -----
             
   #https://dplyr.tidyverse.org/
             
     #case1 - who
-          
       dados_who <- who %>% 
             pivot_longer(cols = contains("new"), values_to = "cases") 
             
@@ -118,11 +120,12 @@
             slice(1)
             
     #exercício: replique os exemplos da cheatsheet
+      #https://rstudio.github.io/cheatsheets/html/data-transformation.html
         
-  # datas (lubridate) -----
+        
+  # datas (library lubridate) -----
       
       #https://lubridate.tidyverse.org/
-  
       
       #case2 - world_bank_pop 
           #todos os paises tem dados iniciados e terminados no mesmo ano?
@@ -138,8 +141,10 @@
   
           
       #exercício: replique os exemplos da cheatsheet
+        #https://rstudio.github.io/cheatsheets/html/lubridate.html
+        
           
-  # fatores (forcats) -----
+  # fatores (library forcats) -----
     
     #https://forcats.tidyverse.org/
   
@@ -170,172 +175,84 @@
               dados_gss_cat$rincome <- dados_gss_cat$rincome %>% fct_shift()
               dados_gss_cat$rincome %>% fct_count()
               
-        #exercício: replique os exemplos da cheatsheet
+      #exercício: replique os exemplos da cheatsheet
+        #https://rstudio.github.io/cheatsheets/html/factors.html     
               
-              
-  # characters (stringr) -----
+  # characters (library stringr) -----
       
       #https://stringr.tidyverse.org/
               
-          #substituindo simbolos
-              dados_gss_cat %>% 
-                  mutate(rincome = str_replace_all(rincome,"to","-")) %>% 
-                  select(rincome) %>% 
-                  as_vector() %>% 
-                  fct_count()
+      #substituindo simbolos
+          dados_gss_cat %>% 
+              mutate(rincome = str_replace_all(rincome,"to","-")) %>% 
+              select(rincome) %>% 
+              as_vector() %>% 
+              fct_count()
           
       #exercício: replique os exemplos da cheatsheet    
+        #https://rstudio.github.io/cheatsheets/html/strings.html  
               
               
 # Visualização (ggplot2) -----
 
   #https://ggplot2.tidyverse.org/
-  #https://beatrizmilz.github.io/aMostra-IME-2019-DataVis/#33
-              
-  #livros/blogs
-    #excelente onboarding em portugues
-      #https://jonnyphillips.github.io/Ciencia_de_Dados/Graficos.html
-    #referencia oficial do pacote
-      #https://ggplot2-book.org/index.html
-    #foco nos comandos mais essenciais do ggplot2
-      #http://www.cookbook-r.com/Graphs/
-    #onboarding não apenas no ggplot mas em princípios de dataviz e no próprio R
-      #https://socviz.co/index.html#preface
-    #como organizar as ideias em torno de objetivos de análise + comandos ggplot
-      #https://clauswilke.com/dataviz/
   
-                     
-    #escrita completa    
-      ggplot(data = starwars, mapping = aes(x = mass)) +
-          geom_histogram()
-            
-    #escrita compacta
-      starwars %>% 
-        ggplot(aes(mass)) +
-         geom_histogram()
-      
-    #exemplo com mais camadas
-      p1 <- starwars %>% 
-        ggplot(aes(mass, color = sex, fill = sex)) +
-        geom_histogram() + 
-        facet_grid(gender ~ .)
+   #para trabalhar via point and click
+   #instalar a biblioteca esquisser, e carregar a janela
+      esquisse::esquisser()
         
-      plotly::ggplotly(p1)
-            
-    # ex: case mpg
-        ggplot(mpg) +
-            geom_point(aes(cty, hwy)) +
-            geom_point(aes(cty,displ)) +
-            geom_label(aes(cty, hwy, label = class))
-
-            ggplot(mpg, aes(cty, hwy)) +
-                geom_point() +
-                geom_point() +
-                geom_label(aes(label = class))
-            
-            a <- mpg %>% 
-                mutate( binario = if_else(hwy <30, TRUE, FALSE)) %>% 
-                ggplot(aes(cty, hwy, color = fl, stroke = binario)) +
-                geom_point() + 
-                facet_grid(.~binario)
-                
-            #transformando o ggplot em um gráfico interativo
-            #(é necessário ter o pacote plotly instalado)
-            plotly::ggplotly(a)
-          
-              
-    #ex: diamonds
-
-        set.seed(1)
-        diamonds_new <- diamonds %>% sample_frac(0.03) 
+        #códigos copiados a partir do exercício de demonstração  
+        # da ferramenta feito em sala de aula 
+        library(dplyr)
+        library(ggplot2)
         
-        ggplot(data = diamonds_new, 
-               mapping = aes(x = carat, y = price))
+        dplyr::starwars %>%
+          filter(!is.na(height)) %>%
+          filter(!is.na(mass)) %>%
+          filter(!is.na(hair_color)) %>%
+          ggplot() +
+          aes(x = mass, y = height, colour = eye_color) +
+          geom_point(shape = "square", 
+                     size = 1.5) +
+          scale_color_hue(direction = 1) +
+          labs(caption = "gráfico aleatório feio") +
+          ggthemes::theme_excel() +
+          facet_wrap(vars(gender))
         
-        diamonds_new %>%
-            ggplot(aes(x = carat, y = price)) + 
-            geom_point() + 
-            geom_smooth() + 
-            facet_grid(. ~  cut)
-        
-        diamonds_new %>% 
-            ggplot(aes(x = cut,  y = price, color = cut)) + 
-            geom_boxplot()
-            
-        diamonds_new %>% 
-            ggplot(aes(x = cut, fill = color)) + 
-            geom_bar(position = "fill")
+    #exercício: faça os exercícios da seção "Visualize Data"
+      # https://posit.cloud/learn/recipes 
         
         
-    #ggplot + forcats
-        #https://wilkelab.org/SDS375/slides/getting-things-in-order.html#1
-        
-   #hands-on: https://rstudio.cloud/learn/primers/3
-        
-
 # Comunicação (Rmarkdown) -----
-  #https://rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf  
-  #https://github.com/rladies/meetup-presentations_sao-paulo
         
-  #hands-on: https://rmarkdown.rstudio.com/lesson-1.html
-  
-  
+  #R Markdown é script com formato (.Rmd) que nos possibilita trabalhar 
+  #com códigos, assim como um script usual .R. Contudo aqui temos a 
+  #possibilidade de adicionar textos e visualizar os outputs dos códigos, 
+  #de maneira mais interativa. Permitindo uma maior praticidade durante a análise. 
+  #Além disso o Rmarkdown pode ser compilado, de modo que o produto final seja 
+  #salvo como um arquivo HTML , PDFs, Word, slides, entre outros. 
         
-# extra: skimr (useful summary statistics) -----
-    
-    library(skimr)
-    
-    starwars %>% glimpse()
-
-    starwars %>% skimr()
-    
-    # um parenteses para falar de group_by e summarise
-      
-      # aqui contamos o total da tabela
-        starwars %>% count()
-        starwars %>% summarise(n())
+  #E como criar? Dentro do RStudio, clique no menu:
+        #`Arquivo -> Novo Arquivo -> R Markdown...`
         
-      #aqui contamos o total para os grupos especificados
-        starwars %>% 
-          group_by(gender, sex) %>% 
-          count()
-        
-        starwars %>% 
-          count(gender, sex)
-        
-        #group_by + summarise
-        starwars %>% 
-          group_by(gender, sex) %>% 
-          summarise(mean_height = mean(height, na.rm = T),
-                    n_distinct_homeworld = n_distinct(homeworld)) %>% 
-          ungroup()
+  #Uma janela pop-up será aberta , dê um 'Título' ao documento e insira as 
+  # informações do 'Autor' (seu nome) e selecione a saíde de interesse 
+  # (o HTML é a saída padrão) – você poderá  mudar tudo isso mais tarde, 
+  # então não se preocupe.
         
 
-        #exemplo de seleção de coluna de modo que possamos aplicar a função média  
-        starwars %>% 
-          filter(!is.na(mass)) %>%  
-          pull(mass) %>% 
-          mean()
+  #exercício: explore a aba "Get Start" do site:
+        #https://rmarkdown.rstudio.com/
+
+          
+#  ::::: Refs -----
         
-      #views 
-        starwars %>% 
-          filter(mass < max(starwars$mass, na.rm =T)) %>% 
-          ggplot(aes(mass)) +
-          geom_boxplot() +
-          coord_flip()
-        
-        starwars %>% 
-          filter(mass < max(starwars$mass, na.rm =T)) %>% 
-          ggplot(aes(mass)) +
-          geom_freqpoly()
-        
-  # voltando ao skimr, podemos combina-lo com o group_by
-      starwars %>% 
-        group_by(gender) %>% 
-        skim()
-    
-    
-# :::::::::::: Refs -----
-        
-  #Repo R-Ladies, alguns meetups recomendados: #1, #5 e #6:
+  #Repo R-Ladies, alguns meetups recomendados: 
     # https://github.com/rladies/meetup-presentations_sao-paulo
+        
+      #6 - MeetUp da R-Ladies São Paulo - Oficina de R - Intermediário
+      # aqui tem um review de muito do que discutimos no curso:
+        #https://beatrizmilz.github.io/2019-02-R-Interm-R-LadiesSP/#1
+          #ggplot: https://beatrizmilz.github.io/2019-02-R-Interm-R-LadiesSP/#51
+          #rmarkdown: https://beatrizmilz.github.io/2019-02-R-Interm-R-LadiesSP/#83 
+        

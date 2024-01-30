@@ -1,0 +1,138 @@
+---
+title: "Guia de Bolso - Intro arquivos R Markdown"
+subtitle: (arquivos com extensão .Rmd)
+output: html_document
+date: '1988-03-25'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introdução
+
+Neste arquivo faremos uma breve introdução sobre o R Markdown, arquivos de extensão .Rmd alternativos aos scripts usuais .R.
+
+# O R Markdown
+
+R Markdown é script com formato (.Rmd) que nos possibilita trabalhar com códigos, assim como um script usual .R. Contudo aqui temos a possibilidade de adicionar textos e visualizar os outputs dos códigos, de maneira mais interativa. Permitindo uma maior praticidade durante a análise. Além disso o Rmarkdown pode ser compilado, de modo que o produto final seja salvo como um arquivo HTML , PDFs, Word, slides, entre outros.
+
+Para saber mais, acesse: [rmarkdown.rstudio.com](https://rmarkdown.rstudio.com/).
+
+## Como criar?
+
+Dentro do RStudio, clique no menu `Arquivo -> Novo Arquivo -> R Markdown...`. Uma janela pop-up será aberta , dê um 'Título' ao documento e insira as informações do 'Autor' (seu nome) e selecione a saíde de interesse (o HTML é a saída padrão) -- você poderá mudar tudo isso mais tarde, então não se preocupe.
+
+Vamos agora ver algumas das funcionalidades básicas do Rstudio:
+
+# Seção exemplo
+
+## Subseção exemplo
+
+Aqui escrevemos textos.
+
+```{r}
+#Este é um chunk, você pode identifica-lo pelo fundo cinza.
+# aqui precisamos seguir as regras de um script .R usual
+
+print("Hello World")
+```
+
+# Como compilar o documento
+
+Para isto podemos utilizar o botão `knit`, presente na barra de funcionalidades do documento .Rmd, ou ainda por meio do atalho `Ctrl + Shift + K`.
+
+# Como trabalhar com códigos em R
+
+## Criando um novo chunk
+
+Para isto você poderá ir via point-and-click, na parte superior direita da tela (o botão **+C**, em verde), ou por meio do atalho `Ctrl+Alt+I`.
+
+```{r}
+#este chunk está vazio, mas daqui para frente traremos uma visão da base cars
+```
+
+## Rodando um código dentro do chunk
+
+Note que para rodar os códigos do chunk, além do mesmo atalho de um .R usual, ou seja o `ctrl+Enter`. Podemos também rodar os comandos via Point-and-Click, na parte superior do próprio chunk, ao final da linha, à direita, na seta verde.
+
+```{r}
+cars
+```
+
+```{r}
+1 + 1
+```
+
+Fica bacana o output da tabela no script, né? Bem interativa! :) Mas não fica tão bonita no documento final, devido a esta base ter muitas linhas. Mas existem bibliotecas específicas para tornar a tabela interativa por lá também :)
+
+```{r}
+summary(cars)
+```
+
+Vamos ver agora um exemplo de output gráfico:
+
+```{r}
+plot(cars)
+```
+
+## Rodando um código fora do chunk, no texto
+
+Pois é, isto também é possível! Se quisermos, por exemplo, saber a quantidade de linhas da base de dados `cars`, basta escrever o comando para tal, no caso a função `nrow()`, utilizando aspas e a letra r no início do comando. Ou seja `r` seguido por `nrow(cars)` tudo junto. Assim a quantidade de linhas da base de dados cars é: `r nrow(cars)`.
+
+## Opções do chunk
+
+Ao criar um novo chunk, você pode especificar vários parâmetros. No código abaixo estou utilizando dois destes parâmetros, o primeiro especificando que o código não deve ser executado (`eval = FALSE`), e o segundo indicando também que o código em si não deve aparecer no output do nosso `.Rmd`.
+
+```{r eval=FALSE}
+Este chunk não será executado! Ainda bem, pois, caso contrário, retornaria um erro.
+```
+
+```{r eval=FALSE, include=FALSE}
+Este chunk não será executado, e não constará no output do .Rmd
+```
+
+## Atenção!
+
+É importante saber que ao trabalhar com o R Markdown você está em um ambiente apartado do seu console. De modo que o que você rodar no console não estará valendo para o seu Rmarkdown.
+
+Outro ponto que vale comentar é que a cada vez que você compilar o documento, você irá rodar o seu .Rmd desde o início. Se qualquer chunk tiver qualquer tipo de problema, o documento não será gerado! Mas não se desespere! Usualmente a mensagem de erro já te dará uma boa dica da origem do problema.
+
+> DICA: um problema comum, é a utilização de alguma função sem ter, antes, realizado o carregamento da respectiva biblioteca.
+
+Vou adicionar aqui um exemplo, em que chamamos a base de dados `construction`, que faz parte da biblioteca `tidyr` --- lembrando que, caso você nunca tenha instalado esta biblioteca, será necessário fazer a instalação por meio do `install.packages("tidyr")` no Console, ou via point-and-click na aba `Packages`. Como teste, inverta os comandos do chunk abaixo, ou seja, carregue a biblioteca **após** chamar a base, e compile o documento (botão `Knit` ou pelo atalho que comentamos anteriormente). Note que na aba `Render` você terá uma mensagem com algo como "objeto não encontrado".
+
+```{r}
+library(tidyr)
+us_rent_income
+```
+
+# Como trabalhar com o texto
+
+Vamos falar um pouco sobre as opções de textos no R Markdown --- basicamente a parte `Markdown` do documento, que apesar de ser muito similar a editores de texto usuais, aqui existe também a possibilidade de trabalhar com formatação de textos, como:
+
+-   bullets
+
+-   **negrito**
+
+-   *italico*
+
+-   `código`
+
+Ou ainda para acesso a links, como estas excelentes referências de consulta:
+
+1.  Aba `Help \> CheatSheet` :
+
+    -   cheatsheet R Markdown
+
+    -   Reference guide
+
+2.  <https://rmarkdown.rstudio.com/>
+
+3.  Canal no youtube da Fernanda Peres -- [R Markdown: Gerando relatórios usando o R (Parte1)](https://www.youtube.com/watch?v=obxa5VH4WvY)
+
+> DICA: explorar a opção "Visual" do R Markdown (disponível em versões mais recentes), que nos permite trabalhar com uma interface com menos código, e mais opções point-and-click.
+
+# MÃO NA MASSA!
+
+Que tal repassar algum script para um R Markdown? Você pode fazer uma curadoria do que é importante para você, possibilitando um material para consulta melhor formatado, mais visual, e com os seus próprios comentários! :)

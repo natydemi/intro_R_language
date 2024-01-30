@@ -1,0 +1,457 @@
+---
+title: "Visualização de Dados"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Bibliotecas
+
+```{r}
+library(tidyverse)
+```
+
+# Introdução
+
+Neste material, discutimos sobre a importância da visualização de dados, tanto para o processo de exploração dos dados, quanto para comunicação das descobertas, denominada aqui, etapa explanatória. No R nosso principal recurso para as visualizações é o pacote `ggplot2`, que implementa uma estrutura lógica denominada Gramática dos Gráficos.
+
+# O que é Dataviz? É de comer?
+
+Dataviz é a abreviação de *Data Vizualization*, ou, em português, **Visualização de dados**. Como o nome sugere, é uma forma de explorarmos os dados visualmente, por meio de gráficos!
+
+> Você também pode encontrar o termo como datavis, com `s`, visto esta ser um sintaxe também aceita no R, devido ao inglês Britânico.
+
+Esta etapa possui um papel crucial na análise de dados! Citando Ben Shneiderman, um importante nome da ciência da computação: "Visualização nos dá resposta para perguntas que nós não sabíamos que tínhamos".
+
+E no R, apesar de existirem muitos recursos padrão para a visualização de dados, como as funções: `plot()`, `hist()` e `boxplot()`.
+
+```{r}
+Temperature <- airquality$Temp
+Ozone <- airquality$Ozone
+
+par(mfrow=c(2,2))
+hist(Ozone, main = "Histograma Ozone")
+plot((density(Temperature)), main = "Densidade Temperatura")
+plot(Ozone, main = "Dispersão Ozone")
+boxplot(Temperature, horizontal=TRUE, main = "Boxplot Temperatura")
+
+```
+
+É quando começamos a trabalhar com o `ggplot2` e suas bibliotecas tangentes que as possibilidades se potencializam.
+
+# O pacote `ggplot2`
+
+Dentre os muitos pacotes do R, o `ggplot2` é a maior referência em relação a visualização de dados. Isto porque nele é implementado o *Grammar of Graphics*, uma abstração segundo a qual cada elemento do gráfico é visto como um elemento sintático, de modo que passamos a ter um sistema de regras que permite uma estrutura única.
+
+Sendo possível construir desde gráficos simples até visualizações complexas, isto por meio da mesma lógica utilizando a mesma lógica. Algumas das vantagens de usar o `ggplot2` são:
+
+-   Sintaxe única e estruturada
+-   Maior controle e versatilidade
+-   Portfólio amplo e em expansão
+-   Oferece recursos de design e "embelezamento" dos gráficos
+-   Fomenta a análise semântica dos dados
+-   Cada variável é representada de forma única
+-   Ter como base uma linguagem cientifica, que otimiza a reprodutibilidade
+-   Ao decodificar gráficos, tornamos a sua comunicação mais clara e intencional
+
+Mas nem tudo são flores, o `ggplot2` tem um contra importante aqui que é a **curva de aprendizado**. Por ter uma gramática própria, leva um tempo para entendê-la e domina-la. Mas uma vez superada a barreira inicial, é difícil enxergar visualização de dados de outra maneira.
+
+> eu nunca encontrei um ex-ggploter ;p
+
+## As camadas do `ggplot2`
+
+No `ggplot()` o gráfico é construído a partir de um mapeamento de elementos, feito por camadas. Sendo necessário para tal indicar quais elementos dos dados devem ser considerados. Para construir isso na prática, temos a estrutura de código abaixo:
+
+```{r, eval=F}
+dados %>% 
+  ggplot(aesthetics()) +
+    geometries(statistics()) +
+    facets() +
+    themes() +
+    coord() +
+    scales()
+```
+
+> Note que, depois de passar o conjunto de dados pelo pipe (`%>%`), a função `ggplot()` encadeia os elementos pelo operador `+`, e não mais pelo pipe -- mas não se preocupe, se você confundir, o próprio R te dá um toque via mensagem ;)
+
+Os principais elementos do `ggplot2` são:
+
+-   `{data}` -- *Basics*: dados que serão utilizados no gráfico;
+
+-   `{aesthetic}` -- *Aes*: mapeamento dos dados para os componentes visuais -- usualmente denominados mapeamentos estéticos (especificação do eixo x, y, cores, formas, etc);
+
+-   `{geometries}` -- *Geoms* : objetos geométricos que serão utilizados no gráfico (escolha dos gráficos!);
+
+-   `{facets}` -- *Faceting* : apresenta as visualizações segundo subgrupos, ou seja, segmentações que você faz nos dados (como um gráfico para cada categoria, por exemplo);
+
+-   `{themes}` -- *Themes* : redefine o layout visual do gráfico, sem mexer nos dados, mas em elementos de design (algo como a seção de "estilos de gráficos" do excel);
+
+-   `{coord}` -- *Coordinate Systems* : organiza as coordenadas/eixos em que objetos geométricos irão aparecer -- usualmente trabalhamos com [sistemas de coordenadas cartesiano](https://pt.wikipedia.org/wiki/Sistema_de_coordenadas_cartesiano) (aqui podemos manusear a apresentação dos eixos);
+
+-   `{statistics}` -- *Stats* : transforma os dados considerando resumos estatísticos, como variância ou média. Normalmente aplicamos estas transformações antes da visualização, mas com o Stats, podemos contemplar esta etapa como uma camada do gráfico.
+
+> existe também o `{scales}`, que apesar de não ser uma camada, mas sim uma `função wrapper` das `{aesthetics}`, possui um uso tão relevante dentro do contexto do ggplot, que vale ser citado aqui. Na prática o `{scales}` é como se fosse uma camada, responsável por adaptar os mapeamentos estéticos para outros contextos, como alteração de padrões de cores (permitindo utilizar uma paleta de cores acessível para daltônicos por exemplo), mudança na apresentação de um eixo (formatando a apresentação de uma variável segundo padrões de data), etc.
+
+## cheat sheet
+
+Aqui você terá uma referência poderosa, particularmente importante no início da sua jornada. Uma "folha de dicas" com imagens e exemplos que podem te auxiliar a decidir em questões como:
+
+-   quais geometrias você pode ou não aplicar, considerando o tipo e a quantidade das variáveis envolvidas?
+-   quais as estéticas obrigatórias para cada geom?
+-   qual a sintaxe que deve ser utilizada para cada camada?
+-   quais os principais `scales` que podemos utilizar?
+
+```{r , echo=FALSE, fig.align = "center", fig.cap="CheatSheet ggplot2 (folha 01 e 02)"}
+knitr::include_graphics('https://i.pinimg.com/originals/5d/f0/dd/5df0dd5a1c5751f039b8db8ad9267cb5.jpg')
+```
+
+E apesar de todas essas possibilidades, você pode focar inicialmente em apenas três camadas, visto se tratarem de componentes obrigatórios para todo e qualquer gráfico: dados (`data`), mapeamentos estéticos (`aesthetic`), e objetos geométricos (`geometries`). No caso:
+
+```{r, eval=F}
+  dados %>% 
+    ggplot(aesthetic) +
+      geometries() 
+```
+
+Vamos começar por elas!
+
+### Camadas obrigatórias
+
+Para entender melhor as camadas obrigatórias, vamos conhecê-las, uma a uma. Para tal, utilizaremos a base `gapmider` do pacote `dados`:
+
+```{r}
+gapminder <- dados::dados_gapminder %>% glimpse()
+```
+
+Ao aplicar a base no ggplot apenas, sem as demais camadas, temos um painel em branco, com isto podemos entender que a função `ggplot` tem como papel inicializar o gráfico:
+
+```{r}
+gapminder %>% 
+  ggplot() 
+```
+
+Passamos agora para o elemento `aesthetic`, no R, representada de maneira abreviada, `aes()`. Essa função é chamada dentro da `ggplot()`, ainda sem o operador `+`, e descreve como as variáveis dos dados serão mapeadas para as propriedades visuais (estéticas).
+
+Ou seja, com `aes()` você indicará quais variáveis serão mapeadas no gráfico, seja um conjunto de variáveis ou apenas uma. Em um mapeamento usual aqui especificamos os eixos x e y, mas é possível também tratar de cores, formas e textos:
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = pib_per_capita, y = expectativa_de_vida)) 
+```
+
+Note que agora o gráfico passou a apresentar as variáveis nos eixos, mas nada além disto, por quê? Ainda precisamos indicar qual a geometria indicada (`geom`) para representar esses elementos. Vamos fazer isso olhando a relação entre `pib_per_capita` e `expectativa_de_vida`:
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = pib_per_capita, y = expectativa_de_vida))  +
+  geom_point()
+```
+
+Neste caso, a `geom_point()` cria um gráfico de dispersão, com pontos indicando todas as observações dos conjuntos de dados em sua posição correta no eixo cartesiano. Poderíamos, de todo modo, recorrer a outros `geoms` [listados aqui](https://ggplot2.tidyverse.org/reference/index.html).
+
+Isso quer dizer que qualquer `geom_*` serve? Não. Precisaria ser uma geometria que trabalhasse com dois eixos, sendo ambos numéricos, já que as variáveis escolhidas são deste tipo. Podemos ainda adicionar novos atributos, bem como novas camadas geométricas, como a `geom_smooth()`, que descreve a tendência dos dados:
+
+```{r, message=F}
+gapminder %>% 
+  ggplot(aes(x = pib_per_capita, y = expectativa_de_vida))  +
+    geom_point() + 
+    geom_smooth()
+```
+
+Também podemos adicionar mais elementos que nos ajudem a entender a visualização, como o parâmetro `alpha`, que possibilita termos uma noção em quais regiões existem mais pontos concentrados
+
+```{r, message=F}
+gapminder %>% 
+  ggplot(aes(x = pib_per_capita, y = expectativa_de_vida))  +
+    geom_point(alpha = 0.1) + 
+    geom_smooth()
+```
+
+Ou ainda colorir os pontos :
+
+```{r, message=F}
+gapminder %>% 
+  ggplot(aes(x = pib_per_capita, y = expectativa_de_vida))  +
+    geom_point(alpha = 0.1, colour = "darkred") + 
+    geom_smooth()
+```
+
+Ou deixar os pontos coloridos por continente:
+
+```{r, message=F}
+gapminder %>% 
+  ggplot(aes(x = pib_per_capita, y = expectativa_de_vida))  +
+    geom_point(aes(color = continente), alpha = 0.1) + 
+    geom_smooth()
+```
+
+Ou ainda todas as camadas com a segmentação de cor por continente:
+
+```{r, message=F}
+gapminder %>% 
+  ggplot(aes(x = pib_per_capita, y = expectativa_de_vida, color = continente))  +
+    geom_point(alpha = 0.1) + 
+    geom_smooth()
+```
+
+#### geometrias com estéticas obrigatórias
+
+É importante comentar que algumas geometrias demandam estéticas específicas, como é o caso do `geom_text()`, que necessita da informação de qual atributo que será utilizo como texto:
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = pib_per_capita, y = expectativa_de_vida, color = continente))  +
+    geom_point() +
+    geom_text(aes(label = pais))
+```
+
+Ficou difícil de ler, certo? Tente filtrar os dados com o `pib_per_capita` maior que 60 mil e ver se o gráfico fica mais claro. Mas note, queremos que este filtro seja aplicado **apenas** na camada do geom_text, e com a gramática dos gráficos isto é possível! Basta utilizar o parâmetro data, que usualmente não é utilizado pois a base de dados especificada inicialmente é utilizada em todas as camadas do ggplot2. No caso, substituindo a última linha por: `geom_text(data = . %>% filter(pib_per_capita>60000), aes(label = pais))`, aqui o `.` (ponto) é utilizado como uma referência da base de dados especificada inicialmente.
+
+#### Um pouco mais dos mapeamentos estéticos possíveis
+
+Avaliando o resultado acima, faria mais sentido se estivéssemos trabalhando com a informação distribuída pelos anos, portando vamos deixar o PIB de lado e olhar para a `expectativa_de_vida` em cada `ano` por `continente`:
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = ano, y = expectativa_de_vida, color = continente))  +
+    geom_point() 
+```
+
+As linhas estão conectando pontos que não necessariamente fazem sentido, para isto podemos passar a informação de `país` como um mapeamento estético:
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = ano, y = expectativa_de_vida, color = continente))  +
+    geom_point() +
+    geom_line(aes(group = pais))
+```
+
+O gráfico ainda está sobrecarregado, certo? E se mantivéssemos apenas as retas ajustadas coloridas?
+
+Note a diferença entre a posição do `color` para cada uma das camadas. Nos dois primeiros geoms, o `color` é especificado como uma cor fixa, enquanto no terceiro, em que não especificamos este parâmetro, é considerado o que consta na primeira linha do ggplot, globalmente. No caso com o `color` parametrizado, dentro do `aes()`:
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = ano, y = expectativa_de_vida, color = continente))  +
+    geom_point(color = "gray") +
+    geom_line(aes(group = pais), color = "gray") +
+    geom_smooth()
+```
+
+Bem melhor, certo? Em dataviz, cada detalhe importa. Mesmo a cor (ou a ausência dela, no caso do cinza) e suas combinações ajudam a entender e apresentar melhor os dados.
+
+### Camadas não obrigatórias
+
+E considerando as demais camadas, o que mais pode ser trabalhado de interessante? Usando o `facet_grid()`, por exemplo, que tal criar gráficos por continente?
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = ano, y = expectativa_de_vida, color = continente))  +
+    geom_point(color = "gray") +
+    geom_line(aes(group = pais), color = "gray")  + 
+    theme_minimal() +
+    geom_smooth()
+```
+
+```{r, message=F}
+gapminder %>% 
+  ggplot(aes(x = ano, y = expectativa_de_vida, color = continente))  +
+    geom_point(color = "gray") +
+    geom_line(aes(group = pais), color = "gray") +
+    geom_smooth() + 
+    theme_minimal() +
+    facet_grid( continente ~ .)
+```
+
+Estamos avançando demais aqui, mas o meu ponto era justo mostrar o quanto a dificuldade não é de código, e sim do entendimento conceitual das formas de mapeamento do `ggplot2`. E não se preocupe: vamos aprofundar com calma em recursos suficientes para que você possa seguir evoluindo na gramática dos gráficos ;)
+
+## Mas é díficil! Como eu supero a barreira de entrada?
+
+Treinando! Lendo a documentação, replicando visualizações, experimentando seus próprios gráficos... E utilizando o pacote `esquisse::esquisser()`! Que nos possibilita construir gráficos do `ggplot2` de maneira interativa! Incrível, certo? Mas não esqueça de copiar os comandos que são gerados, tanto para garantir a reprodutibilidade do seu trabalho, quanto para amadurecer o seu conhecimento :)
+
+# Como fazer boas escolhas visuais?
+
+Uma divisão interessante é separar a etapa de **exploração** da etapa de **explanação** (ou apresentação). Ou seja, tratar de maneira diferente quando você está minerando o conjunto de dados, procurando construir percepções, e quando você já chegou em algo que será compartilhado, e deseja comunicar isto para outras pessoas.
+
+Ambas as partes têm sua complexidade: a primeira exige um entendimento exploratório (e muitas vezes estatístico) de como estudar o conjunto de dados de forma visual para encontrar padrões; e a segunda exige uma maturidade comunicativa para utilizar cada elemento visual de forma que ajude a sua audiência a entender o que você descobriu.
+
+## Exploração: qual gráfico usar? (geom\_\*)
+
+Assim como as sumarizações estatísticas, as visualizações são visões parciais dos dados, otimizadas segundo algum propósito. Assim a escolha de um gráfico implica, necessariamente, na perda de alguma informação, de modo que é importante escolhermos bem: "diferentes níveis de pensamento pedem diferentes níveis de agregação" ou ainda "um gráfico mostra o que aquele gráfico mostra, e nada mais". Com isto em mente, alterar os tipos de visualização, no contexto do `ggplot`, fazer uso das muitas `geoms_*` ofertadas pelo `ggplot2`, pode ser uma excelente tática ao iniciar uma investigação. E como você viu na *Cheat Sheet* discutida, existem diferentes opções de geometria no `ggplot2`, para citar algumas:
+
+-   `geom_line`: para linhas definidas por pares (x,y);
+-   `geom_abline`: para retas definidas por um intercepto e uma inclinação;
+-   `geom_hline`: para retas horizontais;
+-   `geom_bar`: para gráficos de barra;
+-   `geom_histogram`: para histogramas;
+-   `geom_boxplot`: para boxplots;
+-   `geom_density`: para gráficos de densidades;
+-   `geom_area`: para gráficos com áreas.
+
+Além dos vários pacotes que ampliam e complementam tais funções.
+
+O primeiro passo para decidir qual gráfico usar é entender como você pode relacionar as variáveis a partir de sua classe, ou ter clareza no que você quer comunicar. Existem duas ferramentas que podem nos ajudar a ampliar o entendimento sobre estes pontos: o site [R Graph Gallery](https://r-graph-gallery.com/), que reúne exemplos de gráficos construídos no R, e o site [from Data to Viz](https://www.data-to-viz.com/), que além de exemplos de código, organiza uma lista de gráficos segundo o tipo das variáveis, ou pelos nossos objetivos de análise. Veremos um pouco mais sobre esta organização:
+
+### considerando objetivos de análise
+
+Vamos ver algumas possibilidades de visualização, segundo diferentes objetivos. Convido você a refletir sobre como cada um dos gráficos listados nos apoiam a entender melhor sobre as respectivas finalidades.
+
+### Distribuição
+
+Iniciaremos com o conjunto de dados `titanic`, que reúne dados dos passageiros sobreviventes do naufrágio do Titanic.
+
+```{r, message=F}
+library(titanic)
+titanic <- titanic_train
+
+# Gráfico
+
+titanic %>%
+  ggplot(aes(x = Age,y = ..density..,fill = Sex)) +
+  geom_histogram(binwidth = 5,
+                 position = "dodge",
+                 col = "white",
+                 boundary = 0,
+                 alpha = 0.7) +
+  facet_grid(~Sex,
+             labeller = labeller(Sex = function(Sex) paste(Sex,
+                                                           "passengers")))+
+  scale_x_continuous(expand = c(0, 0))+
+  labs(y = "Density")+
+  theme_minimal()+
+  theme(panel.grid.minor.y =element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = "none",
+        panel.spacing = unit(1, "lines"),
+        strip.text=element_text(hjust=0.8, vjust = -1.2)
+  )
+  
+```
+
+### Relação
+
+Agora, com o conjunto de dados `diamante`, que lista informações de preço de quase 54 mil diamantes em seus diferentes tipos (cor, quilate, corte, etc).
+
+```{r, message=F}
+diamante <- dados::diamante
+
+p <-  diamante %>% 
+  sample_frac(0.10) %>% 
+  ggplot(aes(x = quilate, y = preco)) +
+  geom_point(aes(text = transparencia), size = 4) +
+  geom_smooth(aes(colour = corte, fill = corte)) + 
+  facet_grid(.~corte) 
+
+plotly::ggplotly(p)
+```
+
+### Ordenação
+
+Aqui, nosso interesse é entender a distribuição da variável `cut` em relação à `clarity`, ou ambas em relação à `count`:
+
+```{r}
+  diamante %>% 
+    ggplot(aes(x = corte, fill = transparencia)) + 
+    geom_bar()
+```
+
+```{r}
+ diamante %>% 
+    ggplot(aes(x = corte,  y = preco)) + 
+    geom_bar(aes(fill = transparencia), 
+             stat = "identity", 
+             position = "fill")
+  
+```
+
+### Organização
+
+Vamos agora procurar entender sobre a organização dos pinguins nas ilhas do Arquipélago Palmer -- uma base de dados muito utilizada pela comunidade R :)
+
+```{r}
+dados::pinguins %>% 
+  janitor::tabyl(ilha) %>% 
+  ggplot(aes(area = n, fill = n, label = ilha)) + 
+    treemapify::geom_treemap() +
+    treemapify::geom_treemap_text(colour = "white",
+                    place = "centre",
+                    size = 15)
+```
+
+### Evolução
+
+Por fim segue um exemplo de dados temporais em que, em conjunto com as funções do `tidyr` e `dplyr`, remodelamos a base de dados `economics`, visando obter a visualização das variáveis `psavert` e `uempmed` desde `1990`:
+
+```{r}
+economics %>%  glimpse()
+```
+
+```{r}
+economics %>%
+  select(date, psavert, uempmed) %>%
+  filter(date>1990) %>% 
+  pivot_longer(-date) %>% #() 
+  #gather(key = "variable", value = "value", -date) %>% 
+  ggplot(aes(x = date, y = value)) + 
+  geom_line(aes(color = name), size = 1) 
+```
+
+## Explanação: como apresentar?
+
+Aqui seria uma aula (ou um curso) à parte, temas como: teoria das cores e Proportional Ink Principle (em português "princípio da tinta proporcional"), nos ajudam a direcionar as escolhas em termos de design. Para iniciar o entendimento no tema, tendo o R como pano de fundo, recomendo a [Parte II "Principles of figure design" do livro Fundamentals of Data Visualization, do Claus O. Wilke](https://clauswilke.com/dataviz/). E como uma alternativa rápida, para ter um primeiro contato com princípios de design: [essa apresentação do Will Chase sobre o "Glamour of Graphics"](https://www.williamrchase.com/slides/assets/player/KeynoteDHTMLPlayer.html#1).
+
+> No mais acompanhar os materiais desenvolvidos semanalmente na [tidytuesday](https://www.tidytuesday.com/), é, sem dúvida, uma das maneiras mais divertidas de evoluir em temas de dataviz :)
+
+## Bibliotecas complementares ao ggplot
+
+E como um spoiler do poder de fogo do R no contexto de visualização, segue uma pequena amostra, em ordem alfabética, das mais de 350 bibliotecas que complementam o ggplot2:
+
+-   `{cowplot}` --- arranjos de enredo, temas e anotações
+-   `{ggalt}` --- coordenadas alternativas, geoms, estatísticas e escalas
+-   `{gganimate}` --- cria animações
+-   `{ggbump}` --- geoms para gráficos de colisão
+-   `{ggiraph}` --- geoms para visualizações dinâmicas e interativas
+-   `{ggmaps}` --- acesso aos mapas do Google e Stamen
+-   `{ggplotly}` --- cria gráficos interativos
+-   `{ggraph}` --- redes, gráficos e árvores
+-   `{ggrepel}` --- evita a sobreposição de rótulos de texto
+-   `{ggridges}` --- geoms para plotagens de Ridgeline
+-   `{ggsankey}` --- geoms para diagramas Sankey
+-   `{ggstream}` --- geoms para gráficos de fluxo
+-   `{ggthemes}` --- temas, escalas e geometrias adicionais
+-   `{hrbrthemes}` --- temas mínimos centrados em tipografia
+-   `{lemon}` --- complementos de eixo e legenda
+-   `{patchwork}` --- combine ggplots com gráficos de vários painéis
+-   `{rayshader}` --- mapas sombreados em 2D e 3D
+-   `{systemfonts}` --- use fontes personalizadas (substitui - `{extrafont}` e - `{showtext}`)
+
+Por fim dá uma olhada até onde podemos chegar com o `ggplot2` [nessa apresentação](https://www.cedricscherer.com/slides/OutlierConf2021_ggplot-wizardry.pdf) que reúne *bruxarias em R*, como descrito pelo próprio autor, resultando em gráficos maravilhosos!
+
+# Bônus: Tabelas
+
+Por fim gostaria de comentar de uma entidade tão importante quanto o gráfico em si: as tabelas. Eu tenho um amigo que costuma dizer que "por tras de todo grande gráfico temos uma grande tabela". O que faz sentido, inclusive, se você reparar que para vários de nossos exemplos foi necessário fazer algum ajuste nos dados antes de chegar no gráfico:
+
+## DT (função padrão do pacote `knitr`)
+
+```{r}
+gapminder %>% DT::datatable()
+```
+
+## Outras opções de bibliotecas
+
+-   [kableExtra](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html)
+
+-   [flextable](https://ardata-fr.github.io/flextable-book/)
+
+-   [formattable](https://www.displayr.com/formattable/)
+
+# MÃO NA MASSA!
+
+-   Passamos por muitos gráficos neste módulo, MUITOS códigos, que tal revisitá-los, procurando fazer pequenas alterações nos códigos, de modo que você ganhe mais confiança e arsenal no ggplot :)
+
+-   No Posit Recipes : <https://posit.cloud/learn/recipes>, faça os exercícios propostos na coluna `Visualize Data`
+
+-   Demos MUITAS referências neste capítulo, você já investigou alguma? Que tal dar uma olhada no que temos por aqui, e escolher ao menos uma para investigar em mais detalhes?

@@ -14,12 +14,22 @@
     iris %>% summarise(across(contains("Sepal"), mean))
 
 #data explore libraries -----
-    #biblioteca skimr
+    #biblioteca skimr -----
         #https://cran.r-project.org/web/packages/skimr/vignettes/skimr.html 
         ?skimr::skim() 
+  
+      library(skimr)
+      
+      starwars %>% glimpse()
+      starwars %>% skimr()
+    
+      # podemos combinar o skimr com o group_by
+      starwars %>% 
+        group_by(gender) %>% 
+        skim()
+    
 
-
-    #biblioteca janitor
+    #biblioteca janitor -----
         #https://cran.r-project.org/web/packages/janitor/vignettes/tabyls.html
     
         ?janitor::tabyl() 
@@ -34,20 +44,18 @@
             adorn_pct_formatting(digits = 0) %>% 
             adorn_ns(position = "front")  
         
-    #bibliotecas:
-        #inspectdf::
-            inspectdf::inspect_types(starwars) 
-            inspectdf::inspect_num(starwars) 
+    #biblioteca inspectdf -----
+      inspectdf::inspect_types(starwars) 
+      inspectdf::inspect_num(starwars) 
             
-        #naniar::
-            naniar::miss_var_table(starwars)
-            naniar::gg_miss_upset(starwars)
+    #biblioteca naniar -----
+      naniar::miss_var_table(starwars)
+      naniar::gg_miss_upset(starwars)
             
-        #visdat::
-            visdat::vis_guess(starwars)
+    #biblioteca visdat -----
+      visdat::vis_guess(starwars)
             
             
-        
 #Combinar bases -----
 
     library(tidyverse)
@@ -81,7 +89,7 @@
     
 
 #DataViz -----
-    #biblioteca babado
+    #biblioteca pont-and-click
     esquisse::esquisser() 
     
     #Visualizações avançadas
@@ -124,9 +132,12 @@
 #Interoperabilidade R e Python -----
     #Reticulate: https://rstudio.github.io/reticulate/ 
     
-
-
-
 #Comunidades -----
-    #canal: julie singe, samuel macedo, rladies SP, 
-    #twitter: rstats
+    #canal youtube: 
+      #rladies SP
+      #julie singe (Advanced Analytics)
+      #samuel macedo 
+    #rede social: 
+      # hashtag rstats
+    
+    

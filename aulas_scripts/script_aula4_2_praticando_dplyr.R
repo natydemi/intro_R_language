@@ -101,15 +101,22 @@
               mean_age = mean(Age, na.rm = T), 
               median_age = median(Age, na.rm = T),
               max_age = max(Age, na.rm = T), 
-              sd_age = sd(Age, na.rm = T)
+              sd_age = sd(Age, na.rm = T),
+              IQR_age = IQR(Age, na.rm = T) 
               )
+          
+          #este aqui dá errado! 
+          titanic %>% 
+            summarise(n = n()) %>% 
+            summarise(n_dist_age = n_distinct(Age))
       
-  # group_by  ------ 
+  # group_by ------ 
       titanic %>%
-          #filter(!is.na(Age)) %>% 
-          group_by(Pclass) %>% 
+          filter(!is.na(Age)) %>% 
+          #group_by(Pclass) %>% 
           summarise(
               n = n(),
+              n_dist_Pclass = n_distinct(Pclass),
               n_dist_age = n_distinct(Age),
               mean_age = mean(Age, na.rm = T), 
               sd_age = sd(Age, na.rm = T), 

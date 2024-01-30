@@ -141,23 +141,13 @@ Importando dados, funções e bibliotecas
 
 # Agenda Dia 5 - libs p/ análise de dados e 1ºs passos no ggplot
 
-- add
-+ Um pouco sobre Rmarkdown (relatórios estatísticos)
 - Diretório de Trabalho e .Rproj
-
-- Estruturas de controle (versão clean)
-
-- Funções (versão clean)
-
-
--  Pacote skimr
-
-- Princípios de estatística para análise descritiva de dados
 
 - Mais bibliotecas do Tidyverse
 
 - Primeiros passos no ggplot
 
++ Um pouco sobre Rmarkdown (relatórios estatísticos)
 
 
 
@@ -165,6 +155,14 @@ Importando dados, funções e bibliotecas
 
 ---
 # Agenda Dia 6 - R e algumas das suas (muitas) possibilidades
+
+- Estruturas de controle (versão clean)
+
+- Funções (versão clean)
+
+-  Pacote skimr
+
+- Princípios de estatística para análise descritiva de dados
 
  - Manipulação de Dados Avançada (dplyr::across)
  

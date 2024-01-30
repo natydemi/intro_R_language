@@ -1486,10 +1486,14 @@ border-radius: 0px;
 <hr />
 <div id="prefácio" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Prefácio</h1>
-<p>Esta apostila está estruturada considerando três etapas: a
-apresentação do ambiente R, a sua linguagem de programação, considerando
-aspectos estruturais da linguagem, e por fim a apresentação do R com
-foco na rotina de análise da Ciência de Dados.</p>
+<p>Esta apostila está estruturada considerando quatro etapas: 1) a
+apresentação do ambiente R, 2) a sua linguagem de programação,
+considerando aspectos estruturais da linguagem, 3) a apresentação do R
+com foco na rotina de análise da Ciência de Dados, e por fim 4) Tópicos
+extras para investigações intermediárias/avançadas.</p>
+<blockquote>
+<p>Como complemento a este material, acesse os slides neste link: <a href="https://bit.ly/intro_linguagemR_slides" class="uri">https://bit.ly/intro_linguagemR_slides</a>.</p>
+</blockquote>
 <!-------------------------------------------------->
 <hr />
 </div>
@@ -1655,8 +1659,9 @@ RStudio: Layout dos Painéis.
 <hr />
 </div>
 </div>
-<div id="programação-em-r" class="section level1" number="3">
-<h1><span class="header-section-number">3</span> Programação em R</h1>
+<div id="programação-em-r-rbase" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Programação em R
+(RBase)</h1>
 <div id="o-r-como-calculadora" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> O R como
 calculadora</h2>
@@ -1969,8 +1974,12 @@ podemos utilizar o atalho <code>&#39;alt + -&#39;</code>.</p>
 <div id="entendendo-dados" class="section level2" number="3.4">
 <h2><span class="header-section-number">3.4</span> Entendendo dados</h2>
 <p>Para tirar maior proveito da linguagem R é importante entender os
-diferentes tipos e estruturas de dados disponíveis. Para tal, vamos
-primeiramente entender sobre os tipos de dados:</p>
+diferentes tipos, classes e estruturas de dados disponíveis. Para este
+tema recomendo acessar os <a href="https://bit.ly/intro_linguagemR_slides" class="uri">slides</a>
+citados no Prefácio deste material, uma vez que o conteúdo é apresentado
+com mais detalhes.</p>
+<p>Aqui vamos primeiramente entender sobre os tipos de dados existentes
+no R:</p>
 <div id="tipos-de-dados" class="section level3" number="3.4.1">
 <h3><span class="header-section-number">3.4.1</span> Tipos de dados</h3>
 <p>No R existem seis tipos de dados, que basicamente indicam como os
@@ -2231,6 +2240,10 @@ ex_vetor_integer[&quot;três&quot;]
     ex_vetor_integer[!names(ex_vetor_integer) %in% c(&quot;um&quot;,&quot;três&quot;)]
   #&gt;   dois quatro  cinco 
   #&gt;      2      4      5
+        #perceba que o `%in%` é importante pois a comparação é feita
+        # avaliando cada um dos elementos à esquerda, em cada um 
+        # dos elementos à direita. Enquanto que os simbolos `==` e 
+        # `!=` avaliam par a par
   
 #para retirar os nomes podemos redefinir o objeto com a função unname
   ex_vetor_integer &lt;- unname(ex_vetor_integer)
@@ -2647,8 +2660,9 @@ objetos no R consulte o help <code>?Extract</code> ou
 </div>
 </div>
 </div>
-<div id="analisando-dados" class="section level2" number="3.5">
-<h2><span class="header-section-number">3.5</span> Analisando dados</h2>
+<div id="minha-primeira-análise-de-dados" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Minha primeira
+análise de dados</h2>
 <p>Agora que temos familiaridade com os dados no R, vamos análisar uma
 base de dados do próprio R, visando apresentar algumas das funções
 <em>built-in</em> disponibilizadas para tal, bem como apresentar formas
@@ -2901,30 +2915,152 @@ permitindo trabalharmos com outras extensões.</p>
 <code>??read</code> e <code>??write</code>.</p>
 </blockquote>
 </div>
-<div id="estruturas-de-controle" class="section level2" number="3.7">
-<h2><span class="header-section-number">3.7</span> Estruturas de
+<div id="operadores-lógicos" class="section level2" number="3.7">
+<h2><span class="header-section-number">3.7</span> Operadores
+lógicos</h2>
+<p>Os operadores lógicos são usados para realizar operações lógicas, ou
+seja, operações que retornam TRUE (T) ou FALSE (F)</p>
+<div id="comparações-básicas" class="section level3" number="3.7.1">
+<h3><span class="header-section-number">3.7.1</span> comparações
+básicas</h3>
+<pre class="r"><code>#igualdade: se os elementos à esquerda, par a par, estão contidos à direita
+x == y 
+
+#maior que
+x &gt; y 
+
+#maior ou igual que
+x &gt;= y
+
+#menor que
+x &lt; y 
+
+#menor ou igual que
+x &lt;= y 
+
+#diferente: se os elementos à esquerda, par a par, são estão contidos à direita
+x != y </code></pre>
+<p>Alguns exemplos:</p>
+<pre class="r"><code>x &lt;- 1
+y &lt;- 2
+
+# x é igual a y?
+x == y
+  #&gt; [1] FALSE
+
+# x é diferente de y?
+x != y
+  #&gt; [1] TRUE
+
+# x é maior que y?
+x &gt; y
+  #&gt; [1] FALSE
+
+# x é menor que y?
+x &lt; y
+  #&gt; [1] TRUE
+
+# x é maior ou igual a y?
+x &gt;= y
+  #&gt; [1] FALSE
+
+# x é menor ou igual a y?
+x &lt;= y
+  #&gt; [1] TRUE</code></pre>
+</div>
+<div id="comparações-de-igualdade-para-mais-de-um-elemento" class="section level3" number="3.7.2">
+<h3><span class="header-section-number">3.7.2</span> comparações de
+igualdade para mais de um elemento</h3>
+<pre class="r"><code>x %in% y #contem: se os elementos à esquerda, um a um, estão contidos à direita</code></pre>
+<p>Algumas aplicações:</p>
+<pre class="r"><code>x &lt;- c(1, 2, 3, 4)
+
+# 1 está contido em x?
+1 %in% x
+  #&gt; [1] TRUE
+
+# 5 está contido em x?
+5 %in% x
+  #&gt; [1] FALSE</code></pre>
+</div>
+<div id="negação" class="section level3" number="3.7.3">
+<h3><span class="header-section-number">3.7.3</span> negação</h3>
+<pre class="r"><code>!x #negação: inverte o valor lógico de um objeto </code></pre>
+<p>Exemplos considerando comparações de elementos:</p>
+<pre class="r"><code>x &lt;- TRUE
+          
+# negação de x
+!x
+  #&gt; [1] FALSE</code></pre>
+<p>Ou comparações de mais de um elemento:</p>
+<pre class="r"><code>x &lt;- 1
+y &lt;- 2
+
+# x é menor que y?
+x &lt; y
+  #&gt; [1] TRUE
+
+# negação de x &lt; y
+!(x &lt; y)
+  #&gt; [1] FALSE
+
+x &lt;- c(1, 2, 3, 4)
+
+# 1 está contido em x?
+1 %in% x
+  #&gt; [1] TRUE
+!(1 %in% x)
+  #&gt; [1] FALSE</code></pre>
+</div>
+<div id="operadores-combinados" class="section level3" number="3.7.4">
+<h3><span class="header-section-number">3.7.4</span> operadores
+combinados</h3>
+<pre class="r"><code>x | y #ou: retornando T/F para cada elemento das comparações
+x || y #ou: retornando apenas um T/F (1ª comparação à esquerda do vetor)
+x &amp; y #e: retornando T/F para cada elemento das comparações
+x &amp;&amp; y #e: retornando apenas um T/F (1ª comparação à esquerda do vetor)</code></pre>
+<p>Alguns exemplos:</p>
+<pre class="r"><code> x &lt;- 1
+y &lt;- 1:3
+
+# x é igual a y ou x é maior que y?
+x | y
+  #&gt; [1] TRUE TRUE TRUE
+
+# x é igual a y ou x é menor que y?
+x || y
+  #&gt; [1] TRUE</code></pre>
+<pre class="r"><code>x &lt;- c(1, 2, 3)
+y &lt;- c(4, 5, 6)
+
+x &gt;= 3
+  #&gt; [1] FALSE FALSE  TRUE
+x &lt;= 5
+  #&gt; [1] TRUE TRUE TRUE
+
+x &gt;= 3 | x &lt;= 5
+  #&gt; [1] TRUE TRUE TRUE
+x &gt;= 3 &amp; x &lt;= 5
+  #&gt; [1] FALSE FALSE  TRUE</code></pre>
+</div>
+<div id="extras" class="section level3" number="3.7.5">
+<h3><span class="header-section-number">3.7.5</span> extras</h3>
+<p>Adicionalmente, no caso de vetores lógicos, podemos também trabalhar
+com as funções <code>any()</code> e <code>all()</code>, ou ainda a
+função <code>identical()</code> . No caso desta última, trata-se de uma
+função que precisa ser analisada com cuidado, visto trabalhar com
+diferenças sutís, retornando <code>FALSE</code> para comparações como
+por exemplo: <code>identical(1,1L)</code>.</p>
+</div>
+</div>
+<div id="estruturas-de-controle" class="section level2" number="3.8">
+<h2><span class="header-section-number">3.8</span> Estruturas de
 controle</h2>
-<p>No que se refere as estruturas de controle - blocos de programação
-que, baseado em parâmetros pré-definidos, define a direção a seguir - o
-R possui todas as funções usualmente existentes em outras linguagens de
-programação. Contudo, para otimizar o trabalho com tais ferramentas,
-vamos primeiro listar os principais operadores lógicos disponíveis no
-R:</p>
-<pre class="r"><code>#retorna TRUE (T) ou FALSE (F) se:
-  !x #não
-  x | y #ou: retornando T/F para cada elemento das comparações
-  x || y #ou, retornando apenas um T/F (1ª comparação à esquerda do vetor)
-  x &amp; y #e, retornando T/F para cada elemento das comparações
-  x &amp;&amp; y #e, retornando apenas um T/F (1ª comparação à esquerda do vetor)
-  x %in% y #se os elementos à esquerda, um a um, estão contidos à direita</code></pre>
-<p>Adicionalmente, no caso de termos vetores lógicos, as funções
-<code>any()</code> e <code>all()</code>, ou ainda a função
-<code>identical()</code> são consideravelmente úteis - função esta que
-precisa ser analisada com cuidado, visto trabalhar de forma bem
-restrita, retornando <code>FALSE</code> para diferenças sutís, como por
-exemplo: <code>identical(1,1L)</code>.</p>
-<p>Voltando as estruturas de controle, considerando fluxos condicionais
-e de repetição, temos:</p>
+<p>Estruturas de controle são blocos de programação que, baseado em
+parâmetros pré-definidos, definem a direção a ser seguida. No R temos
+todas as funções usualmente existentes em outras linguagens.<br />
+Vamos repassar alguns dos fluxos condicionais e de repetição mais
+usuais, no caso:</p>
 <ul>
 <li><strong>if</strong> - se a declaração testada for verdade, ou seja,
 retornar <code>TRUE</code>, então os comandos especificados dentro das
@@ -3010,8 +3146,8 @@ particular, e pula para a próxima, também existem no R. Além do
 <code>repeat()</code>, um loop que executa um bloco de comandos
 repetidamente, até que o mesmo seja quebrado.</p>
 </div>
-<div id="CriandoFuncoes" class="section level2" number="3.8">
-<h2><span class="header-section-number">3.8</span> Criando funções</h2>
+<div id="CriandoFuncoes" class="section level2" number="3.9">
+<h2><span class="header-section-number">3.9</span> Criando funções</h2>
 <p>No R podemos criar as nossas próprias funções, por meio do objeto
 <code>function()</code>. Tal prática é interessante pois permite a
 automação de atividades de uma forma melhor estruturada e mais
@@ -3150,8 +3286,8 @@ apenas o nome do script (juntamente com o diretório caso não se encontre
 no mesmo diretório).</p>
 </blockquote>
 </div>
-<div id="trabalhando-com-bibliotecas" class="section level2" number="3.9">
-<h2><span class="header-section-number">3.9</span> Trabalhando com
+<div id="trabalhando-com-bibliotecas" class="section level2" number="3.10">
+<h2><span class="header-section-number">3.10</span> Trabalhando com
 bibliotecas</h2>
 <p>Bibliotecas tratam-se de uma coleção de funções, dados e códigos
 compilados. A instalação destas bibliotecas, ou pacotes, como são também
@@ -3209,9 +3345,9 @@ bibliotecas, vamos chamar as primeiras de funções do
 <hr />
 </div>
 </div>
-<div id="r-para-ciência-de-dados" class="section level1" number="4">
-<h1><span class="header-section-number">4</span> R para Ciência de
-Dados</h1>
+<div id="r-para-ciência-de-dados-tidyverse" class="section level1" number="4">
+<h1><span class="header-section-number">4</span> R para Ciência de Dados
+(tidyverse)</h1>
 <p>Vamos agora explorar o R do ponto de vista da Ciência de Dados,
 considerando um ciclo usual de <em>análise</em>, contemplando: leitura,
 tidy (organização), transformações, visualizações, modelagens e
@@ -3385,22 +3521,23 @@ são instaladas e carregadas ao instalarmos e carregarmos o
 <li><strong>tidyr</strong>: reformulação de layout dos dados
 <br /></li>
 <li><strong>dplyr</strong>: manipulação de dados <br /></li>
-<li><strong>ggplot2</strong>: criação de gráficos <br /></li>
-<li><strong>purrr</strong>: programação funcional <br /></li>
 <li><strong>forcats</strong>: operações com variáveis categoricas
 <br /></li>
 <li><strong>stringr</strong>: operações com strings <br /></li>
+<li><strong>lubridate</strong>: operações para trabalhar com datas
+<br /></li>
+<li><strong>ggplot2</strong>: criação de gráficos <br /></li>
+<li><strong>purrr</strong>: programação funcional <br /></li>
 </ul>
 <p>Adicionalmente, temos que algumas bibliotecas, apesar de não serem
 carregadas juntamente com os pacotes listados acima, são instaladas,
-estando à disposição para uso:</p>
+estando à disposição para uso. Aqui temos algumas delas – para acessar a
+lista completa e atualizada, acesse <a href="https://www.tidyverse.org/packages/" class="uri">https://www.tidyverse.org/packages/</a> :</p>
 <ul>
 <li><strong>readxl</strong>: leitura e escrita de arquivos .xls e .xlsx
 <br /></li>
 <li><strong>haven</strong>: leitura e escrita de arquivos SPSS, Stata, e
 SAS <br /></li>
-<li><strong>lubridate</strong>: operações para trabalhar com datas
-<br /></li>
 <li><strong>broom</strong>: resume informações de modelagem de forma
 estruturada <br /></li>
 <li><strong>knitr</strong>: relatórios dinâmicos <br /></li>
@@ -3598,12 +3735,11 @@ podemos expandir linhas em colunas:</li>
   #&gt; 2 Brazil       37737  80488
   #&gt; 3 China       212258 213766</code></pre>
 <ul>
-<li><strong>Dividir/combinar células</strong>
+<li><p><strong>Dividir/combinar células</strong></p>
 <ul>
 <li><code>separate()</code> - divide uma única coluna em várias colunas,
 similarmente a opção <code>separate_rows()</code>, que faz a mesma coisa
 para linhas.</li>
-</ul></li>
 </ul>
 <pre class="r"><code>#base para exemplo
   table3
@@ -3628,7 +3764,7 @@ para linhas.</li>
   #&gt; 4 Brazil       2000 80488  174504898 
   #&gt; 5 China        1999 212258 1272915272
   #&gt; 6 China        2000 213766 1280428583
-  
+
 #exemplo: dividindo linhas
   table3 %&gt;% separate_rows(rate)
   #&gt; # A tibble: 12 × 3
@@ -3649,6 +3785,7 @@ para linhas.</li>
 <ul>
 <li><code>unite()</code> - e de maneira oposta as separações, temos a
 função que combina várias colunas.</li>
+</ul></li>
 </ul>
 <pre class="r"><code>#base para exemplo
   table3_separate &lt;- table3 %&gt;% separate(rate, into = c(&quot;cases&quot;, &quot;pop&quot;))
@@ -3832,11 +3969,11 @@ considerando a proporção especificada</li>
     sample_n(10) %&gt;% 
     sample_frac(0.5) 
   #&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-  #&gt; 1          5.5         2.4          3.7         1.0 versicolor
-  #&gt; 2          4.9         3.1          1.5         0.2     setosa
-  #&gt; 3          7.4         2.8          6.1         1.9  virginica
-  #&gt; 4          6.5         2.8          4.6         1.5 versicolor
-  #&gt; 5          6.5         3.0          5.8         2.2  virginica</code></pre>
+  #&gt; 1          6.4         2.7          5.3         1.9  virginica
+  #&gt; 2          7.0         3.2          4.7         1.4 versicolor
+  #&gt; 3          5.1         3.4          1.5         0.2     setosa
+  #&gt; 4          5.5         2.6          4.4         1.2 versicolor
+  #&gt; 5          6.0         2.2          4.0         1.0 versicolor</code></pre>
 <ul>
 <li><strong>Combinando Bases</strong>
 <ul>
@@ -4271,84 +4408,165 @@ RMarkdown + Shiny
 <hr />
 </div>
 </div>
-<div id="r-para-big-data" class="section level1" number="5">
-<h1><span class="header-section-number">5</span> R para Big Data</h1>
-<p>O R, por padrão, trabalha com dados carregados em memória, por meio
-de processamento sequencial, o que pode limita tanto o tamanho da base
-de dados que podemos trabalhar, quanto a velocidade de análise.
-Alternativas para quando estamos sob alguma destas limitações incluem:
-trabalhar com amostragens, usar um computador com mais recursos, acessar
-os dados considerando outras formas de leitura/processamento, ou
-segmentação de dados. Detalhando estas duas últimas opções temos:</p>
+<div id="r-e-suas-muitas-opções" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> R e suas muitas
+opções</h1>
+<p>Aqui iremos listar algumas das possibilidades de próximos passos, e
+gostaria de frisar a palavra POSSIBILIDADES. Pois a área de dados é
+muito ampla e multidisciplinar, então não se abale com a quantidade de
+conteúdos, aqui recomendo você se inspirar em filósofos como Sócrates
+“só sei que nada sei”, ou ainda Paulo Freire “Ninguém ignora tudo.
+Ninguém sabe tudo. Todos nós sabemos alguma coisa. Todos nós ignoramos
+alguma coisa. Por isso aprendemos sempre”.</p>
+<p>Dito isto, vamos lá!</p>
+<div id="dicas-para-seguir-aprendendo" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Dicas para seguir
+aprendendo</h2>
 <ul>
-<li>outras formas de acesso:
+<li>Siga pessoas legais
 <ul>
-<li>substituir os data.frames/tibbles pelo data.table, da biblioteca
-<code>data.table()</code>, uma vez que este trabalha com otimização de
-processamento e memória;</li>
-<li>processar os dados em disco, ao invés da memória, por meio de
-bibliotecas como <code>bigmemory</code>, <code>ff</code> ou
-<code>RevoScaleR</code>;</li>
-<li>dado que o R é por padrão uma linguagem interpretada, utilizar
-funções como <code>compile()</code> ou <code>enableJIT()</code> para
-acelerar o processamento de uma análise, principalmente se ela for
-executada repeditamente; e</li>
-<li>utilizar pacotes que possibilitam paralelismo, como
-<code>Foreach</code> ou <code>Multicore</code>.</li>
+<li>twitter <a href="https://twitter.com/search?q=%23RStats&amp;src=typeahead_click&amp;f=top">#rstats</a></li>
+<li>linkedin <a href="https://www.linkedin.com/in/nathaliademetrio/">{#olhaEu}</a>]</li>
 </ul></li>
-<li>segmentação: aqui podemos trabalhar “manualmente”, carregando
-sub-conjuntos das base de dados, analisando cada uma delas, e depois
-combinando os resultados. Ou carregar bibliotecas que permitam
-integração do R com o ecossistema de Big Data, permitindo a distribuição
-e análise de forma automática. O <code>RHadoop</code>, por exemplo, é um
-conjunto de pacotes que permite conectar o ambiente R em clusters HDFS e
-HBASE para a execução de operações. Outra opção é o
-<code>sparklyr</code>, que possibilita a execução de comandos do R em
-clusters do Apache Spark. Tanto o <code>RHadoop</code> quanto o
-<code>sparklyr</code> possibilitam o uso de comandos do pacote
-<code>dplyr</code>, e a sintaxe do <code>tidyverse()</code>. Assim, as
-tecnologias se complementam: é possível escrever código de forma mais
-simples e rápida no R e executá-lo distribuidamente em grandes bases de
-dados no Hadoop ou Spark, e podemos alavancar os tradicionais sistemas
-de Big Data, integrando a eles as funcionalidades de análise e machine
-learning disponíveis no ecossistema do R.</li>
+<li>Participe de grupos e eventos, existe muita coisa gratuita bacana
+por aí
+<ul>
+<li><a href="https://satrdays.org/">satRday</a></li>
+<li><a href="https://www.tidytuesday.com/">tidytuesday</a></li>
+</ul></li>
+<li>Crie o hábito de saber o que está rolando de novo (e vá por mim,
+sempre tem coisas novas interessantes!)
+<ul>
+<li>congressos: <a href="https://rstudio.com/conference/">rstudio::conf()</a> é uma ótima
+pedida</li>
+<li>newsletter: <a href="https://dataelixir.com/">Data Elixir</a> é a
+minha preferida</li>
+</ul></li>
 </ul>
-<p>Visando ilustrar a facilidade de tais integrações, segue a aplicação
-do mesmo conjunto de códigos anteriormente utilizados para a base
-<code>mtcars</code>:</p>
-<pre class="r"><code># #carregando da biblioteca após sua instalação
-# library(sparklyr)
-# library(dplyr)
-# 
-# #criando uma conexão
-# spark_conexao &lt;- spark_connect(master = &quot;local&quot;)
-# 
-#  #transformando os dados de memŕia numa tbl_spark
-#   mtcars_tbl &lt;- sdf_copy_to(spark_conexao,
-#                             mtcars, name = &quot;mtcars_tbl&quot;,
-#                             memory = FALSE)
-#   class(mtcars_tbl)
-# 
-#  #verificando a estrutura dos dados
-#   mtcars_tbl %&gt;% glimpse()
-# 
-#  #selecionando alguma variaveis usando o dplyr
-#   mtcars_reduzido &lt;- mtcars_tbl %&gt;%
-#     select(mpg, hp)
-# 
-#  #salvando o mtcars_reduzido em memória
-#   mtcars_reduzido_ram &lt;- collect(mtcars_reduzido)
-# 
-# #Disconnect from Spark
-# spark_disconnect(sc = spark_conexao)</code></pre>
-<p>Vale ressaltar que muitas das soluções que envolvem Big Data no R são
-novas, assim como o ecosistema de Big Data em si. E, portanto, estão em
-constante desenvolvimento, aumentando ainda mais a importância de manter
-o tracking de melhorias e correções dos pacotes. Vale ressaltar que
-mesmo com toda a necessidade de ajustes aqui apresentada, a quantidade
-de recursos que o R oferece para o flow da Ciência de Dados, faz com que
-grandes empresas, como Google, Microsoft, Bank of America e Shell, optem
-por trabalhar com a linguagem R.</p>
+<p>Por fim, procure construir um mapa mental dos tópicos que você for
+tendo conhecimento. Você não precisa dominar tudo, mas ter uma noção do
+que se trata, e ter noção sobre em que contexto aquilo pode ser útil, é
+mais que suficiente (e recomendado!).</p>
+<p>Ah, e não deixe de compartilhar a sua jornada de evolução na
+linguagem! A comunidade R é muito receptiva, lembra que teve alguém que
+passou por todo o processo de submissão do CRAN, só para garantir que
+tivéssemos essa biblioteca no repositório oficial:</p>
+<pre class="r"><code>set.seed(100) 
+praise::praise()
+  #&gt; [1] &quot;You are remarkable!&quot;
+
+#a função set.seed() serve para que a função praise() retorne sempre o mesmo output
+#que tal testar o que acontece se você rodar o praise sem o set.seed? 
+# DICA: rode o praise mais de uma vez! :)</code></pre>
+</div>
+<div id="dicas-de-pacotes-r" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Dicas de pacotes
+R</h2>
+<div id="ponto-de-partida" class="section level3" number="5.2.1">
+<h3><span class="header-section-number">5.2.1</span> Ponto de
+Partida</h3>
+<ul>
+<li>tidyverse</li>
+</ul>
+</div>
+<div id="próximos-passos" class="section level3" number="5.2.2">
+<h3><span class="header-section-number">5.2.2</span> Próximos
+passos</h3>
+<ul>
+<li>tidymodels</li>
+</ul>
+</div>
+<div id="passos-avançados" class="section level3" number="5.2.3">
+<h3><span class="header-section-number">5.2.3</span> Passos
+avançados</h3>
+<ul>
+<li>Interoperabilidade R e Python: <a href="https://rstudio.github.io/reticulate/">reticulate</a></li>
+<li>Criar mapas: <a href="https://rstudio.github.io/leaflet/">leaflet</a></li>
+<li>Gerar memes: <a href="https://github.com/sctyner/memer">memer</a></li>
+<li>Trabalhar com deep learning e dados não estruturados: <a href="https://torch.mlverse.org/packages/">torch</a></li>
+<li>Automatizar processos: <a href="https://github.com/r-lib/usethis">usethis</a></li>
+<li>Modelagem bayesiana: <a href="http://mjskay.github.io/tidybayes/">tidybayes</a></li>
+<li>Analisar texto: <a href="https://github.com/juliasilge/tidytext">tidytext</a></li>
+<li>Desenvolver pacotes: <a href="https://github.com/r-lib/devtools">devtools</a></li>
+<li>Gerenciar dependências do R: <a href="https://rstudio.github.io/renv/articles/renv.html">renv</a></li>
+<li>Criar pipelines: <a href="https://cran.r-project.org/web/packages/targets/vignettes/overview.html">target</a></li>
+<li>Testar códigos: <a href="https://testthat.r-lib.org/">testthat</a></li>
+<li>Estruturar deploy de modelos: <a href="https://github.com/rstudio/vetiver-r">vetiver</a></li>
+<li>Gerenciar e analisar dados com o Hadoop: <a href="https://github.com/RevolutionAnalytics/RHadoop/wiki">RHadoop</a></li>
+</ul>
+</div>
+</div>
+</div>
+<div id="bibliografias-recomendadas" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Bibliografias
+recomendadas</h1>
+<p>Além dos links e bibliotecas comentados durante todo o curso, vou
+deixar aqui algumas referências para que você revise o que foi visto ao
+longo deste material:</p>
+<ul>
+<li><a href="https://r4ds.had.co.nz/introduction.html">R for data
+science</a>
+<ul>
+<li>A 2ª versão do livro está sendo traduzida pelas R-Ladies, acesse <a href="https://cienciadedatos.github.io/pt-r4ds/">aqui</a></li>
+</ul></li>
+<li><a href="https://www.curso-r.com/material/">Curso-R</a></li>
+<li><a href="https://github.com/rladies/meetup-presentations_sao-paulo">R-Ladies</a></li>
+</ul>
+<p>E aqui algumas referências para discussões mais avançadas: - <a href="http://adv-r.had.co.nz/">Advanced R</a> - <a href="https://rstudio-education.github.io/hopr/">Hands-On Programming
+with R</a></p>
+<p>No mais, a grande dica é: trabalhe com versões de você mesma (o),
+para que amanhã saiba um pouco mais do que ontem.</p>
+</div>
+<div id="até-a-próxima" class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Até a próxima!</h1>
+<p>😘</p>
+<!-- ## Big Data -->
+<!-- O R, por padrão, trabalha com dados carregados em memória, por meio de -->
+<!-- processamento sequencial, o que pode limita tanto o tamanho da base de -->
+<!-- dados que podemos trabalhar, quanto a velocidade de análise. -->
+<!-- Alternativas para quando estamos sob alguma destas limitações incluem: -->
+<!-- trabalhar com amostragens, usar um computador com mais recursos, acessar -->
+<!-- os dados considerando outras formas de leitura/processamento, ou -->
+<!-- segmentação de dados. Detalhando estas duas últimas opções temos: -->
+<!-- -   outras formas de acesso: -->
+<!--     -   substituir os data.frames/tibbles pelo data.table, da biblioteca -->
+<!--         `data.table()`, uma vez que este trabalha com otimização de -->
+<!--         processamento e memória; -->
+<!--     -   processar os dados em disco, ao invés da memória, por meio de -->
+<!--         bibliotecas como `bigmemory`, `ff` ou `RevoScaleR`; -->
+<!--     -   dado que o R é por padrão uma linguagem interpretada, utilizar -->
+<!--         funções como `compile()` ou `enableJIT()` para acelerar o -->
+<!--         processamento de uma análise, principalmente se ela for -->
+<!--         executada repeditamente; e -->
+<!--     -   utilizar pacotes que possibilitam paralelismo, como `Foreach` ou -->
+<!--         `Multicore`. -->
+<!-- -   segmentação: aqui podemos trabalhar "manualmente", carregando -->
+<!--     sub-conjuntos das base de dados, analisando cada uma delas, e depois -->
+<!--     combinando os resultados. Ou carregar bibliotecas que permitam -->
+<!--     integração do R com o ecossistema de Big Data, permitindo a -->
+<!--     distribuição e análise de forma automática. O `RHadoop`, por -->
+<!--     exemplo, é um conjunto de pacotes que permite conectar o ambiente R -->
+<!--     em clusters HDFS e HBASE para a execução de operações. Outra opção é -->
+<!--     o `sparklyr`, que possibilita a execução de comandos do R em -->
+<!--     clusters do Apache Spark. Tanto o `RHadoop` quanto o `sparklyr` -->
+<!--     possibilitam o uso de comandos do pacote `dplyr`, e a sintaxe do -->
+<!--     `tidyverse()`. Assim, as tecnologias se complementam: é possível -->
+<!--     escrever código de forma mais simples e rápida no R e executá-lo -->
+<!--     distribuidamente em grandes bases de dados no Hadoop ou Spark, e -->
+<!--     podemos alavancar os tradicionais sistemas de Big Data, integrando a -->
+<!--     eles as funcionalidades de análise e machine learning disponíveis no -->
+<!--     ecossistema do R. -->
+<!-- Visando ilustrar a facilidade de tais integrações, segue a aplicação do -->
+<!-- mesmo conjunto de códigos anteriormente utilizados para a base `mtcars`: -->
+<!-- Vale ressaltar que muitas das soluções que envolvem Big Data no R são -->
+<!-- novas, assim como o ecosistema de Big Data em si. E, portanto, estão em -->
+<!-- constante desenvolvimento, aumentando ainda mais a importância de manter -->
+<!-- o tracking de melhorias e correções dos pacotes. Vale ressaltar que -->
+<!-- mesmo com toda a necessidade de ajustes aqui apresentada, a quantidade -->
+<!-- de recursos que o R oferece para o flow da Ciência de Dados, faz com que -->
+<!-- grandes empresas, como Google, Microsoft, Bank of America e Shell, optem -->
+<!-- por trabalhar com a linguagem R. -->
+<!-- ## NOTAS ADICIONAIS -->
 <!-- R lets you write data analysis code quickly. With a bit of care, you can also make your code easy to read, which means that you can easily maintain your code too. In many cases, R is also fast enough at running your code. -->
 <!-- Unfortunately, R requires that all your data be analyzed in memory (RAM), on a single machine. This limits how much data you can analyze using R. There are a few solutions to this problem, including using Spark. -->
 <!-- Spark is an open source cluster computing platform. That means that you can spread your data and your computations across multiple machines, effectively letting you analyze an unlimited amount of data. The two technologies complement each other strongly. By using R and Spark together you can write code fast and run code fast! -->
@@ -4358,37 +4576,6 @@ por trabalhar com a linguagem R.</p>
 <!-- That means that you are sailing into uncharted territory with this course. The trip may be a little rough, so be prepared to be out of your comfort zone occasionally. -->
 <!-- One further note of caution is that in this course you'll be running code on your own personal Spark mini-cluster in the DataCamp cloud. This is ideal for learning the concepts of how to use Spark, but you won't get the same performance boost as you would using a remote cluster on a high-performance server. That means that the examples here won't run faster than if you were only using R, but you can use the skills you learn here to run analyses on your own big datasets. -->
 <!-- If you wish to install Spark on your local system, simply install the sparklyr package and call spark_install(). -->
-</div>
-<div id="considerações-finais" class="section level1" number="6">
-<h1><span class="header-section-number">6</span> Considerações
-Finais</h1>
-<p>Além das soluções e bibliotecas aqui comentados, é importante lembrar
-que o R oferece muitas formas de completar uma mesma atividade. Sendo
-assim, é sempre recomendado que procure opções para otimizar sua rotina.
-Seguem abaixo as algumas referências open-source para o aprofundamento
-dos pontos aqui listados:</p>
-<ul>
-<li><p>R for data science: <a href="https://r4ds.had.co.nz/introduction.html" class="uri">https://r4ds.had.co.nz/introduction.html</a></p></li>
-<li><p>Advanced R: <a href="http://adv-r.had.co.nz/" class="uri">http://adv-r.had.co.nz/</a></p></li>
-<li><p>Hands-On Programming with R: <a href="https://rstudio-education.github.io/hopr/" class="uri">https://rstudio-education.github.io/hopr/</a></p></li>
-<li><p>Curso-R: <a href="https://www.curso-r.com/material/" class="uri">https://www.curso-r.com/material/</a></p></li>
-</ul>
-</div>
-<div id="agradecimentos" class="section level1" number="7">
-<h1><span class="header-section-number">7</span> Agradecimentos</h1>
-<p>Gostaria de citar algumas das pessoas que colaboraram com este
-material, seja por meio de sugestões, revisões ou compartilhamento de
-textos:</p>
-<ul>
-<li><p><a href="https://linktr.ee/rladies_sp">Rladies São
-Paulo</a></p></li>
-<li><p><a href="https://www.linkedin.com/in/paulo-bittencourt-moura/">Paulo
-Bittencourt Moura</a></p></li>
-<li><p><a href="https://www.linkedin.com/in/renangerbilo/">Renan
-Rodrigo</a></p></li>
-<li><p><a href="https://www.linkedin.com/in/samuel-mac%C3%AAdo-755a8763/">Samuel
-Macêdo</a></p></li>
-</ul>
 <!-- # Atividade Final -->
 <!-- Vamos agora fazer um ciclo de análises considerando os arquivos ...  -->
 <!-- Executar as tarefas a seguir usando o R no ambiente de treinamento. O objetivo é extrair informações relevantes das bases, de forma similar ao que seria feito no dia a dia de trabalho com a linguagem no ambiente de produção do banco, conectado ao Data Lake. -->
@@ -4405,71 +4592,72 @@ Macêdo</a></p></li>
 <!-- - Construa um gráfico de barro por segmento, mostrando o valor médio do saldo. -->
 <!-- - Construir um gráfico de pizza contendo as 5 empresas que mais transacionaram em quantidade no período. Quais foram essas empresas? -->
 <!-- - Fazer um gráfico de dispersão de idade da empresa X número de transações feitas desde a abertura dela. Existe alguma tendência? -->
-</div>
-<div id="apêndice---tratamento-de-exceções" class="section level1" number="8">
-<h1><span class="header-section-number">8</span> Apêndice - Tratamento
-de exceções</h1>
-<p>Chamamos de exceção qualquer condição anormal que possa aparecer
-quando estamos executando um programa de computador. Normalmente, esses
-erros acontecem por fatores externos do ponto de vista do código, como
-valores ou tipos não suportados passados para uma função, necessidade de
-leitura ou gravação de arquivos no sistema operacional, necessidade de
-conexão com a internet para obter algum dado.</p>
-<p>As linguagens costumam ter formas de tratar as exceções, ou seja,
-métodos e funções que possam ser usados para que o programa não quebre a
-execução, não apresente erros abruptos ou até mesmo continue a partir do
-ponto em que o erro ocorreu. O tratamento de exceções em R é feito
-utilizando a função tryCatch. A sintaxe da função é:</p>
-<pre class="r"><code>result = tryCatch(
-  {
-    #Código a ser executado
-  }, 
-  warning = function(condição) {
-      #Código a ser executado caso ocorra algum aviso (warning)
-  }, 
-  error = function(condição) {
-      #Código a ser executado caso ocorra algum erro
-  }, 
-  finally={
-     # Código a sempre ser executado após um dos três blocos acima.
-  }
-)</code></pre>
-<p>Por exemplo, vamos escrever um código que retorna para uma variável
-as linhas de um arquivo lido de uma url:</p>
-<pre class="r"><code>arquivo &lt;- function(url) {
-    linhas &lt;- tryCatch(
-        {
-            message(&quot;Tentando ler o arquivo&quot;)
-            readLines(con=url)
-         },
-        error=function(condicao) {
-            message(paste(&quot;O caminho não pode ser acessado: &quot;, url))
-            message(&quot;Mensagem de erro original: &quot;)
-            message(condicao)
-            return(NA)
-        },
-        warning=function(condicao) {
-            message(&quot;Warnings foram gerados ao ler a url:&quot;) 
-            message(condicao)
-            return(NULL)
-        },
-        finally={
-           message(&quot;Fim da execução&quot;)
-        }
-    )    
-    return(linhas)
-}</code></pre>
-<p>Caso o arquivo consiga ser lido, a última linha do primeiro bloco ( o
-resultado de readLines ) será retornado. Se ocorrer um erro, as
-mensagens de erro são exibidas e é retornado o valor NA. Se ocorrer
-algum warning, as mensagens correspondentes são enviadas e a função
-retorna NULL. Independente do valor de retorno, a mensagem de fim da
-execução será exibida ao final. É importante utilizar blocos de
-tratamento de exceção toda vez que não houver certeza sobre as condições
-necessárias para execução do código. Uma boa escolha de alternativas em
-caso de erros ou problemas faz com que o programa seja executado com
-maior confiabilidade, além de melhorar a legibilidade e diminuir o tempo
-gasto para correção desses erros e problemas.</p>
+<!-- # Apêndice - Tratamento de exceções -->
+<!-- Chamamos de exceção qualquer condição anormal que possa aparecer quando -->
+<!-- estamos executando um programa de computador. Normalmente, esses erros -->
+<!-- acontecem por fatores externos do ponto de vista do código, como valores -->
+<!-- ou tipos não suportados passados para uma função, necessidade de leitura -->
+<!-- ou gravação de arquivos no sistema operacional, necessidade de conexão -->
+<!-- com a internet para obter algum dado. -->
+<!-- As linguagens costumam ter formas de tratar as exceções, ou seja, -->
+<!-- métodos e funções que possam ser usados para que o programa não quebre a -->
+<!-- execução, não apresente erros abruptos ou até mesmo continue a partir do -->
+<!-- ponto em que o erro ocorreu. O tratamento de exceções em R é feito -->
+<!-- utilizando a função tryCatch. A sintaxe da função é: -->
+<!-- ```{r} -->
+<!-- result = tryCatch( -->
+<!--   { -->
+<!--     #Código a ser executado -->
+<!--   },  -->
+<!--   warning = function(condição) { -->
+<!--       #Código a ser executado caso ocorra algum aviso (warning) -->
+<!--   },  -->
+<!--   error = function(condição) { -->
+<!--       #Código a ser executado caso ocorra algum erro -->
+<!--   },  -->
+<!--   finally={ -->
+<!--      # Código a sempre ser executado após um dos três blocos acima. -->
+<!--   } -->
+<!-- ) -->
+<!-- ``` -->
+<!-- Por exemplo, vamos escrever um código que retorna para uma variável as -->
+<!-- linhas de um arquivo lido de uma url: -->
+<!-- ```{r} -->
+<!-- arquivo <- function(url) { -->
+<!--     linhas <- tryCatch( -->
+<!--         { -->
+<!--             message("Tentando ler o arquivo") -->
+<!--             readLines(con=url) -->
+<!--          }, -->
+<!--         error=function(condicao) { -->
+<!--             message(paste("O caminho não pode ser acessado: ", url)) -->
+<!--             message("Mensagem de erro original: ") -->
+<!--             message(condicao) -->
+<!--             return(NA) -->
+<!--         }, -->
+<!--         warning=function(condicao) { -->
+<!--             message("Warnings foram gerados ao ler a url:")  -->
+<!--             message(condicao) -->
+<!--             return(NULL) -->
+<!--         }, -->
+<!--         finally={ -->
+<!--            message("Fim da execução") -->
+<!--         } -->
+<!--     )     -->
+<!--     return(linhas) -->
+<!-- } -->
+<!-- ``` -->
+<!-- Caso o arquivo consiga ser lido, a última linha do primeiro bloco ( o -->
+<!-- resultado de readLines ) será retornado. Se ocorrer um erro, as -->
+<!-- mensagens de erro são exibidas e é retornado o valor NA. Se ocorrer -->
+<!-- algum warning, as mensagens correspondentes são enviadas e a função -->
+<!-- retorna NULL. Independente do valor de retorno, a mensagem de fim da -->
+<!-- execução será exibida ao final. É importante utilizar blocos de -->
+<!-- tratamento de exceção toda vez que não houver certeza sobre as condições -->
+<!-- necessárias para execução do código. Uma boa escolha de alternativas em -->
+<!-- caso de erros ou problemas faz com que o programa seja executado com -->
+<!-- maior confiabilidade, além de melhorar a legibilidade e diminuir o tempo -->
+<!-- gasto para correção desses erros e problemas. -->
 <!-- Falar sobre escopo/environment  -->
 <!-- working environment ~ global  -->
 <!-- falar sobre require  -->
