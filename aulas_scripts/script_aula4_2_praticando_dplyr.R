@@ -19,111 +19,111 @@
 
 # ::::: practice: Rbase vs. tidyverse (base titanic) -----
 
-    install.packages("titanic")
-    install.packages("tidyverse")
-    library(tidyverse)
+install.packages("titanic")
+install.packages("tidyverse")
+library(tidyverse)
 
-  # base de dados ------  
-      (titanic <- titanic::titanic_train)
-  
-      #note como na versão tibble o output é mais clean
-      tibble(titanic)
-      #mas a função que transforma em tibble existe em vários pacotes,
-      #inclusive essa mudança pode ser feita de outras formas, p.e.:
-      (titanic <- as_tibble(titanic))
-      # se não tivessemos carregado a biblioteca do tidyverse, ou o dplyr,
-      # a função precisaria ser chamada da seguinte forma:
-      titanic <- dplyr::as_tibble(titanic)
-  
-  
-  # view / glimpse ------ 
-      #View(titanic)
-      #view(titanic) # msm coisa, mas com letra minuscula
-      titanic %>% view()
-      
-      #str(titanic)
-      titanic %>% glimpse()
-     
-          
-  #atalho para o Pipe: 'ctrl + shift + m'
-  
-  # select ------ 
-      #titanic[ ,c("Sex", "Age")]
-  
-      titanic %>% 
-          #select(Age, Sex)
-          #select(Sex, Age)
-          #select(-Sex)
-          select(1:5)
-      
-  # filter ------ 
-      #titanic[titanic$Sex == "male",]
-      #titanic[(titanic$Sex == "male") & (titanic$Age > 30),]
-      
-      titanic %>% 
-          #filter(Sex == "male")
-          #filter(is.na(Age))
-          filter(Sex == "male", Age > 30 | is.na(Age))  
-  
-  
-  # arrange ------ 
-      #sort(titanic$Sex) ; order(titanic$Sex)
-      #titanic[order(titanic$Sex), ] 
-      
-      titanic %>% 
-          #arrange(Sex, PassengerId) %>% 
-          #arrange(Sex, -PassengerId) %>% 
-          #arrange(Sex, desc(PassengerId)) %>% 
-          arrange(desc(Age ), Name) %>% 
-          #arrange(desc(Sex)) #com -Sex dá erro, pois ñ faz sentido multiplicar um character por -1
-          filter(Sex == "male")
-  
-      #primeiras 5 linhas
-      titanic %>% arrange(-Age) %>% slice(1:5)
-          #top_n e o slice_max
-      
-  # mutate  ------ 
-      #titanic$new_col <- titanic$Age * titanic$Survived 
-      
-      titanic %>% 
-          #mutate(Survived = Survived +1 )
-          mutate(Survived * Age) %>%  glimpse()
-          #mutate(new_col = Age * Survived )
-          mutate(Survived_2 = ifelse(Survived == 1, "sobreviveu", "morreu")) %>% 
-          select(contains("Survived"))
-  
-  # summarise ------  
-      titanic %>% 
-          summarise(
-              n = n(),
-              n_dist_age = n_distinct(Age),
-              min_age = min(Age, na.rm = T), 
-              mean_age = mean(Age, na.rm = T), 
-              median_age = median(Age, na.rm = T),
-              max_age = max(Age, na.rm = T), 
-              sd_age = sd(Age, na.rm = T),
-              IQR_age = IQR(Age, na.rm = T) 
-              )
-          
-          #este aqui dá errado! 
-          titanic %>% 
-            summarise(n = n()) %>% 
-            summarise(n_dist_age = n_distinct(Age))
-      
-  # group_by ------ 
-      titanic %>%
-          filter(!is.na(Age)) %>% 
-          #group_by(Pclass) %>% 
-          summarise(
-              n = n(),
-              n_dist_Pclass = n_distinct(Pclass),
-              n_dist_age = n_distinct(Age),
-              mean_age = mean(Age, na.rm = T), 
-              sd_age = sd(Age, na.rm = T), 
-              mean(Fare, na.rm = T)
-          )
-         
-  
+# base de dados ------  
+(titanic <- titanic::titanic_train)
+
+#note como na versão tibble o output é mais clean
+tibble(titanic)
+#mas a função que transforma em tibble existe em vários pacotes,
+#inclusive essa mudança pode ser feita de outras formas, p.e.:
+(titanic <- as_tibble(titanic))
+# se não tivessemos carregado a biblioteca do tidyverse, ou o dplyr,
+# a função precisaria ser chamada da seguinte forma:
+titanic <- dplyr::as_tibble(titanic)
+
+
+# view / glimpse ------ 
+#View(titanic)
+#view(titanic) # msm coisa, mas com letra minuscula
+titanic %>% view()
+
+#str(titanic)
+titanic %>% glimpse()
+
+
+#atalho para o Pipe: 'ctrl + shift + m'
+
+# select ------ 
+#titanic[ ,c("Sex", "Age")]
+
+titanic %>% 
+  #select(Age, Sex)
+  #select(Sex, Age)
+  #select(-Sex)
+  select(1:5)
+
+# filter ------ 
+#titanic[titanic$Sex == "male",]
+#titanic[(titanic$Sex == "male") & (titanic$Age > 30),]
+
+titanic %>% 
+  #filter(Sex == "male")
+  #filter(is.na(Age))
+  filter(Sex == "male", Age > 30 | is.na(Age))  
+
+
+# arrange ------ 
+#sort(titanic$Sex) ; order(titanic$Sex)
+#titanic[order(titanic$Sex), ] 
+
+titanic %>% 
+  #arrange(Sex, PassengerId) %>% 
+  #arrange(Sex, -PassengerId) %>% 
+  #arrange(Sex, desc(PassengerId)) %>% 
+  arrange(desc(Age ), Name) %>% 
+  #arrange(desc(Sex)) #com -Sex dá erro, pois ñ faz sentido multiplicar um character por -1
+  filter(Sex == "male")
+
+#primeiras 5 linhas
+titanic %>% arrange(-Age) %>% slice(1:5)
+#top_n e o slice_max
+
+# mutate  ------ 
+#titanic$new_col <- titanic$Age * titanic$Survived 
+
+titanic %>% 
+  #mutate(Survived = Survived +1 )
+  mutate(Survived * Age) %>%  glimpse()
+#mutate(new_col = Age * Survived )
+mutate(Survived_2 = ifelse(Survived == 1, "sobreviveu", "morreu")) %>% 
+  select(contains("Survived"))
+
+# summarise ------  
+titanic %>% 
+  summarise(
+    n = n(),
+    n_dist_age = n_distinct(Age),
+    min_age = min(Age, na.rm = T), 
+    mean_age = mean(Age, na.rm = T), 
+    median_age = median(Age, na.rm = T),
+    max_age = max(Age, na.rm = T), 
+    sd_age = sd(Age, na.rm = T),
+    IQR_age = IQR(Age, na.rm = T) 
+  )
+
+#este aqui dá errado! 
+titanic %>% 
+  summarise(n = n()) %>% 
+  summarise(n_dist_age = n_distinct(Age))
+
+# group_by ------ 
+titanic %>%
+  filter(!is.na(Age)) %>% 
+  #group_by(Pclass) %>% 
+  summarise(
+    n = n(),
+    n_dist_Pclass = n_distinct(Pclass),
+    n_dist_age = n_distinct(Age),
+    mean_age = mean(Age, na.rm = T), 
+    sd_age = sd(Age, na.rm = T), 
+    mean(Fare, na.rm = T)
+  )
+
+
   # exemplo com tudo junto ------ 
     # adicionando porcentagem
       titanic %>% 

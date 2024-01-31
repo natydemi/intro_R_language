@@ -1,0 +1,769 @@
+---
+title: "Distribuições de Probabilidade Teóricas e Empiricas: \n a base de uma análise de dados "
+author: "Nath Demetrio"
+output:
+    html_document:
+        toc: yes
+        toc_float: yes
+---
+
+```{r setup, include=FALSE, warning=F}
+knitr::opts_chunk$set(echo = TRUE, message = F, warning = F)
+
+#libs -----
+  #explore
+    #examining and cleaning dirty data
+      if(!require(janitor)){install.packages("janitor"); library(janitor)}
+    #useful summary statistics
+        if(!require(skimr)){install.packages("skimr")}
+    #generalized pairs plot
+        if(!require(GGally)){install.packages("GGally")}
+    #The Composer of Plots
+      if(!require(patchwork)){install.packages("patchwork"); library(patchwork)}
+    #Main interface to plotly
+      if(!require(plotly)){install.packages("plotly"); library(plotly)}
+
+  #set of packages
+    if(!require(tidyverse)){install.packages("tidyverse"); library(tidyverse)}
+
+theme_set(theme_minimal())
+
+```
+
+# Distribições de Probabilidade
+
+## Discretas
+
+### Bernoulli
+
+$X \sim Bern(p)$
+
+```{r}
+dados <- tibble(
+    var_bernoulli = rbernoulli(n = 1000, p = 0.5)
+    )
+
+ggplot(data = dados, aes(x = var_bernoulli)) +
+    geom_bar()
+```
+
+### Binomial
+
+$X \sim B(n,p)$
+
+```{r}
+dados <- tibble(
+    var_binomial = rbinom(n = 10000, size = 10, p = 0.1)
+    )
+
+ggplot(data = dados, aes(x = var_binomial)) +
+    geom_bar()
+```
+
+### Poisson
+
+$X \sim P(lambda)$
+
+```{r}
+dados <- tibble(
+    var_poisson = rpois(n = 1000, lambda = 100)
+    )
+
+ggplot(data = dados, aes(x = var_poisson)) +
+    geom_bar()
+
+#dpois(20, lambda = 100)
+ppois(125, lambda = 100)
+```
+
+## Continuas
+
+### Exponencial
+
+$X \sim Exp(\lambda)$
+
+```{r}
+dados <- tibble(
+    var_exp = rexp(n = 1000, rate = 100)
+    )
+
+ggplot(data = dados, aes(x = var_exp)) +
+    geom_histogram()
+
+pexp(0.1, rate = 100)
+```
+
+### Uniforme
+
+$X \sim U(a,b)$
+
+```{r}
+dados <- tibble(
+    var_uniforme = runif(n = 10000, min = 0 , max = 10)
+    )
+
+ggplot(data = dados, aes(x = var_uniforme)) +
+    geom_histogram()
+```
+
+### Normal
+
+$X \sim N(\mu,\sigma^2)$
+
+```{r}
+dados <- tibble(
+    var_normal = rnorm(n = 1000, mean = 1.65, sd = 0.1)
+    )
+
+ggplot(data = dados, aes(x = var_normal)) +
+    geom_histogram()
+```
+
+# Cases
+
+## C.1.1 \~ Uma cientista de dados de sucesso (age)
+
+<!-- distribuições amostrais ~ para falar disso preciso ler melhor sobre o que se trata -->
+
+### Construção da base de dados
+
+Considerando as variáveis aleatórias discutidas até aqui:
+
+```{r}
+#tamanho das amostras
+n <- 1000
+
+dados <- tibble(
+    var_bernoulli = rbernoulli(n, p = 0.5),
+    var_binomial = rbinom(n, size = 5, p = 0.25),
+    var_poisson = rpois(n, lambda = 3),
+    var_exp = rexp(n, rate = 3),
+    var_uniforme = runif(n, min = 0 , max = 10),
+    var_normal = rnorm(n, mean = 40, sd = 10)
+)
+
+dados
+```
+
+E se as variáveis fossem...
+
+```{r}
+dadosEx <- dados %>% 
+    rename(sex_fem = 1,
+           process_n = 2,
+           firstYear_nProj = 3,
+           firstProj_timing = 4,
+           kmFromRes = 5,
+           age =6
+           ) %>% 
+    mutate(firstProj_timing = round(firstProj_timing*365,0) )
+
+dadosEx
+
+```
+
+Entender a distribuição dos dados nos permitiria ...
+
+### Boxplot univariado
+
+```{r}
+p1 <- dadosEx %>%  
+    ggplot(aes(age, fill=1, color=1)) + 
+    geom_density(alpha=0.5) +
+    labs(y="") + 
+    theme(legend.position = "none") +
+    theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
+
+p2 <- dadosEx %>%  
+    ggplot(aes(1, age)) + 
+    geom_boxplot(color="darkgray") +
+    labs(x="") +
+    theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+
+
+p1 + p2
+```
+
+### Boxplot bivariado
+
+```{r}
+p1 <- dadosEx %>%  
+    mutate(sex = ifelse(sex_fem == TRUE, "fem", "masc")) %>% 
+    ggplot(aes(age, fill = sex, color = sex)) + 
+    geom_density(alpha=0.5) +
+    labs(y="") +
+    theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
+
+p2 <- dadosEx %>%  
+    mutate(sex = ifelse(sex_fem == TRUE, "fem", "masc")) %>% 
+    ggplot(aes(1, age, fill = sex)) + 
+    geom_boxplot()+
+    labs(x="")+ 
+    theme(legend.position = "none") +
+    theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+
+p1 + p2
+```
+
+### E se...
+
+```{r}
+
+dadosEx %>% 
+    mutate(sex_fem = rbernoulli(n, p = 0.3)) %>% 
+    mutate(age = ifelse(sex_fem == T, 
+                        rnorm(n, mean = 35, sd = 5), 
+                        rnorm(n, mean = 50, sd = 10))) -> dadosEx2
+
+p1 <- dadosEx2 %>%  
+    mutate(sex = ifelse(sex_fem == TRUE, "fem", "masc")) %>% 
+    ggplot(aes(age, fill = sex, color = sex)) + 
+    geom_density(alpha=0.5) +
+    labs(y="") +
+    theme(axis.text.y=element_blank(), axis.ticks.y=element_blank())
+
+p2 <- dadosEx2 %>%  
+    mutate(sex = ifelse(sex_fem == TRUE, "fem", "masc")) %>% 
+    ggplot(aes(1, age, fill = sex)) + 
+    geom_boxplot()+
+    labs(x="")+ 
+    theme(legend.position = "none") +
+    theme(axis.text.x=element_blank(), axis.ticks.x=element_blank())
+
+p1 + p2
+
+```
+
+## C.1.2 \~ Uma cientista de dados de sucesso (seniori)
+
+Entender a distribuição dos dados nos permitiria ...
+
+### Boxplot univariado
+
+```{r}
+set.seed(2021)
+dadosEx <- dadosEx %>%  
+  mutate(salary = rnorm(n, mean = 9, sd = 2))
+
+p1 <-dadosEx %>% 
+  ggplot(aes(salary, color = "", fill = "")) +
+    geom_density(alpha=0.5) +
+    scale_colour_viridis_d("", begin = 0.45, end = 0.8, option = "C") +
+    scale_fill_viridis_d("", begin = 0.45, end = 0.8, option = "C") +
+    geom_vline(aes(xintercept = mean(salary), colour = "")) +
+    scale_x_continuous(breaks = seq(0,ceiling(max(dadosEx$salary)), 2),
+                        guide = guide_axis(n.dodge=2),
+                        labels = scales::dollar_format(suffix = "K")) +
+    theme(axis.text.y=element_blank(), legend.position = 'none') +
+    xlab("") 
+
+
+p2 <- dadosEx %>%
+  ggplot(aes("", salary, color = "", fill = "")) +
+  geom_boxplot(alpha=0.5) +
+  stat_summary(fun.y="mean", shape=2) +
+  scale_colour_viridis_d("", begin = 0.45, end = 0.8, option = "C") +
+  scale_fill_viridis_d("", begin = 0.45, end = 0.8, option = "C") +
+  scale_y_continuous(breaks = seq(floor(min(dadosEx$salary)),
+                                  ceiling(max(dadosEx$salary)), 2),
+                      labels = scales::dollar_format(suffix = "K")) +
+  theme(legend.position = 'none') +
+  ylab("") +
+  xlab("") 
+
+
+ggpubr::ggarrange(p1, p2, ncol=2, nrow=1) +
+  plot_annotation(title = 'Fake Data: Salary')
+
+```
+
+### Boxplot bivariado
+
+```{r}
+p1 <-dadosEx %>% 
+  mutate(level = ifelse(sex_fem == TRUE, "entry", "senior")) %>% 
+  ggplot(aes(salary, fill = level, color = level)) +
+    geom_density(alpha=0.5) +
+    scale_colour_viridis_d("", begin = 0.6, end = 0.8, option = "B") +
+    scale_fill_viridis_d("", begin = 0.6, end = 0.8, option = "B") +
+    geom_vline(data = . %>% filter(level =="entry"), aes(xintercept = mean(salary), colour = level)) +
+    geom_vline(data = . %>% filter(level =="senior"), aes(xintercept = mean(salary), colour = level))  +    
+  scale_x_continuous(breaks = seq(0,ceiling(max(dadosEx$salary)), 2),
+                        guide = guide_axis(n.dodge=2),
+                        labels = scales::dollar_format(suffix = "K")) +
+    theme(axis.text.y=element_blank(), legend.position = 'none') +
+    xlab("") 
+
+
+p2 <- dadosEx %>%
+  mutate(level = ifelse(sex_fem == TRUE, "entry", "senior")) %>% 
+  ggplot(aes("", salary, fill = level, color = level)) +
+  geom_boxplot(alpha=0.5) +
+  facet_grid(. ~ level) +
+  stat_summary(fun.y="mean", shape=2) +
+  scale_colour_viridis_d("", begin = 0.6, end = 0.8, option = "B") +
+  scale_fill_viridis_d("", begin = 0.6, end = 0.8, option = "B") +
+  scale_y_continuous(breaks = seq(floor(min(dadosEx$salary)),
+                                  ceiling(max(dadosEx$salary)), 2),
+                      labels = scales::dollar_format(suffix = "K")) +
+  ylab("") +
+  xlab("") 
+
+             
+ggpubr::ggarrange(p1, p2, ncol=2, nrow=1, common.legend = TRUE, legend="bottom") +
+  plot_annotation(title = 'Fake Data: Salary vs. Seniority')
+
+```
+
+### E se...
+
+```{r}
+set.seed(2021)
+dadosEx_1 <-  dadosEx %>% 
+    mutate(sex_fem = rbernoulli(n, p = 0.3)) %>% 
+    mutate(salary = ifelse(sex_fem == T, 
+                        rnorm(n, mean = 6, sd = 2.5), 
+                        rnorm(n, mean = 12, sd = 3))) -> dadosEx2
+
+p1 <- dadosEx_1 %>% 
+  mutate(level = ifelse(sex_fem == TRUE, "entry", "senior")) %>% 
+  ggplot(aes(salary, fill = level, color = level)) +
+    geom_density(alpha=0.5) +
+    scale_colour_viridis_d("", begin = 0.6, end = 0.8, option = "B") +
+    scale_fill_viridis_d("", begin = 0.6, end = 0.8, option = "B") +
+    geom_vline(data = . %>% filter(level =="entry"), aes(xintercept = mean(salary), colour = level)) +
+    geom_vline(data = . %>% filter(level =="senior"), aes(xintercept = mean(salary), colour = level))  +    
+  scale_x_continuous(breaks = seq(0,ceiling(max(dadosEx$salary)), 2),
+                        guide = guide_axis(n.dodge=2),
+                        labels = scales::dollar_format(suffix = "K")) +
+    theme(axis.text.y=element_blank(), legend.position = 'none') +
+    xlab("") 
+
+
+p2 <- dadosEx_1 %>%
+  mutate(level = ifelse(sex_fem == TRUE, "entry", "senior")) %>% 
+  ggplot(aes("", salary, fill = level, color = level)) +
+  geom_boxplot(alpha=0.5) +
+  facet_grid(. ~ level) +
+  stat_summary(fun.y="mean", shape=2) +
+  scale_colour_viridis_d("", begin = 0.6, end = 0.8, option = "B") +
+  scale_fill_viridis_d("", begin = 0.6, end = 0.8, option = "B") +
+  scale_y_continuous(breaks = seq(floor(min(dadosEx$salary)),
+                                  ceiling(max(dadosEx$salary)), 2),
+                      labels = scales::dollar_format(suffix = "K")) +
+  ylab("") +
+  xlab("") 
+
+             
+ggpubr::ggarrange(p1, p2, ncol=2, nrow=1, common.legend = TRUE, legend="bottom") +
+  plot_annotation(title = 'Fake Data: Salary vs. Seniority')
+
+```
+
+#### escala
+
+```{r}
+dadosEx2 <- dadosEx2 %>% mutate(salary = ifelse(salary < 0, mean(salary), salary))
+
+dadosEx2 %>% 
+  mutate(salary = salary * 1000) %>% 
+  select(age, salary, years_since_graduation = firstYear_nProj) %>% 
+  pivot_longer(everything()) %>% 
+  ggplot(aes(name, value, color = name, fill = name)) +
+    geom_boxplot(alpha = 0.3) +
+    theme(legend.position = 'none') +
+    scale_colour_viridis_d("", option = "E") +
+    scale_fill_viridis_d("",  option = "E") +
+    xlab("")  +
+    ylab("") +
+    ggtitle("Fake Data")
+```
+
+```{r}
+dadosEx2 %>% 
+  select(age, salary, years_since_graduation = firstYear_nProj) %>% 
+  pivot_longer(everything()) %>% 
+  ggplot(aes(name, value, color = name, fill = name)) +
+    geom_boxplot(alpha = 0.3) +
+    theme(legend.position = 'none') +
+    scale_colour_viridis_d("", option = "E") +
+    scale_fill_viridis_d("",  option = "E") +
+    xlab("")  +
+    ylab("")+
+    ggtitle("Fake Data")
+```
+
+```{r}
+p1 <- dadosEx2 %>% 
+  select(age, salary, years_since_graduation = firstYear_nProj) %>% 
+  scale() %>% 
+  as_tibble() %>% 
+  pivot_longer(everything()) %>% 
+  ggplot(aes(name, value, color = name, fill = name)) +
+    geom_boxplot(alpha = 0.3) +
+    theme(legend.position = 'none') +
+    scale_colour_viridis_d("",  end = 0.95, option = "E") +
+    scale_fill_viridis_d("",  end = 0.95,  option = "E") +
+    xlab("") +
+    ylab("")  +
+    ggtitle("Z-Score Standardization")
+
+
+p2 <- dadosEx2 %>% 
+  select(age, salary, years_since_graduation = firstYear_nProj) %>% 
+  mutate(across(everything(), ~scales::rescale(.x, to = c(0, 1)))) %>% 
+  pivot_longer(everything()) %>% 
+  ggplot(aes(name, value, color = name, fill = name)) +
+    geom_boxplot(alpha = 0.3) +
+    theme(legend.position = 'none') +
+    scale_colour_viridis_d("",  end = 0.95, option = "E") +
+    scale_fill_viridis_d("",  end = 0.95, option = "E") +
+    xlab("") +
+    ylab("")  +
+    ggtitle("Min-Max Scaling")
+
+
+p2 + p1 + plot_annotation(title = 'Fake Data')
+```
+
+```{r}
+dadosEx2 %>% select(age, salary, years_since_graduation = firstYear_nProj) %>% skimr::skim() 
+```
+
+### Correlação
+
+> Correlação não é causalidade, MAS AJUDA!
+
+```{r }
+dadosEx %>% GGally::ggpairs()
+```
+
+```{r }
+dadosEx %>% GGally::ggpairs(mapping = aes(color = sex_fem))
+```
+
+```{r }
+dadosEx %>% 
+    mutate(sex_fem = rbernoulli(n, p = 0.3)) %>% 
+    mutate(age = ifelse(sex_fem == T, 
+                        rnorm(n, mean = 38, sd = 5), 
+                        rnorm(n, mean = 45, sd = 10))) %>% 
+    GGally::ggpairs(mapping = aes(color = sex_fem))
+```
+
+## C.2 \~ American Math Society Survey Data
+
+Counts of new PhDs in the mathematical sciences for 2008-09 and 2011-12 categorized by type of institution, gender, and US citizenship status.
+
+```{r, eval = F}
+library(carData)
+
+data("AMSsurvey") 
+AMSsurvey %>% glimpse
+#?AMSsurvey
+
+```
+
+<!-- # Case  ~ government is doing for people in poverty  -->
+
+```{r, eval = F, echo = F}
+library(carData)
+
+data("WVS") 
+WVS %>% glimpse
+#?WVS
+
+```
+
+## C.3 \~ School Science Survey Data
+
+attitudes to science, from a survey where there were results from 20 classes in private schools and 46 classes in public schools. - like: a summary score based on two of the questions, on a scale from 1 (dislike) to 12 (like)
+
+```{r}
+library(DAAG)
+
+data("science") 
+science %>% glimpse
+#?science
+
+```
+
+## C.4 \~ Fertility and Socioeconomic Indicators
+
+```{r }
+data("swiss") 
+
+swiss %>% GGally::ggpairs()
+
+```
+
+```{r }
+swiss %>%
+    mutate(Fertility_gr = ifelse(Fertility < 75, "baixa", "alta")) %>% 
+    GGally::ggpairs(mapping = aes(color = Fertility_gr))
+
+```
+
+## C.5 \~ temperatura
+
+```{r}
+library(ggridges)
+data("lincoln_weather")
+
+#lincoln_weather %>% glimpse
+lincoln_weather <- lincoln_weather %>% janitor::clean_names() %>%  glimpse
+
+
+#distribution
+ggplot(lincoln_weather, aes(x = mean_temperature_f, y = month, fill = stat(x))) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  scale_fill_viridis_c(name = "Temp. [F]", option = "C") +
+  labs(title = 'Temperatures in Lincoln NE in 2016') +
+  theme_minimal()
+```
+
+```{r}
+ggplot(lincoln_weather,
+    aes(y = mean_temperature_f, x = month, fill = mean_temperature_f)) +
+    coord_flip() +
+    geom_boxplot()
+```
+
+## C.6 \~ Avengers
+
+```{r}
+library(tidyverse)
+
+avengers_raw <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/avengers/avengers.csv" %>%
+  base::url() %>% 
+  readr::read_csv() %>% 
+  janitor::clean_names() %>% 
+  dplyr::glimpse()
+```
+
+```{r}
+avengers_raw <- avengers_raw %>% 
+  mutate(death1 = forcats::fct_recode(death1, dead = "YES", not_dead = "NO")) %>%
+  mutate(return1 = forcats::fct_recode(return1, return = "YES", not_return = "NO")) %>% 
+  mutate(return1 = forcats::fct_explicit_na(return1, "not_dead")) %>% 
+  glimpse
+```
+
+```{r}
+theme_set(theme_minimal() + theme(legend.position = 'none'))
+
+
+p1 <- avengers_raw %>% 
+  ggplot(aes(years_since_joining, color = "", fill = "")) +
+    geom_density(alpha=0.5) +
+    scale_colour_viridis_d("", begin = 0.45, end = 0.8) +
+    scale_fill_viridis_d("", begin = 0.45, end = 0.8) +
+    geom_vline(aes(xintercept = mean(years_since_joining), colour = "")) +
+    scale_x_continuous(breaks = seq(min(avengers_raw$years_since_joining),
+                                    max(avengers_raw$years_since_joining), 10)) +
+    theme(axis.text.y=element_blank()) +
+    xlab("") 
+
+
+
+p2 <- avengers_raw %>%
+  ggplot(aes("", years_since_joining, color = "", fill = "")) +
+  geom_boxplot() +
+  stat_summary(fun.y="mean", shape=2) +
+  scale_colour_viridis_d("", begin = 0.45, end = 0.5) +
+  scale_fill_viridis_d("", begin = 0.45, end = 0.5, alpha = 0.5) +
+  scale_y_continuous(breaks = seq(min(avengers_raw$years_since_joining),
+                                  max(avengers_raw$years_since_joining), 10)) +
+  xlab("") +
+  ylab("")
+
+ggpubr::ggarrange(p1, p2, ncol=2, nrow=1) +
+  plot_annotation(title = 'Avengers: years_since_joining')
+
+```
+
+```{r}
+theme_set(theme_minimal())
+
+
+p1 <- avengers_raw %>% 
+  ggplot(aes(years_since_joining, fill = death1, colour = death1)) +
+    geom_density(alpha=0.5) +
+    scale_colour_viridis_d("", end = 0.8) +
+    scale_fill_viridis_d("", end = 0.8) +
+  geom_vline(data = . %>% filter(death1 =="dead"), aes(xintercept = mean(years_since_joining), colour = death1)) +
+  geom_vline(data = . %>% filter(death1 =="not_dead"), aes(xintercept = mean(years_since_joining), colour = death1))  +
+      theme(axis.text.y=element_blank()) +
+      scale_x_continuous(breaks = seq(min(avengers_raw$years_since_joining),
+                                    max(avengers_raw$years_since_joining), 10)) +
+    xlab("") 
+
+
+p2 <- avengers_raw %>%
+  ggplot(aes("", years_since_joining, fill = death1, colour = death1)) +
+  geom_boxplot() +
+  facet_grid(. ~ death1) +
+  scale_colour_viridis_d("", end = 0.8) +
+  scale_fill_viridis_d("", end = 0.8, alpha = 0.5) +
+  xlab("") + 
+  ylab("") + 
+      scale_y_continuous(breaks = seq(min(avengers_raw$years_since_joining),
+                                    max(avengers_raw$years_since_joining), 10)) +
+  theme(legend.position = 'bottom') 
+
+ggpubr::ggarrange(p1, p2, ncol=2, nrow=1, common.legend = TRUE, legend="bottom") +
+  plot_annotation(title = 'Avengers: years_since_joining vs. Death (at least once)')
+
+```
+
+```{r}
+theme_set(theme_minimal())
+
+p1 <- avengers_raw %>% 
+  mutate(death1 = forcats::fct_recode(death1, dead = "YES", not_dead = "NO")) %>%
+  mutate(return1 = forcats::fct_recode(return1, return = "YES", not_return = "NO")) %>% 
+  mutate(return1 = forcats::fct_explicit_na(return1, "not_dead")) %>% 
+  mutate(return1 = forcats::fct_infreq(return1)) %>% 
+  ggplot(aes(years_since_joining, fill = return1, colour = return1)) +
+    geom_density(alpha=0.5) +
+    scale_colour_viridis_d("", end = 0.8) +
+    scale_fill_viridis_d("", end = 0.8)  +
+  geom_vline(data = . %>% filter(return1 =="not_return"), aes(xintercept = mean(years_since_joining), colour = return1)) +
+  geom_vline(data = . %>% filter(return1 =="return"), aes(xintercept = mean(years_since_joining), colour = return1))  +
+  geom_vline(data = . %>% filter(return1 =="not_dead"), aes(xintercept = mean(years_since_joining), colour = return1)) +
+      theme(axis.text.y=element_blank()) +
+
+      scale_x_continuous(breaks = seq(min(avengers_raw$years_since_joining),
+                                    max(avengers_raw$years_since_joining), 10)) +
+  xlab("") 
+
+p2 <- avengers_raw %>%
+  mutate(death1 = forcats::fct_recode(death1, dead = "YES", not_dead = "NO")) %>%
+  mutate(return1 = forcats::fct_recode(return1, return = "YES", not_return = "NO")) %>% 
+  mutate(return1 = forcats::fct_explicit_na(return1, "not_dead")) %>% 
+  mutate(return1 = forcats::fct_infreq(return1)) %>% 
+  ggplot(aes("", years_since_joining, fill = return1, colour = return1)) +
+  facet_grid(. ~ return1) +
+  geom_boxplot() +
+    scale_y_continuous(breaks = seq(min(avengers_raw$years_since_joining),
+                                    max(avengers_raw$years_since_joining), 10)) +
+  scale_colour_viridis_d("", end = 0.8) +
+  scale_fill_viridis_d("", end = 0.8, alpha = 0.5) +
+  xlab("") +
+  ylab("") 
+
+ggpubr::ggarrange(p1, p2, ncol=2, nrow=1, common.legend = TRUE, legend="bottom") +
+  plot_annotation(title = 'Avengers: years_since_joining vs. Return (at least once)')
+
+```
+
+```{r}
+avengers_raw %>% 
+  janitor::tabyl(gender) %>% 
+  mutate(percent = scales::percent(percent)) %>% 
+  kableExtra::kbl() %>%
+  kableExtra::kable_styling(full_width = F)
+```
+
+```{r}
+theme_set(theme_minimal())
+
+
+p1 <- avengers_raw %>% 
+  ggplot(aes(years_since_joining, fill = gender, colour = gender)) +
+    geom_density(alpha=0.5) +
+    scale_colour_viridis_d("", end = 0.8) +
+    scale_fill_viridis_d("", end = 0.8) +
+    geom_vline(data = . %>% filter(gender =="FEMALE"), aes(xintercept = mean(years_since_joining), colour = gender)) +
+  geom_vline(data = . %>% filter(gender =="MALE"), aes(xintercept = mean(years_since_joining), colour = gender)) +
+      theme(axis.text.y=element_blank()) +
+      scale_x_continuous(breaks = seq(min(avengers_raw$years_since_joining),
+                                    max(avengers_raw$years_since_joining), 10)) +
+    xlab("") 
+
+
+p2 <- avengers_raw %>%
+  ggplot(aes("", years_since_joining, fill = gender, colour = gender)) +
+  geom_boxplot() +
+  facet_grid(. ~ gender) +
+  scale_colour_viridis_d("", end = 0.8) +
+  scale_fill_viridis_d("", end = 0.8, alpha = 0.5) +
+  xlab("") + 
+  ylab("") + 
+      scale_y_continuous(breaks = seq(min(avengers_raw$years_since_joining),
+                                    max(avengers_raw$years_since_joining), 10)) +
+  theme(legend.position = 'bottom') 
+
+ggpubr::ggarrange(p1, p2, ncol=2, nrow=1, common.legend = TRUE, legend="bottom") +
+  plot_annotation(title = 'Avengers: years_since_joining vs. Gender')
+
+```
+
+```{r}
+
+
+p1 <- avengers_raw %>% 
+  ggplot(aes(appearances, fill = gender, colour = gender)) +
+    geom_density(alpha=0.5) +
+    scale_colour_viridis_d("", end = 0.8) +
+    scale_fill_viridis_d("", end = 0.8) +
+    geom_vline(data = . %>% filter(gender =="FEMALE"), aes(xintercept = mean(appearances), colour = gender)) +
+  geom_vline(data = . %>% filter(gender =="MALE"), aes(xintercept = mean(appearances), colour = gender)) +
+      theme(axis.text.y=element_blank()) +
+      scale_x_continuous(breaks = seq(0,
+                                    max(avengers_raw$appearances), 500)) +
+    xlab("") 
+
+
+p2 <- avengers_raw %>%
+  ggplot(aes("", appearances, fill = gender, colour = gender)) +
+  geom_boxplot() +
+  ggrepel::geom_text_repel(data = . %>% group_by(gender) %>% filter(appearances %in% boxplot.stats(appearances)$out) ,
+            aes(label = name_alias, y = appearances), size = 3) +
+  facet_grid(. ~ gender) +
+  scale_colour_viridis_d("", end = 0.8) +
+  scale_fill_viridis_d("", end = 0.8, alpha = 0.5) +
+  xlab("") + 
+  ylab("") + 
+      scale_y_continuous(breaks = seq(0,
+                                    max(avengers_raw$appearances), 500)) +
+  theme(legend.position = 'bottom') 
+
+ggpubr::ggarrange(p1, p2, ncol=2, nrow=1, common.legend = TRUE, legend="bottom") +
+  plot_annotation(title = 'Avengers: Appearances vs. Gender')
+
+```
+
+```{r}
+avengers_raw %>%
+  ggplot(aes("", appearances, fill = gender, colour = gender)) +
+  geom_boxplot() +
+  ggrepel::geom_text_repel(data = . %>% group_by(gender) %>% filter(appearances %in% boxplot.stats(appearances)$out) ,
+            aes(label = name_alias, y = appearances), size = 3) +
+  facet_grid(. ~ gender) +
+  scale_colour_viridis_d("", end = 0.8) +
+  scale_fill_viridis_d("", end = 0.8, alpha = 0.5) +
+  xlab("") + 
+      scale_y_continuous(breaks = seq(0,
+                                    max(avengers_raw$appearances), 500)) +
+  theme(legend.position = 'none') +
+  ggtitle("Avengers: Appearances vs. Gender")
+
+```
+
+# Conclusões
+
+> Ao avaliar uma distribuição, observe:
+
+-   forma: simétrica, assimétrica (à esquerda/direita)
+-   outliers: observações que se diferenciam drasticamente dos demais
+-   dispersão: variabilidade das observações
+-   posição: centro das observações
+
+> E o que tudo isso tem a ver com Machine Learning?
+
+Tudo! O que discutimos até aqui, é o que os algoritmos de ML fazem de forma escalonada. E cabe a você, cientista de dados, garantir os ajustes necessários para que os modelos possam utilizar os dados da melhor forma, seja para inferência ou predição.
+
+> E lembre-se: você é a porta voz dos dados, porém não se trata de você!
+
+Toda essa teoria deve ser um meio e não um fim, então não perca o foco na (o) cliente final.

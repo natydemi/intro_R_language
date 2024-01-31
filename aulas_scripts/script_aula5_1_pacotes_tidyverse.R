@@ -6,108 +6,108 @@
 
 # Tidying (library tidyr) -----
     
-  #https://tidyr.tidyverse.org/
-  
-  #Redimensionamento de dados - exemplos da cheatsheet
+    #https://tidyr.tidyverse.org/
+    
+    #Redimensionamento de dados - exemplos da cheatsheet
     #case1 - table4a
     
-        table4a %>% 
-            pivot_longer(cols = 2:3,
-                         names_to = "year",
-                         values_to = "cases") 
-      
-        #note como ao fazer tal redimensionamento, 
-        # também conhecido pivotagem, a aplicação de algumas funções
-        # passa a ser mais mais fluída.
-        # Como neste exemplo de ggplot: 
-        table4a %>% 
-        pivot_longer(cols = 2:3,
-                     names_to = "year",
-                     values_to = "cases") %>%
-        ggplot(aes(x = year, y = cases)) +
-            geom_boxplot()
-        
-        # OBS: a função pivot_longer chamava gather em versões anteriores
+    table4a %>% 
+      pivot_longer(cols = 2:3,
+                   names_to = "year",
+                   values_to = "cases") 
+    
+    #note como ao fazer tal redimensionamento, 
+    # também conhecido pivotagem, a aplicação de algumas funções
+    # passa a ser mais mais fluída.
+    # Como neste exemplo de ggplot: 
+    table4a %>% 
+      pivot_longer(cols = 2:3,
+                   names_to = "year",
+                   values_to = "cases") %>%
+      ggplot(aes(x = year, y = cases)) +
+      geom_boxplot()
+    
+    # OBS: a função pivot_longer chamava gather em versões anteriores
     
     #case2 - who
-        who 
-        who %>% glimpse
-  
-        who %>% 
-            pivot_longer(cols = contains("new")) %>% 
-            glimpse()   
-        
-        #podemos agora ver qual a linha com maiores valores
-        who %>% 
-          pivot_longer(cols = contains("new")) %>% 
-          slice_max(value)   
-        
-        
+    who 
+    who %>% glimpse
+    
+    who %>% 
+      pivot_longer(cols = contains("new")) %>% 
+      glimpse()   
+    
+    #podemos agora ver qual a linha com maiores valores
+    who %>% 
+      pivot_longer(cols = contains("new")) %>% 
+      slice_max(value)   
+    
+    
     #case3 - world_bank_pop 
     
-      #note como podemos usar a pivotagem para facilitar a 
-      #aplicação de calculos de interesse
-        world_bank_pop
-        world_bank_pop %>% glimpse
-  
-        dados_world_bank_pop <- world_bank_pop %>%
-          pivot_longer(cols = -(1:2), names_to = "year") %>%
-          mutate(value = round(value,0)) %>%
-          pivot_wider(names_from = year) 
-
+    #note como podemos usar a pivotagem para facilitar a 
+    #aplicação de calculos de interesse
+    world_bank_pop
+    world_bank_pop %>% glimpse
+    
+    dados_world_bank_pop <- world_bank_pop %>%
+      pivot_longer(cols = -(1:2), names_to = "year") %>%
+      mutate(value = round(value,0)) %>%
+      pivot_wider(names_from = year) 
+    
     #exercício: replique os exemplos da cheatsheet
-      #https://rstudio.github.io/cheatsheets/html/tidyr.html
-        
-# Importação (library readr) -----
-
+    #https://rstudio.github.io/cheatsheets/html/tidyr.html
+    
+    # Importação (library readr) -----
+    
     #https://readr.tidyverse.org/
-
+    
     #case2 - world_bank_pop
-        #export
-            dados_world_bank_pop %>%
-              write_csv("dados_world_bank_pop.csv")
-            #ou write_csv(dados_world_bank_pop, "dados_world_bank_pop.csv")
-            
-        #excluindo dataset
-            rm(dados_world_bank_pop)
-            dados_world_bank_pop
-        
-        #import
-            dados_world_bank_pop <- read_csv("dados_world_bank_pop.csv", 
-                                             col_names = T,
-                                             cols(
-                                                 country = col_character(),
-                                                 year = col_date(format = "%Y"),
-                                                 SP.POP.GROW = col_skip(),
-                                                 SP.POP.TOTL = col_double(),
-                                                 SP.URB.GROW = col_double(),
-                                                 SP.URB.TOTL = col_double()
-                                             ))
-            #ou "dados_world_bank_pop.csv" %>% read_csv(col_names = TRUE)
-            
-  #hands-on: consulte o help das funções: col_skip e col_double, o que elas fazem? 
-  #exercício: replique os exemplos da cheatsheet
+    #export
+    dados_world_bank_pop %>%
+      write_csv("dados_world_bank_pop.csv")
+    #ou write_csv(dados_world_bank_pop, "dados_world_bank_pop.csv")
+    
+    #excluindo dataset
+    rm(dados_world_bank_pop)
+    dados_world_bank_pop
+    
+    #import
+    dados_world_bank_pop <- read_csv("dados_world_bank_pop.csv", 
+                                     col_names = T,
+                                     cols(
+                                       country = col_character(),
+                                       year = col_date(format = "%Y"),
+                                       SP.POP.GROW = col_skip(),
+                                       SP.POP.TOTL = col_double(),
+                                       SP.URB.GROW = col_double(),
+                                       SP.URB.TOTL = col_double()
+                                     ))
+    #ou "dados_world_bank_pop.csv" %>% read_csv(col_names = TRUE)
+    
+    #hands-on: consulte o help das funções: col_skip e col_double, o que elas fazem? 
+    #exercício: replique os exemplos da cheatsheet
     #https://rstudio.github.io/cheatsheets/html/data-import.html      
-            
-            
-# Manipulação (library dplyr) -----
-            
-  #https://dplyr.tidyverse.org/
-            
+    
+    
+    # Manipulação (library dplyr) -----
+    
+    #https://dplyr.tidyverse.org/
+    
     #case1 - who
-      dados_who <- who %>% 
-            pivot_longer(cols = contains("new"), values_to = "cases") 
-            
-      dados_who %>%
-        filter(country %in% c("South Africa", "Brazil")) %>%
-        group_by(country) %>%
-        summarise(`numero de linhas` = n(),
-                  media_cases = mean(cases, na.rm = T))
-      
-        #qual grupo com o maior número de casos, por ano
-        dados_who %>% 
-            filter(country == "South Africa") %>% 
-            group_by(year) %>% 
+    dados_who <- who %>% 
+      pivot_longer(cols = contains("new"), values_to = "cases") 
+    
+    dados_who %>%
+      filter(country %in% c("South Africa", "Brazil")) %>%
+      group_by(country) %>%
+      summarise(`numero de linhas` = n(),
+                media_cases = mean(cases, na.rm = T))
+    
+    #qual grupo com o maior número de casos, por ano
+    dados_who %>% 
+      filter(country == "South Africa") %>% 
+      group_by(year) %>% 
             arrange(desc(cases)) %>% 
             slice(which.max(cases))
         
@@ -201,7 +201,7 @@
    #instalar a biblioteca esquisser, e carregar a janela
       esquisse::esquisser()
         
-        #códigos copiados a partir do exercício de demonstração  
+        #ex de código copiado a partir do exercício de demonstração  
         # da ferramenta feito em sala de aula 
         library(dplyr)
         library(ggplot2)

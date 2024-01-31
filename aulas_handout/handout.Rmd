@@ -1,6 +1,7 @@
 ---
 title: "Introdução à Programação em R"
-output:
+output: 
+  #github_document:
   html_document:
     toc: true # table of content true
     number_sections: true 
@@ -280,7 +281,7 @@ uma mensagem de erro, mas basta digitar o comando desejado na sequência:
 > Para resgatar algum comando já digitado no Console, você pode utilizar
 > a tecla 'seta para cima'.
 
-## Aplicando funções
+## Trabalhando com funções
 
 Assim como em muitas linguagens de programação, uma função no R é de um
 conjunto de instruções organizadas visando executar uma tarefa. E nesta
@@ -1084,14 +1085,14 @@ operações, com esquema de reciclagem e coerção:
 > Para tirar dúvidas sobre como consultar os diferentes tipos de objetos
 > no R consulte o help `?Extract` ou `?Syntax`.
 
-## Minha primeira análise de dados
+### Minha primeira análise de dados
 
 Agora que temos familiaridade com os dados no R, vamos análisar uma base
 de dados do próprio R, visando apresentar algumas das funções *built-in*
 disponibilizadas para tal, bem como apresentar formas de
 importar/exportar dados.
 
-### Análises Descritivas {#AnalisesDescritivas}
+#### Análises Descritivas {#AnalisesDescritivas}
 
 Iremos trabalhar com a base `mtcars`, uma das bases disponíveis por
 default no R. Por se tratar de uma base *built-in*, apesar dela ser
@@ -1216,7 +1217,7 @@ dados_mtcars <- mtcars
 > consultar as princípais funções estatísticas/machile learning
 > disponíveis por default: `library(help = "stats")`.
 
-## Importação/Exportação
+## Importação/Exportação de arquivos
 
 Visando facilitar a dinâmica, vamos primeiro exportar a base de dados
 criada no último capítulo `dados_mtcars`, e então vamos importar esta
@@ -1255,12 +1256,74 @@ comentários, e variações, permitindo trabalharmos com outras extensões.
 > para consultar funções relacionadas pesquise os tópicos `??read` e
 > `??write`.
 
-## Operadores lógicos
+## Trabalhando com bibliotecas
+
+Bibliotecas tratam-se de uma coleção de funções, dados e códigos
+compilados. A instalação destas bibliotecas, ou pacotes, como são também
+chamados, é simples, podendo ser feita via point-and-click ('Tools \>
+Install.Packages'), ou pelo comando
+`install.packages("nome_do_pacote")`. Após a instalação é necessário
+apenas carregar os pacotes desejados, por meio do comando
+`library(nome_do_pacote)` - sem aspas duplas, ou ainda indo diretamente
+na janela *Packages* do RStudio, e setando as bibliotecas que deseja
+carregar:
+
+```{r, eval=FALSE}
+#instalação do pacote `ggplot2`   
+install.packages("ggplot2")  
+
+#carregando o pacote   
+library(ggplot2) 
+```
+
+Tais bibliotecas se encontram disponíveis pela rede de distribuição
+oficial do R, o CRAN (do inglês *Comprehensive R Archive Network*). Mas
+existem também bibliotecas disponibilizadas via outros repositórios como
+o Bioconductor e o GitHub, ou ainda disponíveis para download. Nestes
+casos é necessário fazer a instalação com
+`devtools::install_github("nome-do-repo/nome-do-pacote")`, após a
+instalação do pacote `devtools`, ou, no caso de um arquivo zipado,
+adicionando o parâmetro `repos = NULL`, na função `install.packages()`.
+
+```{r, eval=FALSE}
+#instalação do pacote a partir do CRAN   
+install.packages("ggplot2") 
+
+#instalação a partir do git (usualmente é a versão mais recente da biblioteca)   
+devtools::install_github("tidyverse/ggplot2") 
+
+#instalação a partir de um arquivo .zip salvo em "C:/Users/download/"
+install.packages("C:/Users/download/ggplot2.zip", repos = NULL)
+```
+
+Um ponto importante é que uma vez que a biblioteca esteja instalada, não
+é necessário carregar toda a biblioteca para utilizar uma função
+especificamente, sendo suficiente utilizar o nome da biblioteca, seguido
+por `::` e o nome da função desejada, ou seja:
+`nome_da_biblioteta::função_de_interesse()`. Tal recurso é interessante
+visto que ao fazer o load de uma biblioteca, todas as funções desta se
+sobrepõem as que já estão carregadas. E como é comum que pacotes
+diferentes compartilhem funções com o mesmo nome, está torna-se uma
+forma de evitar tal problema - note que este recurso foi utilizado no
+caso do `devtools::install_github()` do exemplo acima.
+
+Para checar quais bibliotecas estão instaladas podemos checar a aba
+`Packages` do RStudio, ou por meio do comando `installed.packages()`.
+Outro ponto importante são as atualizações das bibliotecas, que pode ser
+feita para todas as bibliotecas por meio do comando `update.packages()`,
+ou reinstalando o pacote de interesse - para consultar quais estão
+desatualizadas temos `old.packages()`. Por fim, para diferenciarmos as
+funções *built-in* daquelas carregadas via bibliotecas, vamos chamar as
+primeiras de funções do `R base`.
+
+## Mais sobre a linguagem R 
+
+### Operadores lógicos
 
 Os operadores lógicos são usados para realizar operações lógicas, ou
 seja, operações que retornam TRUE (T) ou FALSE (F)
 
-### comparações básicas
+-   **comparações básicas:** igual, maior/menor e diferente
 
 ```{r, eval=F}
 #igualdade: se os elementos à esquerda, par a par, estão contidos à direita
@@ -1307,10 +1370,11 @@ x >= y
 x <= y
 ```
 
-### comparações de igualdade para mais de um elemento
+-   **comparações:** `%in%`
 
 ```{r, eval=F}
-x %in% y #contem: se os elementos à esquerda, um a um, estão contidos à direita
+#contem: se os elementos à esquerda, um a um, estão contidos à direita
+x %in% y 
 ```
 
 Algumas aplicações:
@@ -1323,12 +1387,49 @@ x <- c(1, 2, 3, 4)
 
 # 5 está contido em x?
 5 %in% x
+
 ```
 
-### negação
+Já se invertermos a comparação, passamos a fazer uso da característica
+de reciclagem do R
+
+```{r}
+# x está contido em 1?
+x %in% 1
+
+# x está contido em 5?
+x %in% 5
+
+```
+
+Lembrando que perceba que o `%in%` é o comando recomendado para
+trabalhar com vetores, pois a comparação é feita avaliando cada um dos
+elementos à esquerda. De modo que todos os elementos da esquerda são
+comparados, individualmente, com a lista de opções à direita. Enquanto
+que o simbolo `==` trabalha com a reciclagem, e faz a avaliação em
+pares, 1º elemento da esquerda com o 1º da direita, e assim por diante.
+
+```{r}
+x <- c(1,2,3,3) 
+
+#1 e 3 está contido em x
+c(1,3) %in% x
+
+#os elementos de x estão contidos em 1 e 3 
+x %in% c(1,3)
+ 
+# x está pareado com 1 e 3?
+x == c(1,3)
+ 
+# 1 e 3 está pareado com x?
+c(1,3) == x
+```
+
+-   **negação:** `!`
 
 ```{r, eval=F}
-!x #negação: inverte o valor lógico de um objeto 
+#negação: inverte o valor lógico de um objeto 
+!x 
 ```
 
 Exemplos considerando comparações de elementos:
@@ -1359,27 +1460,23 @@ x <- c(1, 2, 3, 4)
 !(1 %in% x)
 ```
 
-### operadores combinados
+-   **operadores combinados:** `|` e `&`
 
 ```{r, eval=F}
-x | y #ou: retornando T/F para cada elemento das comparações
-x || y #ou: retornando apenas um T/F (1ª comparação à esquerda do vetor)
-x & y #e: retornando T/F para cada elemento das comparações
-x && y #e: retornando apenas um T/F (1ª comparação à esquerda do vetor)
+#casos mais comuns
+#ou: retornando T/F para cada elemento das comparações
+x | y
+#e: retornando T/F para cada elemento das comparações
+x & y
+
+#casos mais específicos
+#ou: retornando apenas um T/F (1ª comparação à esquerda do vetor)
+x || y
+#e: retornando apenas um T/F (1ª comparação à esquerda do vetor)
+x && y
 ```
 
 Alguns exemplos:
-
-```{r}
- x <- 1
-y <- 1:3
-
-# x é igual a y ou x é maior que y?
-x | y
-
-# x é igual a y ou x é menor que y?
-x || y
-```
 
 ```{r}
 x <- c(1, 2, 3)
@@ -1392,15 +1489,26 @@ x >= 3 | x <= 5
 x >= 3 & x <= 5
 ```
 
-### extras
+```{r}
+x <- 1
+y <- 1:3
 
-Adicionalmente, no caso de vetores lógicos, podemos também trabalhar com
-as funções `any()` e `all()`, ou ainda a função `identical()` . No caso
-desta última, trata-se de uma função que precisa ser analisada com
-cuidado, visto trabalhar com diferenças sutís, retornando `FALSE` para
+# x é igual a y ou x é maior que y?
+x | y
+
+# x é igual a y ou x é menor que y?
+x || y
+```
+
+-   **adicionais:** \`any()\`, \`all()\` e \`identical()\`
+
+No caso de vetores lógicos, podemos também trabalhar com as funções
+`any()` e `all()`, ou ainda a função `identical()` . No caso desta
+última, trata-se de uma função que precisa ser analisada com cuidado,
+visto trabalhar com diferenças sutís, retornando `FALSE` para
 comparações como por exemplo: `identical(1,1L)`.
 
-## Estruturas de controle
+### Estruturas de controle
 
 Estruturas de controle são blocos de programação que, baseado em
 parâmetros pré-definidos, definem a direção a ser seguida. No R temos
@@ -1492,7 +1600,7 @@ para a próxima, também existem no R. Além do `repeat()`, um loop que
 executa um bloco de comandos repetidamente, até que o mesmo seja
 quebrado.
 
-## Criando funções {#CriandoFuncoes}
+### Criando funções {#CriandoFuncoes}
 
 No R podemos criar as nossas próprias funções, por meio do objeto
 `function()`. Tal prática é interessante pois permite a automação de
@@ -1642,65 +1750,76 @@ celcius_fahrenheit(25)
 > nome do script (juntamente com o diretório caso não se encontre no
 > mesmo diretório).
 
-## Trabalhando com bibliotecas
+### Tratamento de exceções
 
-Bibliotecas tratam-se de uma coleção de funções, dados e códigos
-compilados. A instalação destas bibliotecas, ou pacotes, como são também
-chamados, é simples, podendo ser feita via point-and-click ('Tools \>
-Install.Packages'), ou pelo comando
-`install.packages("nome_do_pacote")`. Após a instalação é necessário
-apenas carregar os pacotes desejados, por meio do comando
-`library(nome_do_pacote)` - sem aspas duplas, ou ainda indo diretamente
-na janela *Packages* do RStudio, e setando as bibliotecas que deseja
-carregar:
+Chamamos de exceção qualquer condição anormal que possa aparecer quando
+estamos executando um programa de computador. Normalmente, esses erros
+acontecem por fatores externos do ponto de vista do código, como valores
+ou tipos não suportados passados para uma função, necessidade de leitura
+ou gravação de arquivos no sistema operacional, necessidade de conexão
+com a internet para obter algum dado.
 
-```{r, eval=FALSE}
-#instalação do pacote `ggplot2`
-  install.packages("ggplot2")
+As linguagens costumam ter formas de tratar as exceções, ou seja,
+métodos e funções que possam ser usados para que o programa não quebre a
+execução, não apresente erros abruptos ou até mesmo continue a partir do
+ponto em que o erro ocorreu. O tratamento de exceções em R é feito
 
-#carregando o pacote
-  library(ggplot2)
+utilizando a função tryCatch. A sintaxe da função é:
 
+```{r}
+
+result = tryCatch(   {     
+  #Código a ser executado    
+  },    warning = function(condição) {       
+    #Código a ser executado caso ocorra algum aviso (warning)   
+    },    error = function(condição) {       
+    #Código a ser executado caso ocorra algum erro   
+      },    finally={      
+    # Código a sempre ser executado após um dos três blocos acima.   
+        }  
+  ) 
 ```
 
-Tais bibliotecas se encontram disponíveis pela rede de distribuição
-oficial do R, o CRAN (do inglês *Comprehensive R Archive Network*). Mas
-existem também bibliotecas disponibilizadas via outros repositórios como
-o Bioconductor e o GitHub, ou ainda disponíveis para download. Nestes
-casos é necessário fazer a instalação com
-`devtools::install_github("nome-do-repo/nome-do-pacote")`, após a
-instalação do pacote `devtools`, ou, no caso de um arquivo zipado,
-adicionando o parâmetro `repos = NULL`, na função `install.packages()`.
+Por exemplo, vamos escrever um código que retorna para uma variável as
+linhas de um arquivo lido de uma url:
 
-```{r, eval=FALSE}
-#instalação do pacote a partir do CRAN
-  install.packages("ggplot2")
-#instalação a partir do git (versão mais recente da biblioteca)
-  install.packages("ggplot2")
-  devtools::install_github("tidyverse/ggplot2")
-#instalação a partir de um arquivo .zip
-  install.packages("C:/Users/ggplot2.zip", repos = NULL)
+```{r}
+arquivo <- function(url){      
+  linhas <- tryCatch({  
+    message("Tentando ler o arquivo")
+    readLines(con=url)
+    },
+    
+    error=function(condicao) {
+      message(paste("O caminho não pode ser acessado: ", url))
+      message("Mensagem de erro original: ")
+      message(condicao)
+      return(NA)
+    },
+    
+  warning=function(condicao) {
+    message("Warnings foram gerados ao ler a url:")
+    message(condicao)
+    return(NULL)
+  },
+  
+  finally={
+    message("Fim da execução")
+  })
+  return(linhas) } 
 ```
 
-Um ponto importante é que uma vez que a biblioteca esteja instalada, não
-é necessário carregar toda a biblioteca para utilizar uma função
-especificamente, sendo suficiente utilizar o nome da biblioteca, seguido
-por `::` e o nome da função desejada, ou seja:
-`nome_da_biblioteta::função_de_interesse()`. Tal recurso é interessante
-visto que ao fazer o load de uma biblioteca, todas as funções desta se
-sobrepõem as que já estão carregadas. E como é comum que pacotes
-diferentes compartilhem funções com o mesmo nome, está torna-se uma
-forma de evitar tal problema - note que este recurso foi utilizado no
-caso do `devtools::install_github()` do exemplo acima.
-
-Para checar quais bibliotecas estão instaladas podemos checar a aba
-`Packages` do RStudio, ou por meio do comando `installed.packages()`.
-Outro ponto importante são as atualizações das bibliotecas, que pode ser
-feita para todas as bibliotecas por meio do comando `update.packages()`,
-ou reinstalando o pacote de interesse - para consultar quais estão
-desatualizadas temos `old.packages()`. Por fim, para diferenciarmos as
-funções *built-in* daquelas carregadas via bibliotecas, vamos chamar as
-primeiras de funções do `R base`.
+Caso o arquivo consiga ser lido, a última linha do primeiro bloco ( o
+resultado de readLines ) será retornado. Se ocorrer um erro, as
+mensagens de erro são exibidas e é retornado o valor NA. Se ocorrer
+algum warning, as mensagens correspondentes são enviadas e a função
+retorna NULL. Independente do valor de retorno, a mensagem de fim da
+execução será exibida ao final. É importante utilizar blocos de
+tratamento de exceção toda vez que não houver certeza sobre as condições
+necessárias para execução do código. Uma boa escolha de alternativas em
+caso de erros ou problemas faz com que o programa seja executado com
+maior confiabilidade, além de melhorar a legibilidade e diminuir o tempo
+gasto para correção desses erros e problemas.
 
 <!-------------------------------------------------->
 
@@ -2541,88 +2660,134 @@ praise::praise()
 
 -   tidyverse
 
-
 ### Próximos passos
 
 -   tidymodels
 
 ### Passos avançados
 
--   Interoperabilidade R e Python: [reticulate](https://rstudio.github.io/reticulate/)
+-   Interoperabilidade R e Python:
+    [reticulate](https://rstudio.github.io/reticulate/)
 -   Criar mapas: [leaflet](https://rstudio.github.io/leaflet/)
--   Gerar memes: [memer](https://github.com/sctyner/memer)
--   Trabalhar com deep learning e dados não estruturados: [torch](https://torch.mlverse.org/packages/)
+-   Trabalhar com deep learning e dados não estruturados:
+    [torch](https://torch.mlverse.org/packages/)
 -   Automatizar processos: [usethis](https://github.com/r-lib/usethis)
 -   Modelagem bayesiana: [tidybayes](http://mjskay.github.io/tidybayes/)
 -   Analisar texto: [tidytext](https://github.com/juliasilge/tidytext)
 -   Desenvolver pacotes: [devtools](https://github.com/r-lib/devtools)
--   Gerenciar dependências do R: [renv](https://rstudio.github.io/renv/articles/renv.html)
--   Criar pipelines: [target](https://cran.r-project.org/web/packages/targets/vignettes/overview.html)
+-   Gerenciar dependências do R:
+    [renv](https://rstudio.github.io/renv/articles/renv.html)
+-   Criar pipelines:
+    [target](https://cran.r-project.org/web/packages/targets/vignettes/overview.html)
 -   Testar códigos: [testthat](https://testthat.r-lib.org/)
--   Estruturar deploy de modelos: [vetiver](https://github.com/rstudio/vetiver-r)
--   Gerenciar e analisar dados com o Hadoop: [RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki)
-
+-   Estruturar deploy de modelos:
+    [vetiver](https://github.com/rstudio/vetiver-r)
+-   Gerenciar e analisar dados com o Hadoop:
+    [RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki)
+-   Gerar memes: [memer](https://github.com/sctyner/memer)
 
 # Bibliografias recomendadas
 
-Além dos links e bibliotecas comentados durante todo o curso, vou deixar aqui algumas referências para que você revise o que foi visto ao longo deste material:
+Além dos links e bibliotecas comentados durante todo o curso, vou deixar
+aqui algumas referências para que você possa revisar, aprofundar e
+ampliar os conteúdos vistos ao longo deste material:
 
- - [R for data science](https://r4ds.had.co.nz/introduction.html)
-      - A 2ª versão do livro está sendo traduzida pelas R-Ladies, acesse [aqui](https://cienciadedatos.github.io/pt-r4ds/)
- - [Curso-R](https://www.curso-r.com/material/)
- - [R-Ladies](https://github.com/rladies/meetup-presentations_sao-paulo)
-  
-E aqui algumas referências para discussões mais avançadas:
- - [Advanced R](http://adv-r.had.co.nz/)
- - [Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
+-   [R for data science](https://r4ds.had.co.nz/introduction.html) -- a
+    2ª versão do livro está sendo traduzida pelas R-Ladies, acesse
+    [aqui](https://cienciadedatos.github.io/pt-r4ds/)
+-   [Curso-R](https://www.curso-r.com/material/)
+-   R-Ladies : [blog](https://rladies-sp.org/) e [histórico de
+    apresentações](https://github.com/rladies/meetup-presentations_sao-paulo)
 
+E aqui algumas referências para discussões mais técnicas e avançadas
+sobre a linguagem de programação R:
 
-No mais, a grande dica é: trabalhe com versões de você mesma (o), para que amanhã saiba um pouco mais do que ontem. 
+-   [Advanced R](http://adv-r.had.co.nz/)
 
+-   [Hands-On Programming with
+    R](https://rstudio-education.github.io/hopr/)
 
-# Até a próxima! 
+No mais, a grande dica é: trabalhe com versões de você mesma (o), para
+que amanhã saiba um pouco mais do que ontem.
+
+# Até a próxima!
+
 😘
 
 <!-- ## Big Data -->
 
 <!-- O R, por padrão, trabalha com dados carregados em memória, por meio de -->
+
 <!-- processamento sequencial, o que pode limita tanto o tamanho da base de -->
+
 <!-- dados que podemos trabalhar, quanto a velocidade de análise. -->
+
 <!-- Alternativas para quando estamos sob alguma destas limitações incluem: -->
+
 <!-- trabalhar com amostragens, usar um computador com mais recursos, acessar -->
+
 <!-- os dados considerando outras formas de leitura/processamento, ou -->
+
 <!-- segmentação de dados. Detalhando estas duas últimas opções temos: -->
 
 <!-- -   outras formas de acesso: -->
+
 <!--     -   substituir os data.frames/tibbles pelo data.table, da biblioteca -->
+
 <!--         `data.table()`, uma vez que este trabalha com otimização de -->
+
 <!--         processamento e memória; -->
+
 <!--     -   processar os dados em disco, ao invés da memória, por meio de -->
+
 <!--         bibliotecas como `bigmemory`, `ff` ou `RevoScaleR`; -->
+
 <!--     -   dado que o R é por padrão uma linguagem interpretada, utilizar -->
+
 <!--         funções como `compile()` ou `enableJIT()` para acelerar o -->
+
 <!--         processamento de uma análise, principalmente se ela for -->
+
 <!--         executada repeditamente; e -->
+
 <!--     -   utilizar pacotes que possibilitam paralelismo, como `Foreach` ou -->
+
 <!--         `Multicore`. -->
+
 <!-- -   segmentação: aqui podemos trabalhar "manualmente", carregando -->
+
 <!--     sub-conjuntos das base de dados, analisando cada uma delas, e depois -->
+
 <!--     combinando os resultados. Ou carregar bibliotecas que permitam -->
+
 <!--     integração do R com o ecossistema de Big Data, permitindo a -->
+
 <!--     distribuição e análise de forma automática. O `RHadoop`, por -->
+
 <!--     exemplo, é um conjunto de pacotes que permite conectar o ambiente R -->
+
 <!--     em clusters HDFS e HBASE para a execução de operações. Outra opção é -->
+
 <!--     o `sparklyr`, que possibilita a execução de comandos do R em -->
+
 <!--     clusters do Apache Spark. Tanto o `RHadoop` quanto o `sparklyr` -->
+
 <!--     possibilitam o uso de comandos do pacote `dplyr`, e a sintaxe do -->
+
 <!--     `tidyverse()`. Assim, as tecnologias se complementam: é possível -->
+
 <!--     escrever código de forma mais simples e rápida no R e executá-lo -->
+
 <!--     distribuidamente em grandes bases de dados no Hadoop ou Spark, e -->
+
 <!--     podemos alavancar os tradicionais sistemas de Big Data, integrando a -->
+
 <!--     eles as funcionalidades de análise e machine learning disponíveis no -->
+
 <!--     ecossistema do R. -->
 
 <!-- Visando ilustrar a facilidade de tais integrações, segue a aplicação do -->
+
 <!-- mesmo conjunto de códigos anteriormente utilizados para a base `mtcars`: -->
 
 ```{r eval=FALSE, include=FALSE}
@@ -2654,12 +2819,19 @@ No mais, a grande dica é: trabalhe com versões de você mesma (o), para que am
 ```
 
 <!-- Vale ressaltar que muitas das soluções que envolvem Big Data no R são -->
+
 <!-- novas, assim como o ecosistema de Big Data em si. E, portanto, estão em -->
+
 <!-- constante desenvolvimento, aumentando ainda mais a importância de manter -->
+
 <!-- o tracking de melhorias e correções dos pacotes. Vale ressaltar que -->
+
 <!-- mesmo com toda a necessidade de ajustes aqui apresentada, a quantidade -->
+
 <!-- de recursos que o R oferece para o flow da Ciência de Dados, faz com que -->
+
 <!-- grandes empresas, como Google, Microsoft, Bank of America e Shell, optem -->
+
 <!-- por trabalhar com a linguagem R. -->
 
 <!-- ## NOTAS ADICIONAIS -->
@@ -2682,8 +2854,7 @@ No mais, a grande dica é: trabalhe com versões de você mesma (o), para que am
 
 <!-- If you wish to install Spark on your local system, simply install the sparklyr package and call spark_install(). -->
 
-
-<!-- # Atividade Final -->
+<!-- # TO-DO Atividade Final -->
 
 <!-- Vamos agora fazer um ciclo de análises considerando os arquivos ...  -->
 
@@ -2715,97 +2886,7 @@ No mais, a grande dica é: trabalhe com versões de você mesma (o), para que am
 
 <!-- - Fazer um gráfico de dispersão de idade da empresa X número de transações feitas desde a abertura dela. Existe alguma tendência? -->
 
-<!-- # Apêndice - Tratamento de exceções -->
-
-<!-- Chamamos de exceção qualquer condição anormal que possa aparecer quando -->
-<!-- estamos executando um programa de computador. Normalmente, esses erros -->
-<!-- acontecem por fatores externos do ponto de vista do código, como valores -->
-<!-- ou tipos não suportados passados para uma função, necessidade de leitura -->
-<!-- ou gravação de arquivos no sistema operacional, necessidade de conexão -->
-<!-- com a internet para obter algum dado. -->
-
-<!-- As linguagens costumam ter formas de tratar as exceções, ou seja, -->
-<!-- métodos e funções que possam ser usados para que o programa não quebre a -->
-<!-- execução, não apresente erros abruptos ou até mesmo continue a partir do -->
-<!-- ponto em que o erro ocorreu. O tratamento de exceções em R é feito -->
-<!-- utilizando a função tryCatch. A sintaxe da função é: -->
-
-<!-- ```{r} -->
-<!-- result = tryCatch( -->
-<!--   { -->
-<!--     #Código a ser executado -->
-<!--   },  -->
-<!--   warning = function(condição) { -->
-<!--       #Código a ser executado caso ocorra algum aviso (warning) -->
-<!--   },  -->
-<!--   error = function(condição) { -->
-<!--       #Código a ser executado caso ocorra algum erro -->
-<!--   },  -->
-<!--   finally={ -->
-<!--      # Código a sempre ser executado após um dos três blocos acima. -->
-<!--   } -->
-<!-- ) -->
-
-<!-- ``` -->
-
-<!-- Por exemplo, vamos escrever um código que retorna para uma variável as -->
-<!-- linhas de um arquivo lido de uma url: -->
-
-<!-- ```{r} -->
-<!-- arquivo <- function(url) { -->
-<!--     linhas <- tryCatch( -->
-<!--         { -->
-<!--             message("Tentando ler o arquivo") -->
-<!--             readLines(con=url) -->
-<!--          }, -->
-<!--         error=function(condicao) { -->
-<!--             message(paste("O caminho não pode ser acessado: ", url)) -->
-<!--             message("Mensagem de erro original: ") -->
-<!--             message(condicao) -->
-<!--             return(NA) -->
-<!--         }, -->
-<!--         warning=function(condicao) { -->
-<!--             message("Warnings foram gerados ao ler a url:")  -->
-<!--             message(condicao) -->
-<!--             return(NULL) -->
-<!--         }, -->
-<!--         finally={ -->
-<!--            message("Fim da execução") -->
-<!--         } -->
-<!--     )     -->
-<!--     return(linhas) -->
-<!-- } -->
-<!-- ``` -->
-
-<!-- Caso o arquivo consiga ser lido, a última linha do primeiro bloco ( o -->
-<!-- resultado de readLines ) será retornado. Se ocorrer um erro, as -->
-<!-- mensagens de erro são exibidas e é retornado o valor NA. Se ocorrer -->
-<!-- algum warning, as mensagens correspondentes são enviadas e a função -->
-<!-- retorna NULL. Independente do valor de retorno, a mensagem de fim da -->
-<!-- execução será exibida ao final. É importante utilizar blocos de -->
-<!-- tratamento de exceção toda vez que não houver certeza sobre as condições -->
-<!-- necessárias para execução do código. Uma boa escolha de alternativas em -->
-<!-- caso de erros ou problemas faz com que o programa seja executado com -->
-<!-- maior confiabilidade, além de melhorar a legibilidade e diminuir o tempo -->
-<!-- gasto para correção desses erros e problemas. -->
-
-<!-- Falar sobre escopo/environment  -->
-
-<!-- working environment ~ global  -->
-
-<!-- falar sobre require  -->
-
-<!-- falar sobre warnings  -->
-
-<!-- rmarkdown  -->
-
-<!-- - Web apps interativos (Shiny) - xxx -->
-
-<!-- - Apresentações (Xaringan) - Xxx -->
-
-<!-- - Análise de dados (Sparkly) - xxx -->
-
-<!-- - Criação de pacotes (devtools) - xxx -->
+<!-- TO-DO -->
 
 <!-- funções importantes: -->
 
@@ -2821,6 +2902,6 @@ No mais, a grande dica é: trabalhe com versões de você mesma (o), para que am
 
 <!-- Point-and-click Graphical User Interfaces (GUIs) para o R permite que análises sejam feitas no R sem um conhecimento prévio de programação. Apesar deste não ser o objetivo deste material, apresentaremos aqui os nomes das opções mais populares : rcmdr, rattle, jamovi, deducer e jmv -->
 
-<!-- Rtools - Trata-se de um conjunto de ferramentas que permitem a construção de bibliotecas no Windows, além do acesso a algumas bibliotecas. O processo de instalação é similar ao do R, bastando fazer o download da versão mais atual da ferramenta no site do R Project:  -->
+<!-- Rtools - Trata-se de um conjunto de ferramentas que permitem a construção de bibliotecas no Windows, além do acesso a algumas bibliotecas. O processo de instalação é similar ao do R, bastando fazer o download da versão mais atual da ferramenta no site do R Project: -->
 
 <!-- <!-- https://nugaemeae.wordpress.com/2012/08/30/the-why-and-the-how-of-installing-rtools - print da lista de Rtools no site -->

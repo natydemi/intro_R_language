@@ -110,7 +110,10 @@
     #note que para especificação de diretórios trabalhamos com:
       # barras simples `/` 
       # ou barra dupla `\\` 
-
+        
+      #DICA: explorem a biblioteca here, pois ela tem uma função com o mesmo nome
+      # que auxilia na composição do path, ou seja o endereço, de um arquivo
+        #?here::here()
     
     #para a leitura de arquivos: `read.table`
     #Tanto a função `write.table()` quanto a `read.table()`possuem uma série de parâmetros, 
@@ -125,6 +128,9 @@
     #Para criar um projeto no RStudio, é necessário clicar no ícone superior à direita:
     
     #dica: use o pacote usethis::create_project()
+        
+    #para saber mais, acesse: 
+      #https://support.posit.co/hc/en-us/articles/200526207-Using-RStudio-Projects 
         
 # ::::: hands-on: criação de projetos -----
     # 1) crie um projeto em um novo repositório, 
@@ -250,8 +256,7 @@
           
           #exemplo 2
           x <- c(1, 2, 3)
-          y <- c(4, 5, 6)
-          
+
           x >= 3
           #FALSE FALSE  TRUE
           
@@ -282,11 +287,12 @@
     #se a declaração for verdade, então os comandos dentro das chaves `{}` serão executados: 
             x <- 0
             
-            if(x != 0){
-                print(x+1)
+            if(x == 0){
+                print(x+10)
             }
             
-            #
+          #sintaxe alternativa
+            if(x == 0) print(x+10)
             
             if(x != 0){
               print(x+1)
@@ -301,7 +307,7 @@
             if (x<=10) {
                 print("x é menor ou igual a 10")
             } else if (x>10 & x<20) {
-                print("x está entre 10 e 20")
+                print("x está entre 10 e 20, intervalo aberto")
             } else{
                 print("x é maior ou igual a 20")
             }
@@ -330,10 +336,14 @@
             
     #nested loops -----
     # De modo similar ao anterior temos o caso dos loops aninhados:
-            x <- 1:2; y <- c(1,10)
+            x <- c(10,20); y <- c(10,100, 500)
             
             for(i in seq(x)){
                 for(j in seq(y)) print(x[i]*y[j])
+            }
+            
+            for(i in x){
+              for(j in y) print(i*j)
             }
 
     #while ----- 
@@ -341,7 +351,7 @@
             i <- 1
             while (i<=6){
                 print(i*i)
-                i = i+1
+                i = i+1 #i++
             }
  
     #extras ----- 
@@ -377,6 +387,11 @@
         celcius_fahrenheit <- function(temp_c){
             temp_f <- (temp_c * 9/5) + 32
             temp_f #ou, equivalentemente, return(temp_f)
+        }
+        
+        celcius_fahrenheit <- function(temp_c){
+          (temp_c * 9/5) + 32
+          warning("testit")
         }
         
         celcius_fahrenheit(temp_c = 25)

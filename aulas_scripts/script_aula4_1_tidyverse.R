@@ -17,111 +17,111 @@
   # De modo a garantir recursos para as mais diferentes tarefas que envolvem 
   # o Ciclo de Ciência de Dados. 
 
-  # Para saber mais: https://www.tidyverse.org/
+# Para saber mais: https://www.tidyverse.org/
 
 
 # O que são dados tidy?  -----
-    
-  # A filosofia tidy, é uma forma de vincular a estrutura de um  
-  # conjunto de dados (seu layout físico) com sua semântica (seu significado).  
-  # Para tal, temos que, independente da origem, características, problemas e 
-  # layout dos dados, estes precisam ser organizados garantindo que:
-    
-    # cada variável/informação tenha a sua própria coluna;
-    # cada observação/unidade de análise tenha a sua própria linha; e
-    # que cada valor tenha a sua própria célula.
-    
-  # Apesar da simplicidade das premissas, respeitá-las permite um grande ganho 
-  # em termos de produtividade de análise. Contudo, nem sempre é trivial obter  
-  # esta estrutura. Ponto este, que o próprio ecossistema de pacotes do tidyverse   
-  # nos auxilia, oferecendo uma série de recursos para a obtenção e manutenção 
-  # de uma estrutura tidy. 
 
-  # E para tangibilizar um pouco melhor estas ideias, seguem a lista de cinco 
-  # problemas comuns encontrados em dados que não seguem os princípios tidy,
-  # os ditos "messy-tidy" (dados bagunçados):
-  
-    # 1. O cabeçalho contém valores, e não o nome das variáveis;
-    # 2. Diversas variáveis estão armazenadas na mesma coluna;
-    # 3. Variáveis são armazenadas tanto em linhas, quanto em colunas;
-    # 4. Diferentes tipos de unidades observacionais estão armazenadas em uma mesma tabela;
-    # 5. Uma única unidade observacional está armazenada em diferentes tabelas.
+# A filosofia tidy, é uma forma de vincular a estrutura de um  
+# conjunto de dados (seu layout físico) com sua semântica (seu significado).  
+# Para tal, temos que, independente da origem, características, problemas e 
+# layout dos dados, estes precisam ser organizados garantindo que:
 
-    #material de referência: 
-    #https://escoladedados.org/tutoriais/tidy-data-dados-arrumados-e-5-problemas-comuns/
+# cada variável/informação tenha a sua própria coluna;
+# cada observação/unidade de análise tenha a sua própria linha; e
+# que cada valor tenha a sua própria célula.
+
+# Apesar da simplicidade das premissas, respeitá-las permite um grande ganho 
+# em termos de produtividade de análise. Contudo, nem sempre é trivial obter  
+# esta estrutura. Ponto este, que o próprio ecossistema de pacotes do tidyverse   
+# nos auxilia, oferecendo uma série de recursos para a obtenção e manutenção 
+# de uma estrutura tidy. 
+
+# E para tangibilizar um pouco melhor estas ideias, seguem a lista de cinco 
+# problemas comuns encontrados em dados que não seguem os princípios tidy,
+# os ditos "messy-tidy" (dados bagunçados):
+
+# 1. O cabeçalho contém valores, e não o nome das variáveis;
+# 2. Diversas variáveis estão armazenadas na mesma coluna;
+# 3. Variáveis são armazenadas tanto em linhas, quanto em colunas;
+# 4. Diferentes tipos de unidades observacionais estão armazenadas em uma mesma tabela;
+# 5. Uma única unidade observacional está armazenada em diferentes tabelas.
+
+#material de referência: 
+#https://escoladedados.org/tutoriais/tidy-data-dados-arrumados-e-5-problemas-comuns/
 
 
-  # Para mais informações no tema, recomendo a apresentação:
-  # https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html
-  # Já para um maior aprofundamento, recomendo a leitura do artigo escrito
-  # pelo Hadley Wickham, idealizador do conceito de tidy e de tantos 
-  # outros conceitos e ferramentas importantes da comunidade R: 
-  # http://vita.had.co.nz/papers/tidy-data.pdf
+# Para mais informações no tema, recomendo a apresentação:
+# https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html
+# Já para um maior aprofundamento, recomendo a leitura do artigo escrito
+# pelo Hadley Wickham, idealizador do conceito de tidy e de tantos 
+# outros conceitos e ferramentas importantes da comunidade R: 
+# http://vita.had.co.nz/papers/tidy-data.pdf
 
 
 # O que é o operador pipe? (%>%)  -----
-  
-  #O pipe é uma função com uma sintaxe um pouco diferente, no caso, 
-  # o simbolo: %>%. Que permite o encadeamento de funções, de modo que o output, 
-  # ou seja a saída de uma função, seja o input, a entrada, da função seguinte. 
 
-  # Deste modo passamos a ter uma alternativa à leitura default do R, em que 
-  # a sequência de operações lógicas são aplicadas de dentro para fora:
-    # funçãoN(...(função2(função1(dados, args1), args2)...)argsN)
+#O pipe é uma função com uma sintaxe um pouco diferente, no caso, 
+# o simbolo: %>%. Que permite o encadeamento de funções, de modo que o output, 
+# ou seja a saída de uma função, seja o input, a entrada, da função seguinte. 
 
-  # Com o pipe passamos a ter a aplicação de operações em sequência, ou seja:
-    # dados %>% 
-    #   função1(args1) %>% 
-    #   função2(args2) %>% 
-    #   ...
-    #   funçãoN(argsN)
+# Deste modo passamos a ter uma alternativa à leitura default do R, em que 
+# a sequência de operações lógicas são aplicadas de dentro para fora:
+# funçãoN(...(função2(função1(dados, args1), args2)...)argsN)
 
-  # Muito mais legível, né?
-  
-  #Para trabalhar com o pipe, precisamos carregar um das bibliotecas que  
-  # possuam esta função, no caso, o pipe foi originalmente introduzido no R 
-  # por meio da biblioteca `magrittr`. Mas, atualmente, diversas bibliotecas 
-  # garantem que o pipe seja utilizado.
-  
-    #exemplo 1 - uso simples
-    library(magrittr)
-    "olá, tudo bem" %>% print()
-    
-    
-    #exemplo 2 - comparando resultados
-    #criando base de exemplos 
-    x <- 1:5
+# Com o pipe passamos a ter a aplicação de operações em sequência, ou seja:
+# dados %>% 
+#   função1(args1) %>% 
+#   função2(args2) %>% 
+#   ...
+#   funçãoN(argsN)
 
-  # sem o pipe, isto é, seguindo a leitura default do R, de dentro para fora:
-  floor(sqrt(sum(x)))
-  
-  # com o pipe, ou seja, a partir de uma leitura sequencial:
-  x %>% 
-    sum() %>% 
-    sqrt() %>% 
-    floor()
-  
-  #Assim, para além do claro ganho em termos de leitura, passamos a ter uma
-  # análise mais modular, sendo possível alterar, remover ou inserir funções  
-  # de maneira muito mais prática:
-  
-  x %>% 
-    #sum() %>% 
-    sqrt() %>% 
-    floor() %>% 
-    log()
+# Muito mais legível, né?
 
-  # DICA: o pipe ganhou tamanha importância no R, que passou a ser uma função  
-  # nativa do R para versões mais recentes. Tendo como diferença mais marcante 
-  # a sua alteração de layout: |> ao invés de %>%
-  # Mas para utilizar tal recurso built-in no RStudio, é necessário indicar o 
-  # interesse nas configurações da IDE (ao menos na versão que estou utilizando
-  # hoje, que é a RStudio 2022.07)
-  # Para tal acesse: `Tools > Global Options > Code` e dê o check na opção
-  # `use native pipe operator |>`, note que para tal é necessário que você 
-  # esteja utilizando o R na versão 4.1 ou maior.
-  
-  # Contudo, conforme comentado, diversos pacotes, inclusive, o tidyverse, 
+#Para trabalhar com o pipe, precisamos carregar um das bibliotecas que  
+# possuam esta função, no caso, o pipe foi originalmente introduzido no R 
+# por meio da biblioteca `magrittr`. Mas, atualmente, diversas bibliotecas 
+# garantem que o pipe seja utilizado.
+
+#exemplo 1 - uso simples
+library(magrittr)
+"olá, tudo bem" %>% print()
+
+
+#exemplo 2 - comparando resultados
+#criando base de exemplos 
+x <- 1:5
+
+# sem o pipe, isto é, seguindo a leitura default do R, de dentro para fora:
+floor(sqrt(sum(x)))
+
+# com o pipe, ou seja, a partir de uma leitura sequencial:
+x %>% 
+  sum() %>% 
+  sqrt() %>% 
+  floor()
+
+#Assim, para além do claro ganho em termos de leitura, passamos a ter uma
+# análise mais modular, sendo possível alterar, remover ou inserir funções  
+# de maneira muito mais prática:
+
+x %>% 
+  #sum() %>% 
+  sqrt() %>% 
+  floor() %>% 
+  log()
+
+# DICA: o pipe ganhou tamanha importância no R, que passou a ser uma função  
+# nativa do R para versões mais recentes. Tendo como diferença mais marcante 
+# a sua alteração de layout: |> ao invés de %>%
+# Mas para utilizar tal recurso built-in no RStudio, é necessário indicar o 
+# interesse nas configurações da IDE (ao menos na versão que estou utilizando
+# hoje, que é a RStudio 2022.07)
+# Para tal acesse: `Tools > Global Options > Code` e dê o check na opção
+# `use native pipe operator |>`, note que para tal é necessário que você 
+# esteja utilizando o R na versão 4.1 ou maior.
+
+# Contudo, conforme comentado, diversos pacotes, inclusive, o tidyverse, 
   # abraçaram o uso do pipe. Se o pacote tiver qualquer referência ao universo 
   # tidy, é quase certo que terá o pipe "raiz" (%>%) automaticamente importado. 
   # De modo que juntamente com o conceito de `dados tidy`, temos os pilares 

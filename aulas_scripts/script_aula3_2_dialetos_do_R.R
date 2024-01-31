@@ -17,10 +17,10 @@
     
       #Refs: a seção de exemplos do help
       ?`[.data.frame`
-  
-  # tidyverse: 
-    install.packages("tidyverse")
-    library(tidyverse)
+
+# tidyverse: 
+install.packages("tidyverse")
+library(tidyverse)
     
       #Refs.: 
       ?tidyverse::tidyverse	

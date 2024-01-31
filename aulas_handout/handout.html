@@ -1757,8 +1757,8 @@ o comando desejado na sequência:</p>
 utilizar a tecla ‘seta para cima’.</p>
 </blockquote>
 </div>
-<div id="aplicando-funções" class="section level2" number="3.2">
-<h2><span class="header-section-number">3.2</span> Aplicando
+<div id="trabalhando-com-funções" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Trabalhando com
 funções</h2>
 <p>Assim como em muitas linguagens de programação, uma função no R é de
 um conjunto de instruções organizadas visando executar uma tarefa. E
@@ -2659,17 +2659,16 @@ objetos no R consulte o help <code>?Extract</code> ou
 </blockquote>
 </div>
 </div>
-</div>
-<div id="minha-primeira-análise-de-dados" class="section level2" number="3.5">
-<h2><span class="header-section-number">3.5</span> Minha primeira
-análise de dados</h2>
+<div id="minha-primeira-análise-de-dados" class="section level3" number="3.4.3">
+<h3><span class="header-section-number">3.4.3</span> Minha primeira
+análise de dados</h3>
 <p>Agora que temos familiaridade com os dados no R, vamos análisar uma
 base de dados do próprio R, visando apresentar algumas das funções
 <em>built-in</em> disponibilizadas para tal, bem como apresentar formas
 de importar/exportar dados.</p>
-<div id="AnalisesDescritivas" class="section level3" number="3.5.1">
-<h3><span class="header-section-number">3.5.1</span> Análises
-Descritivas</h3>
+<div id="AnalisesDescritivas" class="section level4" number="3.4.3.1">
+<h4><span class="header-section-number">3.4.3.1</span> Análises
+Descritivas</h4>
 <p>Iremos trabalhar com a base <code>mtcars</code>, uma das bases
 disponíveis por default no R. Por se tratar de uma base
 <em>built-in</em>, apesar dela ser normalmente retornada no console,
@@ -2867,9 +2866,10 @@ disponíveis por default: <code>library(help = &quot;stats&quot;)</code>.</p>
 </blockquote>
 </div>
 </div>
-<div id="importaçãoexportação" class="section level2" number="3.6">
-<h2><span class="header-section-number">3.6</span>
-Importação/Exportação</h2>
+</div>
+<div id="importaçãoexportação-de-arquivos" class="section level2" number="3.5">
+<h2><span class="header-section-number">3.5</span> Importação/Exportação
+de arquivos</h2>
 <p>Visando facilitar a dinâmica, vamos primeiro exportar a base de dados
 criada no último capítulo <code>dados_mtcars</code>, e então vamos
 importar esta mesma base de dados novamente. Para exportar os dados
@@ -2915,14 +2915,74 @@ permitindo trabalharmos com outras extensões.</p>
 <code>??read</code> e <code>??write</code>.</p>
 </blockquote>
 </div>
-<div id="operadores-lógicos" class="section level2" number="3.7">
-<h2><span class="header-section-number">3.7</span> Operadores
-lógicos</h2>
+<div id="trabalhando-com-bibliotecas" class="section level2" number="3.6">
+<h2><span class="header-section-number">3.6</span> Trabalhando com
+bibliotecas</h2>
+<p>Bibliotecas tratam-se de uma coleção de funções, dados e códigos
+compilados. A instalação destas bibliotecas, ou pacotes, como são também
+chamados, é simples, podendo ser feita via point-and-click (‘Tools &gt;
+Install.Packages’), ou pelo comando
+<code>install.packages(&quot;nome_do_pacote&quot;)</code>. Após a instalação é
+necessário apenas carregar os pacotes desejados, por meio do comando
+<code>library(nome_do_pacote)</code> - sem aspas duplas, ou ainda indo
+diretamente na janela <em>Packages</em> do RStudio, e setando as
+bibliotecas que deseja carregar:</p>
+<pre class="r"><code>#instalação do pacote `ggplot2`   
+install.packages(&quot;ggplot2&quot;)  
+
+#carregando o pacote   
+library(ggplot2) </code></pre>
+<p>Tais bibliotecas se encontram disponíveis pela rede de distribuição
+oficial do R, o CRAN (do inglês <em>Comprehensive R Archive
+Network</em>). Mas existem também bibliotecas disponibilizadas via
+outros repositórios como o Bioconductor e o GitHub, ou ainda disponíveis
+para download. Nestes casos é necessário fazer a instalação com
+<code>devtools::install_github(&quot;nome-do-repo/nome-do-pacote&quot;)</code>,
+após a instalação do pacote <code>devtools</code>, ou, no caso de um
+arquivo zipado, adicionando o parâmetro <code>repos = NULL</code>, na
+função <code>install.packages()</code>.</p>
+<pre class="r"><code>#instalação do pacote a partir do CRAN   
+install.packages(&quot;ggplot2&quot;) 
+
+#instalação a partir do git (usualmente é a versão mais recente da biblioteca)   
+devtools::install_github(&quot;tidyverse/ggplot2&quot;) 
+
+#instalação a partir de um arquivo .zip salvo em &quot;C:/Users/download/&quot;
+install.packages(&quot;C:/Users/download/ggplot2.zip&quot;, repos = NULL)</code></pre>
+<p>Um ponto importante é que uma vez que a biblioteca esteja instalada,
+não é necessário carregar toda a biblioteca para utilizar uma função
+especificamente, sendo suficiente utilizar o nome da biblioteca, seguido
+por <code>::</code> e o nome da função desejada, ou seja:
+<code>nome_da_biblioteta::função_de_interesse()</code>. Tal recurso é
+interessante visto que ao fazer o load de uma biblioteca, todas as
+funções desta se sobrepõem as que já estão carregadas. E como é comum
+que pacotes diferentes compartilhem funções com o mesmo nome, está
+torna-se uma forma de evitar tal problema - note que este recurso foi
+utilizado no caso do <code>devtools::install_github()</code> do exemplo
+acima.</p>
+<p>Para checar quais bibliotecas estão instaladas podemos checar a aba
+<code>Packages</code> do RStudio, ou por meio do comando
+<code>installed.packages()</code>. Outro ponto importante são as
+atualizações das bibliotecas, que pode ser feita para todas as
+bibliotecas por meio do comando <code>update.packages()</code>, ou
+reinstalando o pacote de interesse - para consultar quais estão
+desatualizadas temos <code>old.packages()</code>. Por fim, para
+diferenciarmos as funções <em>built-in</em> daquelas carregadas via
+bibliotecas, vamos chamar as primeiras de funções do
+<code>R base</code>.</p>
+</div>
+<div id="mais-sobre-a-linguagem-r" class="section level2" number="3.7">
+<h2><span class="header-section-number">3.7</span> Mais sobre a
+linguagem R</h2>
+<div id="operadores-lógicos" class="section level3" number="3.7.1">
+<h3><span class="header-section-number">3.7.1</span> Operadores
+lógicos</h3>
 <p>Os operadores lógicos são usados para realizar operações lógicas, ou
 seja, operações que retornam TRUE (T) ou FALSE (F)</p>
-<div id="comparações-básicas" class="section level3" number="3.7.1">
-<h3><span class="header-section-number">3.7.1</span> comparações
-básicas</h3>
+<ul>
+<li><strong>comparações básicas:</strong> igual, maior/menor e
+diferente</li>
+</ul>
 <pre class="r"><code>#igualdade: se os elementos à esquerda, par a par, estão contidos à direita
 x == y 
 
@@ -2967,11 +3027,11 @@ x &gt;= y
 # x é menor ou igual a y?
 x &lt;= y
   #&gt; [1] TRUE</code></pre>
-</div>
-<div id="comparações-de-igualdade-para-mais-de-um-elemento" class="section level3" number="3.7.2">
-<h3><span class="header-section-number">3.7.2</span> comparações de
-igualdade para mais de um elemento</h3>
-<pre class="r"><code>x %in% y #contem: se os elementos à esquerda, um a um, estão contidos à direita</code></pre>
+<ul>
+<li><strong>comparações:</strong> <code>%in%</code></li>
+</ul>
+<pre class="r"><code>#contem: se os elementos à esquerda, um a um, estão contidos à direita
+x %in% y </code></pre>
 <p>Algumas aplicações:</p>
 <pre class="r"><code>x &lt;- c(1, 2, 3, 4)
 
@@ -2982,10 +3042,44 @@ igualdade para mais de um elemento</h3>
 # 5 está contido em x?
 5 %in% x
   #&gt; [1] FALSE</code></pre>
-</div>
-<div id="negação" class="section level3" number="3.7.3">
-<h3><span class="header-section-number">3.7.3</span> negação</h3>
-<pre class="r"><code>!x #negação: inverte o valor lógico de um objeto </code></pre>
+<p>Já se invertermos a comparação, passamos a fazer uso da
+característica de reciclagem do R</p>
+<pre class="r"><code># x está contido em 1?
+x %in% 1
+  #&gt; [1]  TRUE FALSE FALSE FALSE
+
+# x está contido em 5?
+x %in% 5
+  #&gt; [1] FALSE FALSE FALSE FALSE</code></pre>
+<p>Lembrando que perceba que o <code>%in%</code> é o comando recomendado
+para trabalhar com vetores, pois a comparação é feita avaliando cada um
+dos elementos à esquerda. De modo que todos os elementos da esquerda são
+comparados, individualmente, com a lista de opções à direita. Enquanto
+que o simbolo <code>==</code> trabalha com a reciclagem, e faz a
+avaliação em pares, 1º elemento da esquerda com o 1º da direita, e assim
+por diante.</p>
+<pre class="r"><code>x &lt;- c(1,2,3,3) 
+
+#1 e 3 está contido em x
+c(1,3) %in% x
+  #&gt; [1] TRUE TRUE
+
+#os elementos de x estão contidos em 1 e 3 
+x %in% c(1,3)
+  #&gt; [1]  TRUE FALSE  TRUE  TRUE
+ 
+# x está pareado com 1 e 3?
+x == c(1,3)
+  #&gt; [1]  TRUE FALSE FALSE  TRUE
+ 
+# 1 e 3 está pareado com x?
+c(1,3) == x
+  #&gt; [1]  TRUE FALSE FALSE  TRUE</code></pre>
+<ul>
+<li><strong>negação:</strong> <code>!</code></li>
+</ul>
+<pre class="r"><code>#negação: inverte o valor lógico de um objeto 
+!x </code></pre>
 <p>Exemplos considerando comparações de elementos:</p>
 <pre class="r"><code>x &lt;- TRUE
           
@@ -3011,25 +3105,22 @@ x &lt;- c(1, 2, 3, 4)
   #&gt; [1] TRUE
 !(1 %in% x)
   #&gt; [1] FALSE</code></pre>
-</div>
-<div id="operadores-combinados" class="section level3" number="3.7.4">
-<h3><span class="header-section-number">3.7.4</span> operadores
-combinados</h3>
-<pre class="r"><code>x | y #ou: retornando T/F para cada elemento das comparações
-x || y #ou: retornando apenas um T/F (1ª comparação à esquerda do vetor)
-x &amp; y #e: retornando T/F para cada elemento das comparações
-x &amp;&amp; y #e: retornando apenas um T/F (1ª comparação à esquerda do vetor)</code></pre>
-<p>Alguns exemplos:</p>
-<pre class="r"><code> x &lt;- 1
-y &lt;- 1:3
-
-# x é igual a y ou x é maior que y?
+<ul>
+<li><strong>operadores combinados:</strong> <code>|</code> e
+<code>&amp;</code></li>
+</ul>
+<pre class="r"><code>#casos mais comuns
+#ou: retornando T/F para cada elemento das comparações
 x | y
-  #&gt; [1] TRUE TRUE TRUE
+#e: retornando T/F para cada elemento das comparações
+x &amp; y
 
-# x é igual a y ou x é menor que y?
+#casos mais específicos
+#ou: retornando apenas um T/F (1ª comparação à esquerda do vetor)
 x || y
-  #&gt; [1] TRUE</code></pre>
+#e: retornando apenas um T/F (1ª comparação à esquerda do vetor)
+x &amp;&amp; y</code></pre>
+<p>Alguns exemplos:</p>
 <pre class="r"><code>x &lt;- c(1, 2, 3)
 y &lt;- c(4, 5, 6)
 
@@ -3042,20 +3133,29 @@ x &gt;= 3 | x &lt;= 5
   #&gt; [1] TRUE TRUE TRUE
 x &gt;= 3 &amp; x &lt;= 5
   #&gt; [1] FALSE FALSE  TRUE</code></pre>
+<pre class="r"><code>x &lt;- 1
+y &lt;- 1:3
+
+# x é igual a y ou x é maior que y?
+x | y
+  #&gt; [1] TRUE TRUE TRUE
+
+# x é igual a y ou x é menor que y?
+x || y
+  #&gt; [1] TRUE</code></pre>
+<ul>
+<li><strong>adicionais:</strong> `any()`, `all()` e `identical()`</li>
+</ul>
+<p>No caso de vetores lógicos, podemos também trabalhar com as funções
+<code>any()</code> e <code>all()</code>, ou ainda a função
+<code>identical()</code> . No caso desta última, trata-se de uma função
+que precisa ser analisada com cuidado, visto trabalhar com diferenças
+sutís, retornando <code>FALSE</code> para comparações como por exemplo:
+<code>identical(1,1L)</code>.</p>
 </div>
-<div id="extras" class="section level3" number="3.7.5">
-<h3><span class="header-section-number">3.7.5</span> extras</h3>
-<p>Adicionalmente, no caso de vetores lógicos, podemos também trabalhar
-com as funções <code>any()</code> e <code>all()</code>, ou ainda a
-função <code>identical()</code> . No caso desta última, trata-se de uma
-função que precisa ser analisada com cuidado, visto trabalhar com
-diferenças sutís, retornando <code>FALSE</code> para comparações como
-por exemplo: <code>identical(1,1L)</code>.</p>
-</div>
-</div>
-<div id="estruturas-de-controle" class="section level2" number="3.8">
-<h2><span class="header-section-number">3.8</span> Estruturas de
-controle</h2>
+<div id="estruturas-de-controle" class="section level3" number="3.7.2">
+<h3><span class="header-section-number">3.7.2</span> Estruturas de
+controle</h3>
 <p>Estruturas de controle são blocos de programação que, baseado em
 parâmetros pré-definidos, definem a direção a ser seguida. No R temos
 todas as funções usualmente existentes em outras linguagens.<br />
@@ -3146,8 +3246,9 @@ particular, e pula para a próxima, também existem no R. Além do
 <code>repeat()</code>, um loop que executa um bloco de comandos
 repetidamente, até que o mesmo seja quebrado.</p>
 </div>
-<div id="CriandoFuncoes" class="section level2" number="3.9">
-<h2><span class="header-section-number">3.9</span> Criando funções</h2>
+<div id="CriandoFuncoes" class="section level3" number="3.7.3">
+<h3><span class="header-section-number">3.7.3</span> Criando
+funções</h3>
 <p>No R podemos criar as nossas próprias funções, por meio do objeto
 <code>function()</code>. Tal prática é interessante pois permite a
 automação de atividades de uma forma melhor estruturada e mais
@@ -3286,63 +3387,70 @@ apenas o nome do script (juntamente com o diretório caso não se encontre
 no mesmo diretório).</p>
 </blockquote>
 </div>
-<div id="trabalhando-com-bibliotecas" class="section level2" number="3.10">
-<h2><span class="header-section-number">3.10</span> Trabalhando com
-bibliotecas</h2>
-<p>Bibliotecas tratam-se de uma coleção de funções, dados e códigos
-compilados. A instalação destas bibliotecas, ou pacotes, como são também
-chamados, é simples, podendo ser feita via point-and-click (‘Tools &gt;
-Install.Packages’), ou pelo comando
-<code>install.packages(&quot;nome_do_pacote&quot;)</code>. Após a instalação é
-necessário apenas carregar os pacotes desejados, por meio do comando
-<code>library(nome_do_pacote)</code> - sem aspas duplas, ou ainda indo
-diretamente na janela <em>Packages</em> do RStudio, e setando as
-bibliotecas que deseja carregar:</p>
-<pre class="r"><code>#instalação do pacote `ggplot2`
-  install.packages(&quot;ggplot2&quot;)
-
-#carregando o pacote
-  library(ggplot2)
-</code></pre>
-<p>Tais bibliotecas se encontram disponíveis pela rede de distribuição
-oficial do R, o CRAN (do inglês <em>Comprehensive R Archive
-Network</em>). Mas existem também bibliotecas disponibilizadas via
-outros repositórios como o Bioconductor e o GitHub, ou ainda disponíveis
-para download. Nestes casos é necessário fazer a instalação com
-<code>devtools::install_github(&quot;nome-do-repo/nome-do-pacote&quot;)</code>,
-após a instalação do pacote <code>devtools</code>, ou, no caso de um
-arquivo zipado, adicionando o parâmetro <code>repos = NULL</code>, na
-função <code>install.packages()</code>.</p>
-<pre class="r"><code>#instalação do pacote a partir do CRAN
-  install.packages(&quot;ggplot2&quot;)
-#instalação a partir do git (versão mais recente da biblioteca)
-  install.packages(&quot;ggplot2&quot;)
-  devtools::install_github(&quot;tidyverse/ggplot2&quot;)
-#instalação a partir de um arquivo .zip
-  install.packages(&quot;C:/Users/ggplot2.zip&quot;, repos = NULL)</code></pre>
-<p>Um ponto importante é que uma vez que a biblioteca esteja instalada,
-não é necessário carregar toda a biblioteca para utilizar uma função
-especificamente, sendo suficiente utilizar o nome da biblioteca, seguido
-por <code>::</code> e o nome da função desejada, ou seja:
-<code>nome_da_biblioteta::função_de_interesse()</code>. Tal recurso é
-interessante visto que ao fazer o load de uma biblioteca, todas as
-funções desta se sobrepõem as que já estão carregadas. E como é comum
-que pacotes diferentes compartilhem funções com o mesmo nome, está
-torna-se uma forma de evitar tal problema - note que este recurso foi
-utilizado no caso do <code>devtools::install_github()</code> do exemplo
-acima.</p>
-<p>Para checar quais bibliotecas estão instaladas podemos checar a aba
-<code>Packages</code> do RStudio, ou por meio do comando
-<code>installed.packages()</code>. Outro ponto importante são as
-atualizações das bibliotecas, que pode ser feita para todas as
-bibliotecas por meio do comando <code>update.packages()</code>, ou
-reinstalando o pacote de interesse - para consultar quais estão
-desatualizadas temos <code>old.packages()</code>. Por fim, para
-diferenciarmos as funções <em>built-in</em> daquelas carregadas via
-bibliotecas, vamos chamar as primeiras de funções do
-<code>R base</code>.</p>
+<div id="tratamento-de-exceções" class="section level3" number="3.7.4">
+<h3><span class="header-section-number">3.7.4</span> Tratamento de
+exceções</h3>
+<p>Chamamos de exceção qualquer condição anormal que possa aparecer
+quando estamos executando um programa de computador. Normalmente, esses
+erros acontecem por fatores externos do ponto de vista do código, como
+valores ou tipos não suportados passados para uma função, necessidade de
+leitura ou gravação de arquivos no sistema operacional, necessidade de
+conexão com a internet para obter algum dado.</p>
+<p>As linguagens costumam ter formas de tratar as exceções, ou seja,
+métodos e funções que possam ser usados para que o programa não quebre a
+execução, não apresente erros abruptos ou até mesmo continue a partir do
+ponto em que o erro ocorreu. O tratamento de exceções em R é feito</p>
+<p>utilizando a função tryCatch. A sintaxe da função é:</p>
+<pre class="r"><code>
+result = tryCatch(   {     
+  #Código a ser executado    
+  },    warning = function(condição) {       
+    #Código a ser executado caso ocorra algum aviso (warning)   
+    },    error = function(condição) {       
+    #Código a ser executado caso ocorra algum erro   
+      },    finally={      
+    # Código a sempre ser executado após um dos três blocos acima.   
+        }  
+  ) </code></pre>
+<p>Por exemplo, vamos escrever um código que retorna para uma variável
+as linhas de um arquivo lido de uma url:</p>
+<pre class="r"><code>arquivo &lt;- function(url){      
+  linhas &lt;- tryCatch({  
+    message(&quot;Tentando ler o arquivo&quot;)
+    readLines(con=url)
+    },
+    
+    error=function(condicao) {
+      message(paste(&quot;O caminho não pode ser acessado: &quot;, url))
+      message(&quot;Mensagem de erro original: &quot;)
+      message(condicao)
+      return(NA)
+    },
+    
+  warning=function(condicao) {
+    message(&quot;Warnings foram gerados ao ler a url:&quot;)
+    message(condicao)
+    return(NULL)
+  },
+  
+  finally={
+    message(&quot;Fim da execução&quot;)
+  })
+  return(linhas) } </code></pre>
+<p>Caso o arquivo consiga ser lido, a última linha do primeiro bloco ( o
+resultado de readLines ) será retornado. Se ocorrer um erro, as
+mensagens de erro são exibidas e é retornado o valor NA. Se ocorrer
+algum warning, as mensagens correspondentes são enviadas e a função
+retorna NULL. Independente do valor de retorno, a mensagem de fim da
+execução será exibida ao final. É importante utilizar blocos de
+tratamento de exceção toda vez que não houver certeza sobre as condições
+necessárias para execução do código. Uma boa escolha de alternativas em
+caso de erros ou problemas faz com que o programa seja executado com
+maior confiabilidade, além de melhorar a legibilidade e diminuir o tempo
+gasto para correção desses erros e problemas.</p>
 <!-------------------------------------------------->
 <hr />
+</div>
 </div>
 </div>
 <div id="r-para-ciência-de-dados-tidyverse" class="section level1" number="4">
@@ -3969,11 +4077,11 @@ considerando a proporção especificada</li>
     sample_n(10) %&gt;% 
     sample_frac(0.5) 
   #&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-  #&gt; 1          6.4         2.7          5.3         1.9  virginica
-  #&gt; 2          7.0         3.2          4.7         1.4 versicolor
-  #&gt; 3          5.1         3.4          1.5         0.2     setosa
-  #&gt; 4          5.5         2.6          4.4         1.2 versicolor
-  #&gt; 5          6.0         2.2          4.0         1.0 versicolor</code></pre>
+  #&gt; 1          6.4         2.8          5.6         2.2  virginica
+  #&gt; 2          5.4         3.4          1.7         0.2     setosa
+  #&gt; 3          5.9         3.2          4.8         1.8 versicolor
+  #&gt; 4          6.2         2.2          4.5         1.5 versicolor
+  #&gt; 5          6.1         2.9          4.7         1.4 versicolor</code></pre>
 <ul>
 <li><strong>Combinando Bases</strong>
 <ul>
@@ -4482,7 +4590,6 @@ avançados</h3>
 <ul>
 <li>Interoperabilidade R e Python: <a href="https://rstudio.github.io/reticulate/">reticulate</a></li>
 <li>Criar mapas: <a href="https://rstudio.github.io/leaflet/">leaflet</a></li>
-<li>Gerar memes: <a href="https://github.com/sctyner/memer">memer</a></li>
 <li>Trabalhar com deep learning e dados não estruturados: <a href="https://torch.mlverse.org/packages/">torch</a></li>
 <li>Automatizar processos: <a href="https://github.com/r-lib/usethis">usethis</a></li>
 <li>Modelagem bayesiana: <a href="http://mjskay.github.io/tidybayes/">tidybayes</a></li>
@@ -4493,6 +4600,7 @@ avançados</h3>
 <li>Testar códigos: <a href="https://testthat.r-lib.org/">testthat</a></li>
 <li>Estruturar deploy de modelos: <a href="https://github.com/rstudio/vetiver-r">vetiver</a></li>
 <li>Gerenciar e analisar dados com o Hadoop: <a href="https://github.com/RevolutionAnalytics/RHadoop/wiki">RHadoop</a></li>
+<li>Gerar memes: <a href="https://github.com/sctyner/memer">memer</a></li>
 </ul>
 </div>
 </div>
@@ -4501,19 +4609,23 @@ avançados</h3>
 <h1><span class="header-section-number">6</span> Bibliografias
 recomendadas</h1>
 <p>Além dos links e bibliotecas comentados durante todo o curso, vou
-deixar aqui algumas referências para que você revise o que foi visto ao
-longo deste material:</p>
+deixar aqui algumas referências para que você possa revisar, aprofundar
+e ampliar os conteúdos vistos ao longo deste material:</p>
 <ul>
 <li><a href="https://r4ds.had.co.nz/introduction.html">R for data
-science</a>
-<ul>
-<li>A 2ª versão do livro está sendo traduzida pelas R-Ladies, acesse <a href="https://cienciadedatos.github.io/pt-r4ds/">aqui</a></li>
-</ul></li>
+science</a> – a 2ª versão do livro está sendo traduzida pelas R-Ladies,
+acesse <a href="https://cienciadedatos.github.io/pt-r4ds/">aqui</a></li>
 <li><a href="https://www.curso-r.com/material/">Curso-R</a></li>
-<li><a href="https://github.com/rladies/meetup-presentations_sao-paulo">R-Ladies</a></li>
+<li>R-Ladies : <a href="https://rladies-sp.org/">blog</a> e <a href="https://github.com/rladies/meetup-presentations_sao-paulo">histórico
+de apresentações</a></li>
 </ul>
-<p>E aqui algumas referências para discussões mais avançadas: - <a href="http://adv-r.had.co.nz/">Advanced R</a> - <a href="https://rstudio-education.github.io/hopr/">Hands-On Programming
-with R</a></p>
+<p>E aqui algumas referências para discussões mais técnicas e avançadas
+sobre a linguagem de programação R:</p>
+<ul>
+<li><p><a href="http://adv-r.had.co.nz/">Advanced R</a></p></li>
+<li><p><a href="https://rstudio-education.github.io/hopr/">Hands-On
+Programming with R</a></p></li>
+</ul>
 <p>No mais, a grande dica é: trabalhe com versões de você mesma (o),
 para que amanhã saiba um pouco mais do que ontem.</p>
 </div>
@@ -4576,7 +4688,7 @@ para que amanhã saiba um pouco mais do que ontem.</p>
 <!-- That means that you are sailing into uncharted territory with this course. The trip may be a little rough, so be prepared to be out of your comfort zone occasionally. -->
 <!-- One further note of caution is that in this course you'll be running code on your own personal Spark mini-cluster in the DataCamp cloud. This is ideal for learning the concepts of how to use Spark, but you won't get the same performance boost as you would using a remote cluster on a high-performance server. That means that the examples here won't run faster than if you were only using R, but you can use the skills you learn here to run analyses on your own big datasets. -->
 <!-- If you wish to install Spark on your local system, simply install the sparklyr package and call spark_install(). -->
-<!-- # Atividade Final -->
+<!-- # TO-DO Atividade Final -->
 <!-- Vamos agora fazer um ciclo de análises considerando os arquivos ...  -->
 <!-- Executar as tarefas a seguir usando o R no ambiente de treinamento. O objetivo é extrair informações relevantes das bases, de forma similar ao que seria feito no dia a dia de trabalho com a linguagem no ambiente de produção do banco, conectado ao Data Lake. -->
 <!-- Os passos compreendem importação, tratamento, análise e visualização dos dados. -->
@@ -4592,81 +4704,7 @@ para que amanhã saiba um pouco mais do que ontem.</p>
 <!-- - Construa um gráfico de barro por segmento, mostrando o valor médio do saldo. -->
 <!-- - Construir um gráfico de pizza contendo as 5 empresas que mais transacionaram em quantidade no período. Quais foram essas empresas? -->
 <!-- - Fazer um gráfico de dispersão de idade da empresa X número de transações feitas desde a abertura dela. Existe alguma tendência? -->
-<!-- # Apêndice - Tratamento de exceções -->
-<!-- Chamamos de exceção qualquer condição anormal que possa aparecer quando -->
-<!-- estamos executando um programa de computador. Normalmente, esses erros -->
-<!-- acontecem por fatores externos do ponto de vista do código, como valores -->
-<!-- ou tipos não suportados passados para uma função, necessidade de leitura -->
-<!-- ou gravação de arquivos no sistema operacional, necessidade de conexão -->
-<!-- com a internet para obter algum dado. -->
-<!-- As linguagens costumam ter formas de tratar as exceções, ou seja, -->
-<!-- métodos e funções que possam ser usados para que o programa não quebre a -->
-<!-- execução, não apresente erros abruptos ou até mesmo continue a partir do -->
-<!-- ponto em que o erro ocorreu. O tratamento de exceções em R é feito -->
-<!-- utilizando a função tryCatch. A sintaxe da função é: -->
-<!-- ```{r} -->
-<!-- result = tryCatch( -->
-<!--   { -->
-<!--     #Código a ser executado -->
-<!--   },  -->
-<!--   warning = function(condição) { -->
-<!--       #Código a ser executado caso ocorra algum aviso (warning) -->
-<!--   },  -->
-<!--   error = function(condição) { -->
-<!--       #Código a ser executado caso ocorra algum erro -->
-<!--   },  -->
-<!--   finally={ -->
-<!--      # Código a sempre ser executado após um dos três blocos acima. -->
-<!--   } -->
-<!-- ) -->
-<!-- ``` -->
-<!-- Por exemplo, vamos escrever um código que retorna para uma variável as -->
-<!-- linhas de um arquivo lido de uma url: -->
-<!-- ```{r} -->
-<!-- arquivo <- function(url) { -->
-<!--     linhas <- tryCatch( -->
-<!--         { -->
-<!--             message("Tentando ler o arquivo") -->
-<!--             readLines(con=url) -->
-<!--          }, -->
-<!--         error=function(condicao) { -->
-<!--             message(paste("O caminho não pode ser acessado: ", url)) -->
-<!--             message("Mensagem de erro original: ") -->
-<!--             message(condicao) -->
-<!--             return(NA) -->
-<!--         }, -->
-<!--         warning=function(condicao) { -->
-<!--             message("Warnings foram gerados ao ler a url:")  -->
-<!--             message(condicao) -->
-<!--             return(NULL) -->
-<!--         }, -->
-<!--         finally={ -->
-<!--            message("Fim da execução") -->
-<!--         } -->
-<!--     )     -->
-<!--     return(linhas) -->
-<!-- } -->
-<!-- ``` -->
-<!-- Caso o arquivo consiga ser lido, a última linha do primeiro bloco ( o -->
-<!-- resultado de readLines ) será retornado. Se ocorrer um erro, as -->
-<!-- mensagens de erro são exibidas e é retornado o valor NA. Se ocorrer -->
-<!-- algum warning, as mensagens correspondentes são enviadas e a função -->
-<!-- retorna NULL. Independente do valor de retorno, a mensagem de fim da -->
-<!-- execução será exibida ao final. É importante utilizar blocos de -->
-<!-- tratamento de exceção toda vez que não houver certeza sobre as condições -->
-<!-- necessárias para execução do código. Uma boa escolha de alternativas em -->
-<!-- caso de erros ou problemas faz com que o programa seja executado com -->
-<!-- maior confiabilidade, além de melhorar a legibilidade e diminuir o tempo -->
-<!-- gasto para correção desses erros e problemas. -->
-<!-- Falar sobre escopo/environment  -->
-<!-- working environment ~ global  -->
-<!-- falar sobre require  -->
-<!-- falar sobre warnings  -->
-<!-- rmarkdown  -->
-<!-- - Web apps interativos (Shiny) - xxx -->
-<!-- - Apresentações (Xaringan) - Xxx -->
-<!-- - Análise de dados (Sparkly) - xxx -->
-<!-- - Criação de pacotes (devtools) - xxx -->
+<!-- TO-DO -->
 <!-- funções importantes: -->
 <!-- - :: :::    #access variables in a namespace -->
 <!-- - $ @   #component / slot extraction -->
@@ -4674,7 +4712,7 @@ para que amanhã saiba um pouco mais do que ontem.</p>
 <!-- Para acesso das informações temos ama Uma da Subsetting Vocabulário focado em algumas funções essenciais (summary, [, \$, %in%, print, cat, str, table,plot, ifelse e as funções *pply) -->
 <!-- - **Opções point and click** <br> -->
 <!-- Point-and-click Graphical User Interfaces (GUIs) para o R permite que análises sejam feitas no R sem um conhecimento prévio de programação. Apesar deste não ser o objetivo deste material, apresentaremos aqui os nomes das opções mais populares : rcmdr, rattle, jamovi, deducer e jmv -->
-<!-- Rtools - Trata-se de um conjunto de ferramentas que permitem a construção de bibliotecas no Windows, além do acesso a algumas bibliotecas. O processo de instalação é similar ao do R, bastando fazer o download da versão mais atual da ferramenta no site do R Project:  -->
+<!-- Rtools - Trata-se de um conjunto de ferramentas que permitem a construção de bibliotecas no Windows, além do acesso a algumas bibliotecas. O processo de instalação é similar ao do R, bastando fazer o download da versão mais atual da ferramenta no site do R Project: -->
 <!-- <!-- https://nugaemeae.wordpress.com/2012/08/30/the-why-and-the-how-of-installing-rtools - print da lista de Rtools no site -->
 </div>
 
