@@ -2983,11 +2983,11 @@ com o pacote `dplyr`, com recursos para:
     sample_n(10) %>% 
     sample_frac(0.5) 
   #>   Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-  #> 1          5.8         2.8          5.1         2.4  virginica
-  #> 2          6.3         2.5          5.0         1.9  virginica
-  #> 3          4.9         2.4          3.3         1.0 versicolor
-  #> 4          6.6         3.0          4.4         1.4 versicolor
-  #> 5          6.7         3.0          5.0         1.7 versicolor
+  #> 1          6.0         3.0          4.8         1.8  virginica
+  #> 2          6.4         2.8          5.6         2.2  virginica
+  #> 3          4.9         3.1          1.5         0.2     setosa
+  #> 4          5.4         3.4          1.5         0.4     setosa
+  #> 5          5.6         2.5          3.9         1.1 versicolor
 ```
 
 -   **Combinando Bases**
@@ -3131,31 +3131,18 @@ três pacotes com tal finalidade contidos no `tidyverse`:
 
 ## Visualização
 
-A etapa de visualização possui um papel importantíssimo no contexto de
-análise de dados, uma vez que, quando devidamente utilizados, nos
-permitem o entendimento dos dados e suas particularidades. E, apesar da
-visualização também contemplar um conjunto de medidas organizadas em
-tabelas, vamos focar este capítulo na opção gráfica, visto já termos
-apresentado o pacote `dplyr`, e funções de sumarização como o
-`summarise()` - um pacote particularmente útil para visualizações
-descritivas é o `skimr`.
+A etapa de visualização possui um papel importantíssimo no contexto de análise de dados, uma vez que, quando devidamente utilizados, nos permitem o entendimento dos dados e suas particularidades. E, apesar da visualização também contemplar um conjunto de medidas organizadas em tabelas, vamos focar este capítulo na opção gráfica, visto já termos apresentado o pacote `dplyr`, e funções de sumarização como o `summarise()` - um pacote particularmente útil para visualizações descritivas é o `skimr`.
 
 Conforme apresentado no capítulo de [Análises
-Descritivas](#AnalisesDescritivas), o RBase oferece uma série de opções
-gráficas. Contudo, é quando começamos a trabalhar com as bibliotecas de
-visualização do R, que o recurso gráfico é realmente potencializado.
-Para tal temos o pacote `ggplot2` como uma das opções atualmente mais
-utilizada e difundida. Nesta trabalhamos com a filosófia chamada
-*Grammar of Graphics*, em que o mapeamento dos dados é feito a partir de
-objetos geométricos e atributos estéticos, ambos trabalhados em uma
-lógica de camadas, similarmente ao encadeamento do `Pipe` - porém
-utilizando o operador `+` no lugar do `%>%`. Assim temos a estrutura:
+Descritivas](#AnalisesDescritivas), o RBase oferece uma série de opções gráficas. Contudo, é quando começamos a trabalhar com as bibliotecas de visualização do R, que o recurso gráfico é realmente potencializado.
+Para tal temos o pacote `ggplot2` como uma das opções atualmente mais utilizada e difundida. Nesta trabalhamos com a filosófia chamada *Grammar of Graphics*, em que o mapeamento dos dados é feito a partir de objetos geométricos e atributos estéticos, ambos trabalhados em uma lógica de camadas, similarmente ao encadeamento do `Pipe` - porém utilizando o operador `+` no lugar do `%>%`. Assim temos a estrutura:
 
 
 ```r
-  ggplot(dados) +
-    função_geometrica(mapeamentos) +
-    funções_estéticas
+  dados %>% 
+    ggplot(mapeamentos_estéticos()) +
+      camada_geométrica() +
+      camadas_não_obrigatorias()
 ```
 
 em que na primeira linha inicializamos o objeto gráfico, na segunda
@@ -3166,20 +3153,32 @@ representação escolhida e, por fim, funções estéticas permitindo o
 ajuste de: divisão de gráficos (faceting), rótulos, escalas, legendas,
 sistemas de coordenadas, temas de fundo, etc.
 
-Como um primeiro exemplo, vamos refazer o histograma da variável `qsec`,
-da base `mtcars`, feita [anteriormente](#AnalisesDescritivas):
+### Exemplo 
+
+Como um primeiro exemplo, vamos refazer o histograma da variável `qsec`, da base `mtcars`, feita [anteriormente](#AnalisesDescritivas):
 
 
 ```r
-  ggplot(mtcars) +
-   geom_histogram(aes(qsec))
+mtcars %>% 
+  ggplot(aes(x = qsec)) +
+    geom_histogram()
 ```
 
 <img src="index_files/figure-html/unnamed-chunk-124-1.png" width="100%" style="display: block; margin: auto;" />
 
-E agora, reestruturando a primeira linha segundo a lógica pipe,
-diminuindo o intervalo de quebra do histograma (que tem 30 por default),
-e alguns parâmetros estéticos:
+Note que temos:
+
+```r
+#dados
+mtcars %>% 
+  #mapeamentos_estéticos
+  ggplot(aes(x = qsec)) +
+    #camada_geometrica
+    geom_histogram()
+```
+
+
+E agora diminuindo o intervalo de quebra do histograma (que tem 30 por default), e adicionando alguns parâmetros estéticos e camadas não obrigatórias:
 
 
 ```r
@@ -3191,14 +3190,9 @@ e alguns parâmetros estéticos:
      theme_minimal() 
 ```
 
-<img src="index_files/figure-html/unnamed-chunk-125-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-126-1.png" width="100%" style="display: block; margin: auto;" />
 
-Visando ilustrar outras funcionalidades do `ggplot2` segue um exemplo em
-que a visualização é dada em termos da variável `mpg` por `disp`,
-segmentando por `vs` e modelando segundo para um dos níveis de `cyl` -
-note que ambas as variáveis de segmentaçao são originalmente numéricas
-e, portanto, precisam ser redefinidas como fatores, visando permitir a
-leitura:
+Visando ilustrar outras funcionalidades do `ggplot2` segue um exemplo em que a visualização é dada em termos da variável `mpg` por `disp`,segmentando por `vs` e modelando segundo para um dos níveis de `cyl` - note que ambas as variáveis de segmentaçao são originalmente numéricas e, portanto, precisam ser redefinidas como fatores, visando permitir a leitura:
 
 
 ```r
@@ -3211,11 +3205,9 @@ leitura:
   #> `geom_smooth()` using formula = 'y ~ x'
 ```
 
-<img src="index_files/figure-html/unnamed-chunk-126-1.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-127-1.png" style="display: block; margin: auto;" />
 
-Adicionalmente, segue um exemplo considerando a base `diamonds`, onde o
-interesse é entender a distribuição da variável `cut` em relação à
-`clarity`, ou ambas quanto a `count`:
+Adicionalmente, segue um exemplo considerando a base `diamonds`, onde o interesse é entender a distribuição da variável `cut` em relação à `clarity`, ou ambas quanto a `count`:
 
 
 ```r
@@ -3243,7 +3235,7 @@ interesse é entender a distribuição da variável `cut` em relação à
     geom_bar()
 ```
 
-<img src="index_files/figure-html/unnamed-chunk-128-1.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-129-1.png" style="display: block; margin: auto;" />
 
 ```r
 # visualização 2
@@ -3254,12 +3246,9 @@ interesse é entender a distribuição da variável `cut` em relação à
              position = "fill")
 ```
 
-<img src="index_files/figure-html/unnamed-chunk-128-2.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-129-2.png" style="display: block; margin: auto;" />
 
-Por fim segue um exemplo de dados temporais em que, em conjunto com as
-funções do `tidyr` e `dplyr`, remodelamos a base de dados `economics`
-visando obter a visualização das variáveis `psavert` e `uempmed` desde
-`1990`:
+Por fim segue um exemplo de dados temporais em que, em conjunto com as funções do `tidyr` e `dplyr`, remodelamos a base de dados `economics` visando obter a visualização das variáveis `psavert` e `uempmed` desde `1990`:
 
 
 ```r
@@ -3296,7 +3285,7 @@ economics %>%
   #> generated.
 ```
 
-<img src="index_files/figure-html/unnamed-chunk-130-1.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-131-1.png" style="display: block; margin: auto;" />
 
 ## Modelagem
 
