@@ -1542,13 +1542,13 @@ histograma para uma variável pré especificada:
   boxplot(mtcars)
 ```
 
-<img src="handout_files/figure-html/unnamed-chunk-62-1.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-62-1.png" style="display: block; margin: auto;" />
 
 ```r
   hist(mtcars$qsec)
 ```
 
-<img src="handout_files/figure-html/unnamed-chunk-62-2.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-62-2.png" style="display: block; margin: auto;" />
 
 Lembrando que, assim como para as funções do R em geral, os gráficos
 possuem várias opções de argumento, permitindo o ajuste de rótulos,
@@ -1569,7 +1569,7 @@ covariância dos dados:
     plot(mtcars[,1:3])
 ```
 
-<img src="handout_files/figure-html/unnamed-chunk-63-1.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-63-1.png" style="display: block; margin: auto;" />
 
 ```r
   #representação numérica
@@ -2983,11 +2983,11 @@ com o pacote `dplyr`, com recursos para:
     sample_n(10) %>% 
     sample_frac(0.5) 
   #>   Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-  #> 1          5.8         2.7          3.9         1.2 versicolor
-  #> 2          5.2         4.1          1.5         0.1     setosa
-  #> 3          6.2         2.2          4.5         1.5 versicolor
-  #> 4          6.4         2.9          4.3         1.3 versicolor
-  #> 5          6.1         3.0          4.9         1.8  virginica
+  #> 1          4.9         2.4          3.3         1.0 versicolor
+  #> 2          6.7         3.3          5.7         2.1  virginica
+  #> 3          5.7         3.0          4.2         1.2 versicolor
+  #> 4          6.2         2.9          4.3         1.3 versicolor
+  #> 5          5.5         2.4          3.8         1.1 versicolor
 ```
 
 -   **Combinando Bases**
@@ -3175,7 +3175,7 @@ da base `mtcars`, feita [anteriormente](#AnalisesDescritivas):
    geom_histogram(aes(qsec))
 ```
 
-<img src="handout_files/figure-html/unnamed-chunk-124-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-124-1.png" width="100%" style="display: block; margin: auto;" />
 
 E agora, reestruturando a primeira linha segundo a lógica pipe,
 diminuindo o intervalo de quebra do histograma (que tem 30 por default),
@@ -3191,7 +3191,7 @@ e alguns parâmetros estéticos:
      theme_minimal() 
 ```
 
-<img src="handout_files/figure-html/unnamed-chunk-125-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-125-1.png" width="100%" style="display: block; margin: auto;" />
 
 Visando ilustrar outras funcionalidades do `ggplot2` segue um exemplo em
 que a visualização é dada em termos da variável `mpg` por `disp`,
@@ -3211,7 +3211,7 @@ leitura:
   #> `geom_smooth()` using formula = 'y ~ x'
 ```
 
-<img src="handout_files/figure-html/unnamed-chunk-126-1.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-126-1.png" style="display: block; margin: auto;" />
 
 Adicionalmente, segue um exemplo considerando a base `diamonds`, onde o
 interesse é entender a distribuição da variável `cut` em relação à
@@ -3243,7 +3243,7 @@ interesse é entender a distribuição da variável `cut` em relação à
     geom_bar()
 ```
 
-<img src="handout_files/figure-html/unnamed-chunk-128-1.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-128-1.png" style="display: block; margin: auto;" />
 
 ```r
 # visualização 2
@@ -3254,7 +3254,7 @@ interesse é entender a distribuição da variável `cut` em relação à
              position = "fill")
 ```
 
-<img src="handout_files/figure-html/unnamed-chunk-128-2.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-128-2.png" style="display: block; margin: auto;" />
 
 Por fim segue um exemplo de dados temporais em que, em conjunto com as
 funções do `tidyr` e `dplyr`, remodelamos a base de dados `economics`
@@ -3296,7 +3296,7 @@ economics %>%
   #> generated.
 ```
 
-<img src="handout_files/figure-html/unnamed-chunk-130-1.png" style="display: block; margin: auto;" />
+<img src="index_files/figure-html/unnamed-chunk-130-1.png" style="display: block; margin: auto;" />
 
 ## Modelagem
 

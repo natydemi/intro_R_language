@@ -48,7 +48,7 @@
         walk(glimpse)
     
     
-#data explore libraries -----
+#EDA/data explore libraries -----
     #biblioteca skimr -----
         #https://cran.r-project.org/web/packages/skimr/vignettes/skimr.html 
         ?skimr::skim() 
@@ -121,8 +121,11 @@
       
       
 #Machine Learning -----
-    #Tidymodels
-      #https://www.tidymodels.org/start/
+  #Tidymodels
+    #https://www.tidymodels.org/start/
+#Inference  -----
+  #Infer
+    #https://infer.netlify.app/
 
 #Interoperabilidade R e Python -----
     #Reticulate
@@ -132,5 +135,6 @@
     #redes sociais 
       # procure pela hashtag #rstats
       # grupo telegram R-Brasil: https://t.me/rbrasiloficial
+      # r-ladies: https://rladies-sp.org/
     
     
