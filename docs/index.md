@@ -2983,11 +2983,11 @@ com o pacote `dplyr`, com recursos para:
     sample_n(10) %>% 
     sample_frac(0.5) 
   #>   Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-  #> 1          4.9         2.4          3.3         1.0 versicolor
-  #> 2          6.7         3.3          5.7         2.1  virginica
-  #> 3          5.7         3.0          4.2         1.2 versicolor
-  #> 4          6.2         2.9          4.3         1.3 versicolor
-  #> 5          5.5         2.4          3.8         1.1 versicolor
+  #> 1          5.8         2.8          5.1         2.4  virginica
+  #> 2          6.3         2.5          5.0         1.9  virginica
+  #> 3          4.9         2.4          3.3         1.0 versicolor
+  #> 4          6.6         3.0          4.4         1.4 versicolor
+  #> 5          6.7         3.0          5.0         1.7 versicolor
 ```
 
 -   **Combinando Bases**
