@@ -1,12 +1,14 @@
 ---
 title: "Introdução à Programação em R"
+author: Nathália Demetrio [(para acessar mais conteúdos como este)](bit.ly/NathaliaDemetrio)
+date: "Last update: `r format(Sys.time(), '%d %B, %Y')`"
 output: 
   #github_document:
   html_document:
     toc: true # table of content true
     number_sections: true 
     toc_float: true
-    keep_md: true
+    #keep_md: true
 editor_options: 
   markdown: 
     wrap: 72
@@ -2552,17 +2554,8 @@ por coluna, entre outras opções. Adicionalmente temos recursos como:
 
 ## Comunicação
 
-Por fim temos a apresentação dos resultados, uma parte crítica do
-processo, visto que, usualmente, é neste momento que toda a análise
-passa a ter um significado prático. Para tal podemos exportar as
-informações de interesse para outras ferramentas, como excel, power
-point, ou etc, o que não costuma ser muito prático. Como alternativa
-podemos fazer a análise e montar o report conjuntamente pelo R,
-garantindo reprodutibilidade e histórico, por meio do Rmarkdown. Tal
-recurso é uma extensão do R que permite que padrões básicos de
-formatação sejam utilizados, além de pedaços de código, imagens, e etc,
-possibilitando a geração de diferentes tipos de documentos a partir do
-Script do R:
+Por fim temos a apresentação dos resultados, uma parte crítica do processo, visto que, usualmente, é neste momento que toda a análise passa a ter um significado prático. Para tal podemos exportar as informações de interesse para outras ferramentas, como excel, power point, ou etc, o que não costuma ser muito prático. Como alternativa podemos fazer a análise e montar o report conjuntamente pelo R, garantindo reprodutibilidade e histórico, por meio do Rmarkdown. Tal
+recurso é uma extensão do R que permite que padrões básicos de formatação sejam utilizados, além de pedaços de código, imagens, e etc, possibilitando a geração de diferentes tipos de documentos a partir do Script do R:
 
 ```{r , echo=FALSE, out.width = '40%', fig.align = "center", fig.cap="RMarkdown"}
  knitr::include_graphics("../img/Fig_2_Rmarkdown.png")
@@ -2572,18 +2565,10 @@ Para criar tais arquivos basta ir em 'File \> New File \> R Markdown
 ...', preencher as especificações do Documento, e então apertar o botão
 Knit, ou o atalho 'Ctrl + Shift + K'.
 
-Além do RMarkdown, temos também ferramentas como o Shiny - pacote usado
-para geração de gráficos e dashboards interativos. que permitem a
-construção de aplicações Web. Para tal, as ferramentas da biblioteca
-convertem os dados analisados e as funções de R para HTML, CSS e
-JavaScript, gerando arquivos que podem ser abertos e trabalhados em um
+Além do RMarkdown, temos também ferramentas como o Shiny - pacote usado para geração de gráficos e dashboards interativos. que permitem a construção de aplicações Web. Para tal, as ferramentas da biblioteca convertem os dados analisados e as funções de R para HTML, CSS e JavaScript, gerando arquivos que podem ser abertos e trabalhados em um
 navegador.
 
-O Shiny é baseado em dois componentes principais: 'server', que é
-responsável pela lógica do programa, tratamento e exibição dos dados, e
-'ui' (user interface) que é responsável por oferecer as interações
-necessárias com o usuário através do navegador. Ambos possuem métodos e
-funções prontas para uso para as funcionalidades mais populares.
+O Shiny é baseado em dois componentes principais: 'server', que é responsável pela lógica do programa, tratamento e exibição dos dados, e 'ui' (user interface) que é responsável por oferecer as interações necessárias com o usuário através do navegador. Ambos possuem métodos e funções prontas para uso para as funcionalidades mais populares.
 
 ```{r , echo=FALSE, out.width = '30%', fig.align = "center", fig.cap="RMarkdown + Shiny"}
  knitr::include_graphics("../img/Fig_2_Shiny_Rmarkdown.png")
@@ -2607,15 +2592,16 @@ Dito isto, vamos lá!
 
 ## Dicas para seguir aprendendo
 
--   Siga pessoas legais
-    -   twitter
-        [#rstats](https://twitter.com/search?q=%23RStats&src=typeahead_click&f=top)
-    -   linkedin
-        [{#olhaEu}](https://www.linkedin.com/in/nathaliademetrio/)]
+-   Siga conteúdos/pessoas da área
+    -   conteúdos: para encontrar materiais e posts procure por #rstats (por exemplo: [#rstats no twitter/X](https://twitter.com/search?q=%23RStats&src=typeahead_click&f=top)
+    -   pessoas: tem muita gente legal falando de diferentes especialidades de dados, escolha uma rede social e concentre as suas buscas. Normalmente a partir de dois ou três produtores de conteúdo mais engajados, você irá encontrar novas pessoas. Por hora, que tal começar comigo? [Aqui minhas redes ☺ ](bit.ly/NathaliaDemetrio)]
+        
 -   Participe de grupos e eventos, existe muita coisa gratuita bacana
     por aí
-    -   [satRday](https://satrdays.org/)
+    -   [Grupo R-Brasil no Telegram](https://t.me/rbrasiloficial) – Este é o grupo mais movimentado que conheço, mas você irá encontrar grupos em todas as redes sociais ;)
+    -   [eventos satRday](https://satrdays.org/)
     -   [tidytuesday](https://www.tidytuesday.com/)
+    
 -   Crie o hábito de saber o que está rolando de novo (e vá por mim,
     sempre tem coisas novas interessantes!)
     -   congressos: [rstudio::conf()](https://rstudio.com/conference/) é
@@ -2676,8 +2662,7 @@ praise::praise()
 
 # Bibliografias recomendadas
 
-Além dos links e bibliotecas comentados durante todo o curso, vou deixar
-aqui algumas referências para que você possa revisar, aprofundar e
+Além dos links e bibliotecas comentados durante todo o curso, vou deixar aqui algumas referências para que você possa revisar, aprofundar e
 ampliar os conteúdos vistos ao longo deste material:
 
 -   [R for data science](https://r4ds.had.co.nz/introduction.html) -- a
@@ -2692,8 +2677,11 @@ sobre a linguagem de programação R:
 
 -   [Advanced R](http://adv-r.had.co.nz/)
 
--   [Hands-On Programming with
-    R](https://rstudio-education.github.io/hopr/)
+-   [Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
+
+
+Além da página com as [CheatSheets da Posit](https://posit.co/resources/cheatsheets/) (particularmente a aba [contributed-cheatsheets](https://rstudio.github.io/cheatsheets/contributed-cheatsheets)) e a página o [Rstudio Education](https://education.rstudio.com/), que possui conteúdos para: Beginners, Intermediates e Experts.
+
 
 No mais, a grande dica é: trabalhe com versões de você mesma (o), para
 que amanhã saiba um pouco mais do que ontem.

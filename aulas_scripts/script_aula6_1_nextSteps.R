@@ -97,14 +97,15 @@
     #biblioteca pont-and-click
     esquisse::esquisser() 
 
+    # introdução em português
+      #https://jonnyphillips.github.io/Ciencia_de_Dados/Graficos.html
+  
     #consulta de gráficos e como fazer no R
       # https://www.data-to-viz.com/
-      
       
     #lista de pacotes complementares:
       #https://github.com/krzjoa/awesome-r-dataviz
     
-
 #Dashboards estáticos-----
     #Rmarkdown
       #https://rmarkdown.rstudio.com/lesson-1.html
@@ -130,6 +131,7 @@
 #Interoperabilidade R e Python -----
     #Reticulate
       #https://rstudio.github.io/reticulate/ 
+      #https://rstudio.github.io/cheatsheets/html/reticulate
     
 #Comunidades -----
     #redes sociais 
