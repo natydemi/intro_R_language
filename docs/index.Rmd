@@ -2634,7 +2634,7 @@ alguma coisa. Por isso aprendemos sempre".
 
 Dito isto, vamos lá!
 
-## Bibliografia recomendada
+## Bibliografias recomendadas
 
 Além dos links e bibliotecas comentados durante todo o curso, vou deixar
 aqui algumas referências para que você possa revisar, aprofundar e
@@ -2670,7 +2670,13 @@ características da linguagem R:
 [Advanced R](http://adv-r.had.co.nz/) e [Hands-On Programming with
 R](https://rstudio-education.github.io/hopr/) .
 
-## Dicas de pacotes R {#dicas_pacotes}
+## Explore os Pacotes {#dicas_pacotes}
+
+Conforme já discutido, o R tem uma infinidade de pacotes, para pesquisar
+novas bibliotecas recomendo o site
+[r-universe.dev/](https://r-universe.dev/search/). Mas para adiantar,
+organizei alguns pacotes que podem ser interessantes que você saiba que
+existem:
 
 -   Advanced Analytics
     -   Machine Learning: [tidymodels](https://www.tidymodels.org/)
@@ -2700,12 +2706,12 @@ R](https://rstudio-education.github.io/hopr/) .
         [RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki)
     -   Gerar memes: [memer](https://github.com/sctyner/memer)
 
-## Dicas para seguir aprendendo
+## Aprenda com a comunidade 
 
--   Siga conteúdos/pessoas da área
+-   Acompanhe conteúdos/pessoas da área
     -   conteúdos: para encontrar materiais e posts procure por #rstats
         (por exemplo: [#rstats no
-        twitter/X](https://twitter.com/search?q=%23RStats&src=typeahead_click&f=top)
+        twitter](https://twitter.com/search?q=%23RStats&src=typeahead_click&f=top)
     -   pessoas: tem muita gente legal falando de diferentes
         especialidades de dados, você pode procurar pelo pessoas da
         Curso-R ou R-Ladies por exemplo. Normalmente a partir de dois ou
@@ -2771,8 +2777,8 @@ que amanhã saiba um pouco mais do que ontem.
 
 # Apêndice
 
-Vou adicionar aqui contextualizações rápidas de algumas das
-bibliotecas citadas na seção [Dicas de Pacotes](#dicas_pacotes) 
+Vou adicionar aqui contextualizações rápidas de algumas das bibliotecas
+citadas na seção [Explore os Pacotes](#dicas_pacotes).
 
 ## Interoperabilidade R & Python
 
@@ -2821,9 +2827,8 @@ dados_r %>% head()
 r.dados_r.head()
 ```
 
-
-Legal né? Se quiser aprofundar neste uso, a galera da Curso-R tem alguns vídeos no Youtube contextualizando mais sobre ;) 
-
+Legal né? Se quiser aprofundar neste uso, a galera da Curso-R tem alguns
+vídeos no Youtube contextualizando mais sobre ;)
 
 <!-- ## Big Data -->
 
