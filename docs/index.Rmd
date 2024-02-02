@@ -6,7 +6,7 @@ output:
   #github_document:
   html_document:
     toc: true # table of content true
-    number_sections: true 
+    #number_sections: true 
     toc_float: true
     #keep_md: true
 editor_options: 
@@ -1319,7 +1319,7 @@ desatualizadas temos `old.packages()`. Por fim, para diferenciarmos as
 funções *built-in* daquelas carregadas via bibliotecas, vamos chamar as
 primeiras de funções do `R base`.
 
-## Mais sobre a linguagem R 
+## Mais sobre a linguagem R
 
 ### Operadores lógicos
 
@@ -2370,11 +2370,25 @@ três pacotes com tal finalidade contidos no `tidyverse`:
 
 ## Visualização
 
-A etapa de visualização possui um papel importantíssimo no contexto de análise de dados, uma vez que, quando devidamente utilizados, nos permitem o entendimento dos dados e suas particularidades. E, apesar da visualização também contemplar um conjunto de medidas organizadas em tabelas, vamos focar este capítulo na opção gráfica, visto já termos apresentado o pacote `dplyr`, e funções de sumarização como o `summarise()` - um pacote particularmente útil para visualizações descritivas é o `skimr`.
+A etapa de visualização possui um papel importantíssimo no contexto de
+análise de dados, uma vez que, quando devidamente utilizados, nos
+permitem o entendimento dos dados e suas particularidades. E, apesar da
+visualização também contemplar um conjunto de medidas organizadas em
+tabelas, vamos focar este capítulo na opção gráfica, visto já termos
+apresentado o pacote `dplyr`, e funções de sumarização como o
+`summarise()` - um pacote particularmente útil para visualizações
+descritivas é o `skimr`.
 
 Conforme apresentado no capítulo de [Análises
-Descritivas](#AnalisesDescritivas), o RBase oferece uma série de opções gráficas. Contudo, é quando começamos a trabalhar com as bibliotecas de visualização do R, que o recurso gráfico é realmente potencializado.
-Para tal temos o pacote `ggplot2` como uma das opções atualmente mais utilizada e difundida. Nesta trabalhamos com a filosófia chamada *Grammar of Graphics*, em que o mapeamento dos dados é feito a partir de objetos geométricos e atributos estéticos, ambos trabalhados em uma lógica de camadas, similarmente ao encadeamento do `Pipe` - porém utilizando o operador `+` no lugar do `%>%`. Assim temos a estrutura:
+Descritivas](#AnalisesDescritivas), o RBase oferece uma série de opções
+gráficas. Contudo, é quando começamos a trabalhar com as bibliotecas de
+visualização do R, que o recurso gráfico é realmente potencializado.
+Para tal temos o pacote `ggplot2` como uma das opções atualmente mais
+utilizada e difundida. Nesta trabalhamos com a filosófia chamada
+*Grammar of Graphics*, em que o mapeamento dos dados é feito a partir de
+objetos geométricos e atributos estéticos, ambos trabalhados em uma
+lógica de camadas, similarmente ao encadeamento do `Pipe` - porém
+utilizando o operador `+` no lugar do `%>%`. Assim temos a estrutura:
 
 ```{r, eval=F}
   dados %>% 
@@ -2391,9 +2405,10 @@ representação escolhida e, por fim, funções estéticas permitindo o
 ajuste de: divisão de gráficos (faceting), rótulos, escalas, legendas,
 sistemas de coordenadas, temas de fundo, etc.
 
-### Exemplo 
+### Exemplo
 
-Como um primeiro exemplo, vamos refazer o histograma da variável `qsec`, da base `mtcars`, feita [anteriormente](#AnalisesDescritivas):
+Como um primeiro exemplo, vamos refazer o histograma da variável `qsec`,
+da base `mtcars`, feita [anteriormente](#AnalisesDescritivas):
 
 ```{r, out.width = '100%', fig.align = "center", message=F}
 mtcars %>% 
@@ -2402,6 +2417,7 @@ mtcars %>%
 ```
 
 Note que temos:
+
 ```{r eval=F}
 #dados
 mtcars %>% 
@@ -2411,8 +2427,9 @@ mtcars %>%
     geom_histogram()
 ```
 
-
-E agora diminuindo o intervalo de quebra do histograma (que tem 30 por default), e adicionando alguns parâmetros estéticos e camadas não obrigatórias:
+E agora diminuindo o intervalo de quebra do histograma (que tem 30 por
+default), e adicionando alguns parâmetros estéticos e camadas não
+obrigatórias:
 
 ```{r, out.width = '100%', fig.align = "center", message=F, warning=F}
   mtcars %>% 
@@ -2423,7 +2440,12 @@ E agora diminuindo o intervalo de quebra do histograma (que tem 30 por default),
      theme_minimal() 
 ```
 
-Visando ilustrar outras funcionalidades do `ggplot2` segue um exemplo em que a visualização é dada em termos da variável `mpg` por `disp`,segmentando por `vs` e modelando segundo para um dos níveis de `cyl` - note que ambas as variáveis de segmentaçao são originalmente numéricas e, portanto, precisam ser redefinidas como fatores, visando permitir a leitura:
+Visando ilustrar outras funcionalidades do `ggplot2` segue um exemplo em
+que a visualização é dada em termos da variável `mpg` por
+`disp`,segmentando por `vs` e modelando segundo para um dos níveis de
+`cyl` - note que ambas as variáveis de segmentaçao são originalmente
+numéricas e, portanto, precisam ser redefinidas como fatores, visando
+permitir a leitura:
 
 ```{r}
 #exemplo: gráfico ggplot
@@ -2434,7 +2456,9 @@ Visando ilustrar outras funcionalidades do `ggplot2` segue um exemplo em que a v
     stat_smooth(method = 'lm')
 ```
 
-Adicionalmente, segue um exemplo considerando a base `diamonds`, onde o interesse é entender a distribuição da variável `cut` em relação à `clarity`, ou ambas quanto a `count`:
+Adicionalmente, segue um exemplo considerando a base `diamonds`, onde o
+interesse é entender a distribuição da variável `cut` em relação à
+`clarity`, ou ambas quanto a `count`:
 
 ```{r}
 #visualização dos dados
@@ -2455,7 +2479,10 @@ Adicionalmente, segue um exemplo considerando a base `diamonds`, onde o interess
   
 ```
 
-Por fim segue um exemplo de dados temporais em que, em conjunto com as funções do `tidyr` e `dplyr`, remodelamos a base de dados `economics` visando obter a visualização das variáveis `psavert` e `uempmed` desde `1990`:
+Por fim segue um exemplo de dados temporais em que, em conjunto com as
+funções do `tidyr` e `dplyr`, remodelamos a base de dados `economics`
+visando obter a visualização das variáveis `psavert` e `uempmed` desde
+`1990`:
 
 ```{r}
 economics
@@ -2554,8 +2581,17 @@ por coluna, entre outras opções. Adicionalmente temos recursos como:
 
 ## Comunicação
 
-Por fim temos a apresentação dos resultados, uma parte crítica do processo, visto que, usualmente, é neste momento que toda a análise passa a ter um significado prático. Para tal podemos exportar as informações de interesse para outras ferramentas, como excel, power point, ou etc, o que não costuma ser muito prático. Como alternativa podemos fazer a análise e montar o report conjuntamente pelo R, garantindo reprodutibilidade e histórico, por meio do Rmarkdown. Tal
-recurso é uma extensão do R que permite que padrões básicos de formatação sejam utilizados, além de pedaços de código, imagens, e etc, possibilitando a geração de diferentes tipos de documentos a partir do Script do R:
+Por fim temos a apresentação dos resultados, uma parte crítica do
+processo, visto que, usualmente, é neste momento que toda a análise
+passa a ter um significado prático. Para tal podemos exportar as
+informações de interesse para outras ferramentas, como excel, power
+point, ou etc, o que não costuma ser muito prático. Como alternativa
+podemos fazer a análise e montar o report conjuntamente pelo R,
+garantindo reprodutibilidade e histórico, por meio do Rmarkdown. Tal
+recurso é uma extensão do R que permite que padrões básicos de
+formatação sejam utilizados, além de pedaços de código, imagens, e etc,
+possibilitando a geração de diferentes tipos de documentos a partir do
+Script do R:
 
 ```{r , echo=FALSE, out.width = '40%', fig.align = "center", fig.cap="RMarkdown"}
  knitr::include_graphics("../img/Fig_2_Rmarkdown.png")
@@ -2565,10 +2601,18 @@ Para criar tais arquivos basta ir em 'File \> New File \> R Markdown
 ...', preencher as especificações do Documento, e então apertar o botão
 Knit, ou o atalho 'Ctrl + Shift + K'.
 
-Além do RMarkdown, temos também ferramentas como o Shiny - pacote usado para geração de gráficos e dashboards interativos. que permitem a construção de aplicações Web. Para tal, as ferramentas da biblioteca convertem os dados analisados e as funções de R para HTML, CSS e JavaScript, gerando arquivos que podem ser abertos e trabalhados em um
+Além do RMarkdown, temos também ferramentas como o Shiny - pacote usado
+para geração de gráficos e dashboards interativos. que permitem a
+construção de aplicações Web. Para tal, as ferramentas da biblioteca
+convertem os dados analisados e as funções de R para HTML, CSS e
+JavaScript, gerando arquivos que podem ser abertos e trabalhados em um
 navegador.
 
-O Shiny é baseado em dois componentes principais: 'server', que é responsável pela lógica do programa, tratamento e exibição dos dados, e 'ui' (user interface) que é responsável por oferecer as interações necessárias com o usuário através do navegador. Ambos possuem métodos e funções prontas para uso para as funcionalidades mais populares.
+O Shiny é baseado em dois componentes principais: 'server', que é
+responsável pela lógica do programa, tratamento e exibição dos dados, e
+'ui' (user interface) que é responsável por oferecer as interações
+necessárias com o usuário através do navegador. Ambos possuem métodos e
+funções prontas para uso para as funcionalidades mais populares.
 
 ```{r , echo=FALSE, out.width = '30%', fig.align = "center", fig.cap="RMarkdown + Shiny"}
  knitr::include_graphics("../img/Fig_2_Shiny_Rmarkdown.png")
@@ -2578,7 +2622,7 @@ O Shiny é baseado em dois componentes principais: 'server', que é responsável
 
 ------------------------------------------------------------------------
 
-# R e suas muitas opções
+# Próximos passos
 
 Aqui iremos listar algumas das possibilidades de próximos passos, e
 gostaria de frisar a palavra POSSIBILIDADES. Pois a área de dados é
@@ -2590,24 +2634,114 @@ alguma coisa. Por isso aprendemos sempre".
 
 Dito isto, vamos lá!
 
+## Bibliografia recomendada
+
+Além dos links e bibliotecas comentados durante todo o curso, vou deixar
+aqui algumas referências para que você possa revisar, aprofundar e
+ampliar o seu conhecimento no R:
+
+-   Para revisar e sedimentar os temas: o livro [R for data
+    science](https://r4ds.had.co.nz/introduction.html) -- dica: a 2ª
+    versão está sendo traduzida pelas R-Ladies [neste
+    link](https://cienciadedatos.github.io/pt-r4ds/)
+
+-   Para avançar o conhecimento no R de maneira mais estruturada:
+    [Rstudio Education](https://education.rstudio.com/), que possui
+    conteúdos para todos os níveis -- na página `Learn` você encontrará
+    conteúdos segmentados para Beginners, Intermediates e Experts.
+
+-   Para aprender sobre os mais diversos temas e pacotes: as
+    [R-Ladies](https://rladies.org/) estão espalhadas por cidades de
+    todo o mundo, e você sempre irá encontrar materiais e meetups online
+    (muitos ao vivo). Dentre os capítulos brasileiros deixo aqui o [blog
+    das R-Ladies São Paulo](https://rladies-sp.org/).
+
+-   Para ampliar o portfólio de funções e bibliotecas: [CheatSheets da
+    Posit](https://posit.co/resources/cheatsheets/) (particularmente a
+    aba
+    [contributed-cheatsheets](https://rstudio.github.io/cheatsheets/contributed-cheatsheets))
+
+-   Para ter acesso a tutoriais, livros, lives e cursos, recomendo
+    demais a empresa [Curso-R](https://www.curso-r.com/material/)
+
+E caso você tenha interesse em discussões mais avançadas sobre
+características da linguagem R:
+
+[Advanced R](http://adv-r.had.co.nz/) e [Hands-On Programming with
+R](https://rstudio-education.github.io/hopr/) .
+
+## Dicas de pacotes R {#dicas_pacotes}
+
+-   Advanced Analytics
+    -   Machine Learning: [tidymodels](https://www.tidymodels.org/)
+    -   Trabalhar com deep learning e dados não estruturados:
+        [torch](https://torch.mlverse.org/packages/)
+    -   Modelagem bayesiana:
+        [tidybayes](http://mjskay.github.io/tidybayes/)
+    -   Analisar texto:
+        [tidytext](https://github.com/juliasilge/tidytext)
+-   Replicabilidade
+    -   Automatizar processos:
+        [usethis](https://github.com/r-lib/usethis)
+    -   Desenvolver pacotes:
+        [devtools](https://github.com/r-lib/devtools)
+    -   Gerenciar dependências de ambientes do R:
+        [renv](https://rstudio.github.io/renv/articles/renv.html)
+    -   Criar pipelines:
+        [target](https://cran.r-project.org/web/packages/targets/vignettes/overview.html)
+    -   Testar códigos: [testthat](https://testthat.r-lib.org/)
+    -   Estruturar deploy de modelos:
+        [vetiver](https://github.com/rstudio/vetiver-r)
+-   Diversos
+    -   Interoperabilidade R e Python:
+        [reticulate](https://rstudio.github.io/reticulate/)
+    -   Criar mapas: [leaflet](https://rstudio.github.io/leaflet/)
+    -   Gerenciar e analisar dados com o Hadoop:
+        [RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki)
+    -   Gerar memes: [memer](https://github.com/sctyner/memer)
+
 ## Dicas para seguir aprendendo
 
 -   Siga conteúdos/pessoas da área
-    -   conteúdos: para encontrar materiais e posts procure por #rstats (por exemplo: [#rstats no twitter/X](https://twitter.com/search?q=%23RStats&src=typeahead_click&f=top)
-    -   pessoas: tem muita gente legal falando de diferentes especialidades de dados, escolha uma rede social e concentre as suas buscas. Normalmente a partir de dois ou três produtores de conteúdo mais engajados, você irá encontrar novas pessoas. Por hora, que tal começar comigo? [Aqui minhas redes ☺ ](bit.ly/NathaliaDemetrio)]
-        
+    -   conteúdos: para encontrar materiais e posts procure por #rstats
+        (por exemplo: [#rstats no
+        twitter/X](https://twitter.com/search?q=%23RStats&src=typeahead_click&f=top)
+    -   pessoas: tem muita gente legal falando de diferentes
+        especialidades de dados, você pode procurar pelo pessoas da
+        Curso-R ou R-Ladies por exemplo. Normalmente a partir de dois ou
+        três produtores de conteúdo mais engajados, você irá encontrar
+        novas pessoas. Por hora, que tal começar comigo? [Aqui minhas
+        redes ☺](bit.ly/NathaliaDemetrio)]
 -   Participe de grupos e eventos, existe muita coisa gratuita bacana
     por aí
-    -   [Grupo R-Brasil no Telegram](https://t.me/rbrasiloficial) – Este é o grupo mais movimentado que conheço, mas você irá encontrar grupos em todas as redes sociais ;)
-    -   [eventos satRday](https://satrdays.org/)
-    -   [tidytuesday](https://www.tidytuesday.com/)
-    
--   Crie o hábito de saber o que está rolando de novo (e vá por mim,
-    sempre tem coisas novas interessantes!)
-    -   congressos: [rstudio::conf()](https://rstudio.com/conference/) é
-        uma ótima pedida
-    -   newsletter: [Data Elixir](https://dataelixir.com/) é a minha
-        preferida
+    -   [Grupo R-Brasil no Telegram](https://t.me/rbrasiloficial): Este
+        é o grupo mais movimentado que conheço, cheio de pessoas
+        interessadas em compartilhar conhecimento. De toda a forma vale
+        reforçar que você irá encontrar grupos em todas as redes sociais
+        ;)
+
+    -   [tidytuesday](https://www.tidytuesday.com/): este é um projeto
+        que promove a prática de visualização de dados com a
+        linguagem R. Toda semana, um novo conjunto de dados é
+        disponibilizado, e os participantes são desafiados a criar
+        visualizações informativas e criativas usando o R e o pacote
+        ggplot2.
+
+    -   [posit::conf()](https://rstudio.com/conference/): é uma
+        conferência anual que reúne usuários de R e Python de todo o
+        mundo para compartilhar conhecimentos, aprender novas
+        habilidades e se conectar com a comunidade. Parte do conteúdo é
+        disponibilizado nas redes da Posit.
+
+<!-- -   Crie o hábito de saber o que está rolando de novo (e vá por mim, -->
+
+<!--     sempre tem coisas novas interessantes!) -->
+
+<!--         uma ótima pedida -->
+
+<!--     -   newsletter: [Data Elixir](https://dataelixir.com/) é a minha -->
+
+<!--         preferida -->
 
 Por fim, procure construir um mapa mental dos tópicos que você for tendo
 conhecimento. Você não precisa dominar tudo, mas ter uma noção do que se
@@ -2628,67 +2762,70 @@ praise::praise()
 # DICA: rode o praise mais de uma vez! :)
 ```
 
-## Dicas de pacotes R
-
-### Ponto de Partida
-
--   tidyverse
-
-### Próximos passos
-
--   tidymodels
-
-### Passos avançados
-
--   Interoperabilidade R e Python:
-    [reticulate](https://rstudio.github.io/reticulate/)
--   Criar mapas: [leaflet](https://rstudio.github.io/leaflet/)
--   Trabalhar com deep learning e dados não estruturados:
-    [torch](https://torch.mlverse.org/packages/)
--   Automatizar processos: [usethis](https://github.com/r-lib/usethis)
--   Modelagem bayesiana: [tidybayes](http://mjskay.github.io/tidybayes/)
--   Analisar texto: [tidytext](https://github.com/juliasilge/tidytext)
--   Desenvolver pacotes: [devtools](https://github.com/r-lib/devtools)
--   Gerenciar dependências do R:
-    [renv](https://rstudio.github.io/renv/articles/renv.html)
--   Criar pipelines:
-    [target](https://cran.r-project.org/web/packages/targets/vignettes/overview.html)
--   Testar códigos: [testthat](https://testthat.r-lib.org/)
--   Estruturar deploy de modelos:
-    [vetiver](https://github.com/rstudio/vetiver-r)
--   Gerenciar e analisar dados com o Hadoop:
-    [RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki)
--   Gerar memes: [memer](https://github.com/sctyner/memer)
-
-# Bibliografias recomendadas
-
-Além dos links e bibliotecas comentados durante todo o curso, vou deixar aqui algumas referências para que você possa revisar, aprofundar e
-ampliar os conteúdos vistos ao longo deste material:
-
--   [R for data science](https://r4ds.had.co.nz/introduction.html) -- a
-    2ª versão do livro está sendo traduzida pelas R-Ladies, acesse
-    [aqui](https://cienciadedatos.github.io/pt-r4ds/)
--   [Curso-R](https://www.curso-r.com/material/)
--   R-Ladies : [blog](https://rladies-sp.org/) e [histórico de
-    apresentações](https://github.com/rladies/meetup-presentations_sao-paulo)
-
-E aqui algumas referências para discussões mais técnicas e avançadas
-sobre a linguagem de programação R:
-
--   [Advanced R](http://adv-r.had.co.nz/)
-
--   [Hands-On Programming with R](https://rstudio-education.github.io/hopr/)
-
-
-Além da página com as [CheatSheets da Posit](https://posit.co/resources/cheatsheets/) (particularmente a aba [contributed-cheatsheets](https://rstudio.github.io/cheatsheets/contributed-cheatsheets)) e a página o [Rstudio Education](https://education.rstudio.com/), que possui conteúdos para: Beginners, Intermediates e Experts.
-
-
 No mais, a grande dica é: trabalhe com versões de você mesma (o), para
 que amanhã saiba um pouco mais do que ontem.
 
 # Até a próxima!
 
 😘
+
+# Apêndice
+
+## Sneak Peak de bibliotecas
+
+Vou adicionar aqui algumas contextualizações rápidas de algumas das
+bibliotecas citadas na seção [Dicas de pacotes](#dicas_pacotes) 
+
+### Interoperabilidade R & Python
+
+No RStudio, podemos trabalhar diretamente com a linguagem de programação
+Python através do pacote reticulate, permitindo combinar as
+funcionalidades de ambas as linguagens em um único ambiente de
+desenvolvimento. Existem duas maneiras de fazer isso:
+
+-   Scripts Python (.py): Crie um novo arquivo .py no RStudio e escreva
+    seu código Python como faria em qualquer outro editor. A IDE oferece
+    realce de sintaxe, autocompletar e outras ferramentas para auxiliar
+    na escrita do código.
+
+-   Utilizar Chunks Python em RMarkdown: Incorpore código Python em
+    documentos RMarkdown usando chunks. Isso permite alternar entre R e
+    Python dentro do mesmo documento, facilitando a análise de dados e a
+    geração de relatórios.
+
+Note que com esta integração você pode inclusive combinar as duas
+linguagem, trazendo objetos e funções de um ambiente para outro, veja um
+exemplo em que carregamos uma base de dados a partir de uma biblioteca
+do python, então alteramos os dados no R, e voltamos para o python:
+
+```{python}
+#chunk python
+import seaborn as sns
+dados_py = sns.load_dataset("tips")
+
+dados_py.head()
+```
+
+```{r}
+#chunk r
+library(reticulate)
+
+dados_r <- py$dados_py %>% 
+  mutate(across(where(is.factor), ~str_to_lower(.x))) %>% 
+  mutate(tip_p = round(tip/total_bill, 2)) %>%
+  mutate(tip_p_tidy = scales::percent(tip_p, accuracy = 1))
+
+dados_r %>% head()
+```
+
+```{python}
+#chunk python
+r.dados_r.head()
+```
+
+
+Legal né? Se quiser aprofundar neste uso, a galera da Curso-R tem alguns vídeos no Youtube contextualizando mais sobre ;) 
+
 
 <!-- ## Big Data -->
 

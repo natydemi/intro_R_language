@@ -133,6 +133,8 @@
       #https://rstudio.github.io/reticulate/ 
       #https://rstudio.github.io/cheatsheets/html/reticulate
     
+      #para um passo-a-passo assista esta live da curso-r:
+        #https://www.youtube.com/live/FnpKTXkmBRo?si=tjNVyzkd9VBc8iuE
 #Comunidades -----
     #redes sociais 
       # procure pela hashtag #rstats
