@@ -1481,7 +1481,7 @@ border-radius: 0px;
 <h1 class="title toc-ignore">Introdução à Programação em R</h1>
 <h4 class="author">Nathália Demetrio <a href="bit.ly/NathaliaDemetrio">(para acessar mais conteúdos como
 este)</a></h4>
-<h4 class="date">Last update: 01 fevereiro, 2024</h4>
+<h4 class="date">Last update: 02 fevereiro, 2024</h4>
 
 </div>
 
@@ -3055,13 +3055,12 @@ x %in% 1
 # x está contido em 5?
 x %in% 5
   #&gt; [1] FALSE FALSE FALSE FALSE</code></pre>
-<p>Lembrando que perceba que o <code>%in%</code> é o comando recomendado
-para trabalhar com vetores, pois a comparação é feita avaliando cada um
-dos elementos à esquerda. De modo que todos os elementos da esquerda são
-comparados, individualmente, com a lista de opções à direita. Enquanto
-que o simbolo <code>==</code> trabalha com a reciclagem, e faz a
-avaliação em pares, 1º elemento da esquerda com o 1º da direita, e assim
-por diante.</p>
+<p>Lembrando: o comando <code>%in%</code> é recomendado para trabalhar
+com vetores, pois a comparação é feita avaliando cada um dos elementos à
+esquerda. De modo que todos os elementos da esquerda são comparados,
+individualmente, com a lista de opções à direita. Enquanto que o simbolo
+<code>==</code> trabalha com a reciclagem, e faz a avaliação em pares,
+1º elemento da esquerda com o 1º da direita, e assim por diante.</p>
 <pre class="r"><code>x &lt;- c(1,2,3,3) 
 
 #1 e 3 está contido em x
@@ -3189,28 +3188,31 @@ resultado do primeiro bloco for <code>FALSE</code>:</li>
     print(&quot;x é maior ou igual a 20&quot;)
   }
   #&gt; [1] &quot;x é maior ou igual a 20&quot;</code></pre>
-<p>Existe também <code>ifelse()</code>, uma versão mais simples, em que
-especificamos ambas as ações como parametro de uma função:</p>
-<pre class="r"><code>    x &lt;- &quot;olar&quot;
-    ifelse(x == &quot;olar&quot;, &quot;flor.do.campo&quot;, &quot;xovens&quot;)
+<ul>
+<li><strong>ifelse</strong> - Existe também o <code>ifelse()</code>, uma
+versão mais simples, em que especificamos ambas as ações como parametro
+da mesma função:</li>
+</ul>
+<pre class="r"><code>x &lt;- &quot;olar&quot;
+ifelse(x == &quot;olar&quot;, &quot;flor.do.campo&quot;, &quot;xovens&quot;)
   #&gt; [1] &quot;flor.do.campo&quot;</code></pre>
 <ul>
 <li><strong>for</strong> - uma sequência de instruções que são repetidas
 com cada um dos elementos especificados:</li>
 </ul>
 <pre class="r"><code>#exemplo
-  x &lt;- 1:3
-  for(i in x){
-    print(i)
-  }
+x &lt;- 1:3
+for(i in x){
+  print(i)
+}
   #&gt; [1] 1
   #&gt; [1] 2
   #&gt; [1] 3</code></pre>
 <p>Podemos trabalhar sem as chaves caso as instruções sejam dadas em até
 uma linha após o comando <code>for</code>:</p>
 <pre class="r"><code>#exemplo
-  x &lt;- 1:3
-  for(i in x) print(i)
+x &lt;- 1:3
+for(i in x) print(i)
   #&gt; [1] 1
   #&gt; [1] 2
   #&gt; [1] 3</code></pre>
@@ -3219,10 +3221,10 @@ uma linha após o comando <code>for</code>:</p>
 caso dos loops aninhados:</li>
 </ul>
 <pre class="r"><code>#exemplo ~ podemos utilizar a função `seq` para acessar os indíces de interesse
-  x &lt;- 1:2; y &lt;- c(1,10)
-  for(i in seq(x)){
-    for(j in seq(y)) print(x[i]*y[j])
-  }
+x &lt;- 1:2; y &lt;- c(1,10)
+for(i in seq(x)){
+  for(j in seq(y)) print(x[i]*y[j])
+}
   #&gt; [1] 1
   #&gt; [1] 10
   #&gt; [1] 2
@@ -3232,11 +3234,11 @@ caso dos loops aninhados:</li>
 certa condição não seja mais satisfeita:</li>
 </ul>
 <pre class="r"><code>#exemplo
-  i &lt;- 1
-  while (i&lt;=6){
-    print(i*i)
-    i = i+1
-  }
+i &lt;- 1
+while (i&lt;=6){
+  print(i*i)
+  i = i+1
+}
   #&gt; [1] 1
   #&gt; [1] 4
   #&gt; [1] 9
@@ -3263,9 +3265,9 @@ para a função ser armazenada (que terá papel fundamental na legibilidade
 do código), os argumentos que a função pode, ou não, possuir, e o corpo
 da função, onde é definido o que a função faz, e o que retorna:</p>
 <pre class="r"><code>#modelo
-  nome_funcao &lt;- function(arg_1, arg_2, ...){
-     corpo da função
-  }</code></pre>
+nome_funcao &lt;- function(arg_1, arg_2, ...){
+   corpo da função
+}</code></pre>
 <p>Em relação ao retorno da função, o R, por default, retorna a última
 linha do corpo da função. Porém, alternativamente, podemos utilizar a
 função <code>return()</code>, que garante o retorno independente da
@@ -3287,18 +3289,18 @@ fahrenheit <code>temp_f</code> é calculada, porém o resultado só
 retornado quando chamamos a função <code>celcius_fahrenheit()</code>, e
 não para o objeto <code>temp_f</code>:</p>
 <pre class="r"><code>#exemplo
-  temp_c &lt;- 25
-  
-  celcius_fahrenheit &lt;- function(){
-    temp_f &lt;- (temp_c * 9/5) + 32
-    temp_f #ou, equivalentemente, return(temp_f)
-  }
+temp_c &lt;- 25
 
-  temp_f
+celcius_fahrenheit &lt;- function(){
+  temp_f &lt;- (temp_c * 9/5) + 32
+  temp_f #ou, equivalentemente, return(temp_f)
+}
+
+temp_f
   #&gt; Error in eval(expr, envir, enclos): objeto &#39;temp_f&#39; não encontrado
-  celcius_fahrenheit()
+celcius_fahrenheit()
   #&gt; [1] 77
-  temp_f
+temp_f
   #&gt; Error in eval(expr, envir, enclos): objeto &#39;temp_f&#39; não encontrado</code></pre>
 <p>Revisitando os pontos anteriormente comentados, temos que : - como a
 função não encontrou o objeto <code>temp_c</code> em seu
@@ -3350,6 +3352,7 @@ contrário, a atribuição ocorrerá no ambiente global. Assim:</p>
 #tendo como saída:
   myfun()
   #&gt; [1] 3
+  
 #enquanto que os objetos:
   x #foi redefinida
   #&gt; [1] 1
@@ -4081,11 +4084,11 @@ considerando a proporção especificada</li>
     sample_n(10) %&gt;% 
     sample_frac(0.5) 
   #&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
-  #&gt; 1          5.6         2.5          3.9         1.1 versicolor
-  #&gt; 2          6.0         2.2          5.0         1.5  virginica
-  #&gt; 3          7.2         3.6          6.1         2.5  virginica
-  #&gt; 4          6.5         3.2          5.1         2.0  virginica
-  #&gt; 5          5.8         2.7          5.1         1.9  virginica</code></pre>
+  #&gt; 1          5.6         3.0          4.1         1.3 versicolor
+  #&gt; 2          5.2         2.7          3.9         1.4 versicolor
+  #&gt; 3          6.3         2.7          4.9         1.8  virginica
+  #&gt; 4          4.4         3.2          1.3         0.2     setosa
+  #&gt; 5          6.4         3.2          4.5         1.5 versicolor</code></pre>
 <ul>
 <li><strong>Combinando Bases</strong>
 <ul>
@@ -4560,17 +4563,16 @@ todo o mundo, e você sempre irá encontrar materiais e meetups online
 (muitos ao vivo). Dentre os capítulos brasileiros deixo aqui o <a href="https://rladies-sp.org/">blog das R-Ladies São Paulo</a>.</p></li>
 <li><p>Para ampliar o portfólio de funções e bibliotecas: <a href="https://posit.co/resources/cheatsheets/">CheatSheets da Posit</a>
 (particularmente a aba <a href="https://rstudio.github.io/cheatsheets/contributed-cheatsheets">contributed-cheatsheets</a>)</p></li>
-<li><p>Para ter acesso a tutoriais, livros, lives e cursos, recomendo
-demais a empresa <a href="https://www.curso-r.com/material/">Curso-R</a></p></li>
+<li><p>Para ter acesso a tutoriais, livros, lives e cursos em português:
+recomendo a <a href="#id_0">Curso-R</a></p></li>
 </ul>
 <p>E caso você tenha interesse em discussões mais avançadas sobre
-características da linguagem R:</p>
-<p><a href="http://adv-r.had.co.nz/">Advanced R</a> e <a href="https://rstudio-education.github.io/hopr/">Hands-On Programming
+características da linguagem R: <a href="http://adv-r.had.co.nz/">Advanced R</a> e <a href="https://rstudio-education.github.io/hopr/">Hands-On Programming
 with R</a> .</p>
 </div>
 <div id="dicas_pacotes" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Explore os
-Pacotes</h2>
+pacotes</h2>
 <p>Conforme já discutido, o R tem uma infinidade de pacotes, para
 pesquisar novas bibliotecas recomendo o site <a href="https://r-universe.dev/search/">r-universe.dev/</a>. Mas para
 adiantar, organizei alguns pacotes que podem ser interessantes que você
@@ -4611,11 +4613,10 @@ comunidade</h2>
 exemplo: <a href="https://twitter.com/search?q=%23RStats&amp;src=typeahead_click&amp;f=top">#rstats
 no twitter</a></li>
 <li>pessoas: tem muita gente legal falando de diferentes especialidades
-de dados, você pode procurar pelo pessoas da Curso-R ou R-Ladies por
-exemplo. Normalmente a partir de dois ou três produtores de conteúdo
-mais engajados, você irá encontrar novas pessoas. Por hora, que tal
-começar comigo? <a href="bit.ly/NathaliaDemetrio">Aqui minhas redes
-☺</a>]</li>
+de dados, você pode procurar pelo pessoas da <a href="https://www.curso-r.com/material/">Curso-R</a> ou <a href="https://rladies-sp.org/">R-Ladies São Paulo</a> por exemplo.
+Normalmente a partir de dois ou três produtores de conteúdo mais
+engajados, você irá encontrar novas pessoas. Por hora, que tal começar
+comigo? <a href="bit.ly/NathaliaDemetrio">Aqui minhas redes ☺</a>]</li>
 </ul></li>
 <li>Participe de grupos e eventos, existe muita coisa gratuita bacana
 por aí

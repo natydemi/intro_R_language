@@ -36,19 +36,19 @@ class: center, middle, inverse, title-slide
 
 # Agenda do Curso
 
-- Dia 1 - Da instalação à primeira análise no R
+- Dia 1 - Da Instalação à Primeira Análise no R
 
 &lt;br&gt;
-- Dia 2 - Bibliotecas &amp; Tipos e estruturas de dados no R
+- Dia 2 - Bibliotecas &amp; Tipos e Estruturas de dados no R
 
 &lt;br&gt;
-- Dia 3 - Sintaxes para manipulação de dados &amp; Importação
+- Dia 3 - Manipulação de Dados com RBase &amp; Importação e Exportação de Arquivos
 
 &lt;br&gt;
-- Dia 4 - R para ciência de dados: tidyverse e dplyr
+- Dia 4 - R para Ciência de Dados: tidyverse e dplyr 
 
 &lt;br&gt;
-- Dia 5 - libs p/ análise de dados e 1ºs passos no ggplot
+- Dia 5 - Projetos no R (.Rproj), pacotes do tidyverse, e recursos point-and-click para ggplot2 e Rmarkdown (.Rmd)
 
 &lt;br&gt;
 - Dia 6 - R e algumas das suas (muitas) possibilidades
@@ -56,7 +56,7 @@ class: center, middle, inverse, title-slide
 
 
 ---
-# Agenda Dia 1 - Da instalação à primeira análise no R
+# Agenda Dia 1 - Da Instalação à Primeira Análise no R
 
 - Apresentações 
 
@@ -74,15 +74,17 @@ class: center, middle, inverse, title-slide
 
 - Criando objetos
 
-- Primeiras estatísticas descritivas
+- Primeiras estatísticas descritivas com o RBase
 
 
 ---
-# Agenda Dia 2 - Bibliotecas &amp; Tipos e estruturas de dados no R
+# Agenda Dia 2 - Bibliotecas &amp; Tipos e Estruturas de dados no R
 
-- Primeiro contato com: 
-  + bibliotecas/pacotes no R
-  + dialetos/sintaxes de manipulação de dados do R
+- Trabalhando com bibliotecas/pacotes no R
+
+- Conhecendo os diferentes dialetos/sintaxes de manipulação de dados no R
+
+- Como o R lida com dados? Tipos de dados, classes e estruturas
 
 - Tipos de dados na estatística (classificação dos dados segundo suas propriedades): 
   + nominal, ordinal, discreto e contínuo
@@ -102,18 +104,21 @@ class: center, middle, inverse, title-slide
 
 
 ---
-# Agenda Dia 3 - Sintaxes para manipulação de dados &amp; Importação
+# Agenda Dia 3 - Manipulação de Dados com RBase &amp; Importação e Exportação de Arquivos
 
 - Revisando: tipos, classes e estruturas de Dados no R
   + casos especiais: factor, ordered e date
   
 - Manipulando dados:
-  + criação, consulta, classes e operações para data.frames
+  + criação, consulta (linhas/colunas), classes e operações para vetores e data.frames
+  + diferenças entre os operadores == e %in% 
+
+- Comparação de estruturas/dialetos/sintaxes de manipulação de dados do R
+  + data.frame (Rbase) vs. tibble (tidyverse) vs. data.table
 
 - Importação/exportação de arquivos
+  + consulta e edição de diretórios de trabalho
 
-- Comparação de dialetos/sintaxes de manipulação de dados do R
-  + data.frame (Rbase) vs. tibble (tidyverse) vs. data.table
 
 
 
@@ -122,76 +127,81 @@ class: center, middle, inverse, title-slide
 
 
 ---
-# Agenda Dia 4 - R para ciência de dados: tidyverse e dplyr 
-Importando dados, funções e bibliotecas
+# Agenda Dia 4 - R para Ciência de Dados: tidyverse e dplyr 
 
 
-- Ciência de Dados, Estatística, Data Mining, e ... vs. R
+- R para ... Ciência de Dados, Estatística, Data Mining, e etc
 
-- O que são dados Tidy 
+- O que são dados tidy ?
 
 - O que é um tibble? (vs. data.frame)
 
-- O que é o operador Pipe?
+- O que é o operador pipe?
 
-- Utilizando a gramática Pipe
+- Utilizando a gramática pipe
 
-- As bibliotecas do Tidyverse
+- As bibliotecas do (meta) pacote tidyverse
 
-- practice: explorando a base de dados do titanic com o dplyr 
+- Prática: explorando a base de dados do titanic com o pacote dplyr 
 
-- cheatsheet: o que são, onde encontrar e porque usar.
+- cheatsheet dplyr (uma excelente referência para conhecer os recursos do pacote)
 
 
 
 
 ---
 
-# Agenda Dia 5 - libs p/ análise de dados e 1ºs passos no ggplot
-
-- add
-+ Um pouco sobre Rmarkdown (relatórios estatísticos)
-- Diretório de Trabalho e .Rproj
-
-- Estruturas de controle (versão clean)
-
-- Funções (versão clean)
-
-
--  Pacote skimr
-
-- Princípios de estatística para análise descritiva de dados
-
-- Mais bibliotecas do Tidyverse
-
-- Primeiros passos no ggplot
+# Agenda Dia 5 - Projetos no R (.Rproj), pacotes do tidyverse, e recursos point-and-click para ggplot2 e Rmarkdown (.Rmd)
 
 
 
+- Revisão de diretórios de trabalho e introdução aos projetos do R(.Rproj) 
+
+- Revisão dos principais verbos do pacote de manipulação de dados dplyr (tidyverse)
+
+- Mais bibliotecas do tidyverse 
+
+- cheatsheets: o que são, onde encontrar e por que usar?
+
+- Importação/exportação de arquivos com pacote readr
+
+- Tratamento de dados visando estrutura tidy via tidyr  
+
+- Mais bibliotecas do tidyverse: forcats, stringr e lubridate
+
+- Recursos point-and-click para os primeiros passos em: 
+  + Visualização: criando gráficos com ggplot2 (pacote esquisse)
+  
+  + Documentos estáticos: criando relatórios com Rmarkdown (extensão .Rmd)
 
 
 
 ---
 # Agenda Dia 6 - R e algumas das suas (muitas) possibilidades
 
- - Manipulação de Dados Avançada (dplyr::across)
- 
- - Pacotes para Data Mining (refs)
- 
- - Interoperabilidade R e Python (reticulate)
- 
- - Dashboards Estáticos (Rmarkdown e flexdashboard)
- 
- - Pacotes para Dataviz (esquisser e refs)
- 
- - Programação funcional (purrr)
- 
- - Modelagem no R (tidymodels)
- 
- - Dashboards Dinâmicos (Shiny)
- 
- - Comunidades a serem seguidas
+- Operadores lógicos, estruturas de controle e funções 
 
+- Manipulação de dados avançada 
+  + trabalhando com várias colunas simultaneamente: dplyr::across()
+  &lt;!-- + dplyr::left_join() e adendos --&gt;
+  &lt;!-- + programação funcional: purrr::map() --&gt;
+
+- Pacotes para exploração de dados: skimr, janitor e inspectdf
+
+- Pacotes para Visualização de Dados (ggplot2 e complementos)
+
+- Relatórios/Dashboards Estáticos (Rmarkdown, Quarto e flexdashboard)
+
+- Dashboards Dinâmicos (Shiny)
+
+- Advanced Analytics no R 
+  + Machine Learning: tidymodels
+  + Inferência: infer
+  + Multivariada: factoextra
+
+- Interoperabilidade R e Python (reticulate)
+
+- Próximos passos e comunidades a serem seguidas
 
 
 
@@ -199,19 +209,18 @@ Importando dados, funções e bibliotecas
 
 # Algumas referências
 
-- [R for Data Science, by by Garrett Grolemund, Hadley Wickham](https://r4ds.had.co.nz/)
+- [R for Data Science, by Garrett Grolemund, Hadley Wickham](https://r4ds.had.co.nz/)
 
 - [Cheat Sheets RStudio](https://rstudio.com/resources/cheatsheets/)
 
 - [#rstats (twitter)](https://twitter.com/hashtag/rstats) 
 
-- [R-Ladies São Paulo](https://github.com/rladies/meetup-presentations_sao-paulo)
+- [Blog R-Ladies São Paulo](https://rladies-sp.org/)
 
 - [Curso-R](https://www.curso-r.com/)
 
-- [R Brasil (Telegram)](https://t.me/rbrasiloficial) 
+- [Canal R Brasil (Telegram)](https://t.me/rbrasiloficial) 
 
-- [R Memes For Statistical Fiends](https://www.facebook.com/Rmemes0/)
 
 
 
