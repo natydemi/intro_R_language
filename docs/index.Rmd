@@ -6,7 +6,7 @@ output:
   #github_document:
   html_document:
     toc: true # table of content true
-    #number_sections: true 
+    number_sections: true 
     toc_float: true
     #keep_md: true
 editor_options: 
@@ -2771,12 +2771,10 @@ que amanhã saiba um pouco mais do que ontem.
 
 # Apêndice
 
-## Sneak Peak de bibliotecas
+Vou adicionar aqui contextualizações rápidas de algumas das
+bibliotecas citadas na seção [Dicas de Pacotes](#dicas_pacotes) 
 
-Vou adicionar aqui algumas contextualizações rápidas de algumas das
-bibliotecas citadas na seção [Dicas de pacotes](#dicas_pacotes) 
-
-### Interoperabilidade R & Python
+## Interoperabilidade R & Python
 
 No RStudio, podemos trabalhar diretamente com a linguagem de programação
 Python através do pacote reticulate, permitindo combinar as
