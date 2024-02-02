@@ -148,12 +148,15 @@
       #R for data science: https://r4ds.had.co.nz/introduction.html 
       #dica: a 2ª versão está sendo traduzida pelas R-Ladies:
         #https://cienciadedatos.github.io/pt-r4ds/
+      
+      #Cheat Sheets Posit: https://posit.co/resources/cheatsheets/
+        
       #Para ter acesso a tutoriais, livros, lives e cursos em português
-        #Curso-R: https://www.curso-r.com/material/ 
+          #Curso-R: https://www.curso-r.com/material/ 
       
     #Comunidades 
       # procure pela hashtag #rstats nas redes sociais 
-      # grupo telegram R-Brasil: https://t.me/rbrasiloficial
-      # r-ladies são paulo: https://rladies-sp.org/
+      # Canal R-Brasil no Telegram: https://t.me/rbrasiloficial
+      # Blog R-Ladies São Paulo: https://rladies-sp.org/
     
     
