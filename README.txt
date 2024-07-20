@@ -3,6 +3,8 @@
 # Professora: Nathália Demetrio Vasconcelos Moura
 # Página do Programa De Verão: https://www.ime.usp.br/verao/index.php
 
+# Página com o material abordado durante o curso: https://bit.ly/intro_linguagemR_handout
+
 
 # 31º Programa De Verão (2024)
 # Ementa: https://www.ime.usp.br/verao/index.php/turmas/descricao/486
