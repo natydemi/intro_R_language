@@ -7,7 +7,7 @@
 # Página com o material abordado durante o curso: 
 https://bit.ly/intro_linguagemR_handout
 
-# 32º Programa De Verão (2025)
+# 54º Programa De Verão (2025)
 # Ementa: https://www.ime.usp.br/verao/index.php/turmas/descricao/505
 # Pessoas monitoras: 
 	• Agatha Priscila Alves Nogueira (https://www.linkedin.com/in/agatha-nogueira/)
@@ -17,7 +17,7 @@ https://bit.ly/intro_linguagemR_handout
 	• Natan Sant Anna Borges (https://www.linkedin.com/in/natan-borges-6990b81a4/) 
 	• Vanessa Escolano Maso (https://www.linkedin.com/in/vanessa-escolano-maso)
 
-# 31º Programa De Verão (2024)
+# 53º Programa De Verão (2024)
 # Ementa: https://www.ime.usp.br/verao/index.php/turmas/descricao/486
 # Pessoas monitoras: 
 	• Agatha Priscila Alves Nogueira (https://www.linkedin.com/in/agatha-nogueira/)
@@ -25,7 +25,7 @@ https://bit.ly/intro_linguagemR_handout
 	• Beatriz Proença Carvalho (https://www.linkedin.com/in/beapcarvalho)
 	• Natan Sant Anna Borges (https://www.linkedin.com/in/natan-borges-6990b81a4/) 
 
-# 30º Programa De Verão (2023)
+# 52º Programa De Verão (2023)
 # Pessoas monitoras: https://www.ime.usp.br/verao/index.php/turmas/descricao/448
 	• Agatha Priscila Alves Nogueira (https://www.linkedin.com/in/agatha-nogueira/)
 	• Bianca Aparecida Muniz Pereira (https://www.linkedin.com/in/bmuniz/)
@@ -33,7 +33,7 @@ https://bit.ly/intro_linguagemR_handout
 	• Rodrigo Gonçalves Pinto (https://www.linkedin.com/in/rodrigouzz/) 
 
 
-# 29º Programa De Verão (2022)
+# 51º Programa De Verão (2022)
 # Ementa: https://www.ime.usp.br/verao/index.php/turmas/descricao/415
 # Pessoas monitoras: 
 	• Ana Carolina Faleiros Camargo Moreno (https://www.linkedin.com/in/anacarolinamoreno/) 
@@ -42,14 +42,14 @@ https://bit.ly/intro_linguagemR_handout
 	• Tereza Cristina de Oliveira Lacerda (https://www.linkedin.com/in/terezalacerda/)
 
 
-# 28º Programa De Verão (2021)
+# 50º Programa De Verão (2021)
 # Ementa: https://www.ime.usp.br/verao/index.php/turmas/descricao/391
 # Pessoas monitoras: 
 	• Alex Muto Kushima (https://www.linkedin.com/in/alex-kushima/)
 	• Geovana Lopes Batista (https://www.linkedin.com/in/geovanalopes/) 
 	
 
-# 27º Programa De Verão (2020)
+# 49º Programa De Verão (2020)
 # Pessoa monitora: 
 	• Geovana Lopes Batista (https://www.linkedin.com/in/geovanalopes/) 
 
