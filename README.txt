@@ -1,10 +1,21 @@
 
 # Introdução à Programação em R
 # Professora: Nathália Demetrio Vasconcelos Moura
+# Contato: https://bit.ly/NathaliaDemetrio
 # Página do Programa De Verão: https://www.ime.usp.br/verao/index.php
 
-# Página com o material abordado durante o curso: https://bit.ly/intro_linguagemR_handout
+# Página com o material abordado durante o curso: 
+https://bit.ly/intro_linguagemR_handout
 
+# 32º Programa De Verão (2025)
+# Ementa: https://www.ime.usp.br/verao/index.php/turmas/descricao/505
+# Pessoas monitoras: 
+	• Agatha Priscila Alves Nogueira (https://www.linkedin.com/in/agatha-nogueira/)
+	• Alan da Silva (https://www.linkedin.com/in/alan-silva-341600196)
+	• Bruna da Silva Barbosa (http://linkedin.com/in/bruna-barbosa-599a1217a )
+	• Carolina Rodrigues da Silva (https://www.linkedin.com/in/carolinardg/)
+	• Natan Sant Anna Borges (https://www.linkedin.com/in/natan-borges-6990b81a4/) 
+	• Vanessa Escolano Maso (https://www.linkedin.com/in/vanessa-escolano-maso)
 
 # 31º Programa De Verão (2024)
 # Ementa: https://www.ime.usp.br/verao/index.php/turmas/descricao/486
