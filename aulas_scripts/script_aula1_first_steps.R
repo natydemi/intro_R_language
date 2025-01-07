@@ -23,7 +23,7 @@
     # https://www.rstudio.com/
 
   # Alternativa ao Desktop: Rstudio Cloud 
-    #https://rstudio.cloud/
+    #https://posit.cloud/
 
 
 # Um tour pelo Rstudio  -----
