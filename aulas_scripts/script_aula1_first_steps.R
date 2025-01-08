@@ -49,7 +49,7 @@
         1 + 1.5
 
         #subtração
-        7 - 2 
+        7 - 2 ; 9 / 3 
         
         #divisão
         9 / 3  
@@ -75,7 +75,8 @@
     #O R permite ampliar as equações mantendo a notação básica de operações algébricas
         #equação ok
         (2 * ( 2 * ( 2 * (4-3))))
-        #equação não ok
+        
+        #equação não ok (dará erro)
         (2 * { 2 * [ 2 * (4-3)]})
 
         
@@ -114,9 +115,11 @@
         
 # Entendendo funções  -----
 
-    #Uma função no R é de um conjunto de instruções organizadas visando executar uma tarefa.
+    #Uma função no R é de um conjunto de instruções organizadas visando 
+    # executar uma tarefa.
 
-    #No R apenas com as funções builtins, podemos fazer desde cálculos aritméticos a gráficos e modelos estatísticos.
+    #No R apenas com as funções builtins, 
+    # podemos fazer desde cálculos aritméticos a gráficos e modelos estatísticos.
     #Segue uma lista de funções no R:
         builtins() 
 
@@ -159,7 +162,7 @@
         objeto <- 1 #atribuição da direita para a esquerda (RECOMENDADO)
         
         #síntaxe: letras minúsculas com a primeira letra maiúscula
-        Objeto =  2 #atribuição da direita para a esquerda
+        Objeto = 2 #atribuição da direita para a esquerda
         
         #síntaxe: letras minúsculas, símbolo e número
         3 -> objeto_1 #atribuição da esquerda para a direita
