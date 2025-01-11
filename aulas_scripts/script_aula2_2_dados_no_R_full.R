@@ -75,7 +75,7 @@
         
   #> VETORES -----
       #A forma mais usual para criar um vetor no R é por meio da função `c()`
-          ex_vetor_character <- c("laranja", "roxo", "verde") 
+          ex_vetor_character <- c("laranja", "roxo", "verde", "roxo", "verde") 
           ex_vetor_character
           
           ex_vetor_numerical <- c(1,2,3,4,5)

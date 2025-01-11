@@ -12,6 +12,7 @@
 
   install.packages("praise")
   library(praise)
+  #require(praise)
   
   praise::praise()
 

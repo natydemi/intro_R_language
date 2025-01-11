@@ -267,7 +267,7 @@
 
       #regressão: um exemplo em que ajustamos a variável qsec 
       # em função da variável carb:
-      fit <- lm(qsec ~ carb, data = mtcars)  
+      fit <- lm(qsec ~ carb + disp, data = mtcars)  
       summary(fit)
       plot(fit)
       
