@@ -207,6 +207,7 @@
             #Como exemplos podemos citar: cores, marcas ou sexo. 
             var_nominal <- c(rep(0,2), rep(1, 3)); var_nominal
             var_factor <- factor(var_nominal); var_factor
+            var_factor <- as.factor(var_nominal); var_factor
             
             #podemos checar os níveis de fator 
             levels(var_factor) 
@@ -214,6 +215,7 @@
             #e altera-los
             levels(var_factor)[1] <- "masculino"; 
             levels(var_factor)[2] <- "feminino"
+            #maneira alternativa: levels(var_factor)  <- c("masculino", "feminino")
             
             #e inclusive adicionar níveis à variável
             levels(var_factor) <- c(levels(var_factor), "prefiro não responder")
@@ -227,6 +229,7 @@
             var_ordinal <- factor(c(rep("baixo",2), rep("alto", 3))); var_ordinal
             
             var_ordinal <- ordered(var_ordinal); var_ordinal
+            var_ordinal <- as.ordered(var_ordinal); var_ordinal
             
             #podemos fazer a alteração redefinindo os níveis
             levels(var_ordinal) <- c("baixo", "alto"); var_ordinal
@@ -322,7 +325,12 @@
           
   #> DATA FRAMES -----
       #é possível criar data frames diretamente
-          data.frame(col1 = 1:5, col2 = as.character(c(1:4, "NA")), col3 = LETTERS[1:5])
+          data.frame(
+            col1 = 1:5, 
+            col2 = as.character(c(1:4, "NA")), 
+            col3 = LETTERS[1:5]
+            )
+      
           #com ou sem o nome das colunas
           data.frame(1:5, as.character(1:5), LETTERS[1:5])
           
@@ -361,6 +369,9 @@
           
           #por vetores lógicos, e combinando as opções anteriores:
           ex_df[ex_df$idade>30, 1]
+          ex_df[ex_df$idade >= 30 & ex_df$classe == "D", ]   
+          ex_df[ex_df$idade >= 30 | ex_df$classe == "B", ]   
+          
           
           #exemplos
           ex_df[rownames(ex_df)==4, ]
