@@ -1,0 +1,339 @@
+---
+title: "Análise Exploratória de Dados"
+subtitle: "Exploratory Data Analysis (EDA)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+```
+
+# Bibliotecas
+
+```{r}
+library(tidyverse)
+```
+
+# Introdução
+
+Neste módulo iremos expandir a etapa de Investigação de dados, considerando bibliotecas do R e alguns princípios relacionados à Análise Exploratória de Dados. Posteriormente aprofundaremos sobre alguns conceitos da estatística que podem e devem ser considerados para que possamos evoluir na etapa de Exploração de dados.
+
+# O que é EDA?
+
+EDA, do inglês Exploratory Data Analysis, e em português Análise Exploratória de Dados, trata o processo de explorar os dados. O que, tipicamente, inclui desde examinar a estrutura de um dataset --- algo iniciado no módulo anterior, até o entendimento mais profundo sobre o comportamento das variáveis --- nosso foco neste módulo. Algumas das possibilidades da EDA incluem:
+
+-   Encontrar padrões nos dados, não necessariamente conhecidos a priori;
+-   Identificar se há alguma inconsistência no conjunto de dados analisado;
+-   Avaliar se as informações disponíveis nos permitem responder as perguntas que temos interesse; e
+-   Desenvolver um esboço de resposta para as hipóteses levantadas, por vezes até mesmo respondê-las.
+
+Assim, seja considerando uma linha de exploração descritiva, por meio de volumetrias, estatísticas e visualizações. Quanto por uma abordagem mais diagnóstica, explorando comportamentos mais complexos, como padrões de associação. É na etapa de exploração que **aprendemos** e damos **sentido** aos dados!
+
+# Base de Dados: Super Bowl Americano
+
+Vamos trabalhar com uma base de comerciais do Super Bowl Americano, considerando os anúncios das 10 marcas que mais veicularam neste evento nos últimos anos, tendo, para cada comercial, uma classificação binária relacionada a critérios pré-especificados. Para mais informações sobre o levantamento e/ou os dados acesse:
+
+-   <https://projects.fivethirtyeight.com/super-bowl-ads/>
+
+-   <https://github.com/rfordatascience/tidytuesday/blob/master/data/2021/2021-03-02/readme.md>
+
+```{r}
+youtube <- readr::read_csv(
+  'https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2021/2021-03-02/youtube.csv')
+
+#caso não tenha acesso a internet, pelo código abaixo, a base foi salva e, na sequencia, pode ser novamente lida a partir do arquivo .csv salvo na pasta dados
+  #readr::write_csv(youtube, "..\\dados\\youtube.csv")
+  #youtube <- readr::read_csv("..\\dados\\youtube.csv")
+
+```
+
+```{r}
+youtube %>% glimpse()
+```
+
+# Bibliotecas para EDA
+
+Vamos iniciar fazendo uso de pacotes que nos ajudam a investigar as principais características dos dados:
+
+## janitor
+
+O pacote `janitor`, algo como `faxineiro` em inglês, disponibiliza algumas funções para limpar e avaliar bases de dados, como por exemplo:
+
+-   `janitor::remove_empty_cols()` para a remoção de colunas vazias;
+-   `janitor::get_dupes()` para a identificação de linhas duplicadas; e
+-   `janitor::round_half_up()` para arredondar resultados numéricos.
+
+Ah, tem uma função MUITO legal, `janitor::clean_names()` que limpa o nome das colunas --- facilmente uma das minha top5 funções preferidas. Para a base do Super Bowl ela não se faz necessária, visto que os nomes da coluna já estão em um ótimo formato. Mas mais para frente passaremos por um exemplo em que esta função será super útil. Apenas para ilustrar o seu uso, segue uma aplicação desta função considerando uma das suas possíveis variações (via alteração do parâmetro `case`), para a modição do estilo das colunas :
+
+```{r}
+#janitor::
+youtube %>% janitor::clean_names(case = "upper_camel") %>%  glimpse()
+```
+
+Este pacote também nos possibilita criar tabelas de frequência rapidamente:
+
+```{r}
+youtube %>% janitor::tabyl(brand) 
+```
+
+E mais, deixar a tabela em um formato bonitinho :)
+
+```{r}
+youtube %>% 
+  janitor::tabyl(brand) %>%  
+  janitor::adorn_totals() %>%  
+  janitor::adorn_pct_formatting()
+```
+
+Essa mesma função funciona também para visualizar duas variáveis de modo combinado --- este tipo de tabela é usualmente conhecido como `Tabela de Contingência`:
+
+```{r}
+youtube %>% 
+  janitor::tabyl(brand, celebrity) %>%  
+  janitor::adorn_totals(c("row", "col")) 
+```
+
+```{r}
+youtube %>% 
+  janitor::tabyl(brand, celebrity) %>% 
+  janitor::adorn_totals(c("row", "col")) %>% 
+  janitor::adorn_percentages("row") %>% 
+  janitor::adorn_pct_formatting()
+
+```
+
+```{r}
+#janitor::
+```
+
+## inspectdf
+
+O pacote `inspectdf` faz exatamente o que o nome sugere, nos auxilia a inspecionar dados por meio de uma série de recursos para apresentação de resumos dos dados, como: contabilização de volumetrias e dados faltantes. Sempre fornecendo tal direcionamento a partir da classe das variáveis -- lembrando que já discutimos sobre o quão importante este conceito é, tanto a partir da óptica estatística, quanto no contexto computacional, considerando a interpretação da linguagem R. Vamos avaliar alguns dos resultados:
+
+```{r}
+#inspectdf::
+youtube %>% inspectdf::inspect_types() 
+```
+
+Apesar de não priorizarmos dados do tipo lista neste curso, vou deixar aqui um exemplo de como poderíamos consultar colunas que possuam esta estrutura:
+
+```{r}
+youtube %>% inspectdf::inspect_types() %>% pull(col_name)
+```
+
+Podemos também ter visibilidade dos níveis mais frequente de cada uma das variáveis categóricas:
+
+```{r}
+youtube %>% inspectdf::inspect_imb()
+```
+
+Ou ainda a versão gráfica da tabela acima:
+
+```{r}
+youtube %>% inspectdf::inspect_imb() %>% inspectdf::show_plot()
+```
+
+Bem como recursos sobre os dados faltantes por coluna:
+
+```{r}
+youtube %>% inspectdf::inspect_na() %>% inspectdf::show_plot()
+```
+
+Ou ainda medidas de resumo relacionadas às variáveis numéricas:
+
+```{r}
+youtube %>% inspectdf::inspect_num() 
+```
+
+## skimr
+
+Em português skim significa algo como "tirar a nata", no caso, tirar a nata dos dados. E é isto que o pacote `skimr` faz, visto nos permitir uma visão macro de toda a base, com uma série de estatísticas organizadas de acordo com a classe das colunas -- inclusive com um gráfico de frequência! Muito legal né? :p
+
+```{r}
+#skimr::
+youtube %>%  skimr::skim()
+```
+
+Este pacote aqui entra facilmente no meu top três bibliotecas preferidas :)
+
+# Como avaliar os resultados?
+
+Estatística! Aqui não tem muito para onde correr, é da estatística que vêm os ferramentais que utilizamos para sumarizar os dados. E como se trata de um tema amplo, e não temos tempo hábil neste curso para aprofundar, vou deixar aqui um link para o caso de você ter interesse em aprofundar o tema:
+
+-   [Aulas Remotas da Disciplina de Estatística Básica ofertada pelo DEST-UFPR](https://www.youtube.com/playlist?list=PLQcLb-PUD9WNZnVBYDKEonioyJw3nEaOM), entre 2020 e 2021
+
+Mas não se preocupe, iremos passar por alguns conceitos fundamentais aqui, dividindo a discussão em três momentos:
+
+## 1. Medidas de Resumo
+
+Aqui temos a essência do que se trata a estatística descritiva: resumir dados. De modo que independente de quantas observações você tenha na sua tabela, seja possível sumarizá-las e ter conclusões a respeito das características dos dados. Mas note que assim como qualquer resumo, trata-se de uma simplificação, implica em algum grau de perda de informação! E no caso da estatística descritiva isto não é diferente. Mas aqui a ideia é nos cercar de medidas, de modo que, em conjunto, tais métricas nos permitam traçar o perfil dos dados de maneira consistente. Dentre as principais medidas de resumo para **variáveis quantitativas** temos:
+
+-   Medidas de Posição, Concentração ou Tendência Central: média (μ), moda (Mo) e mediana (Md)
+-   Medidas de Ordenação (posição relativa): máximo, mínimo, quartis (1º quartíl = Q1 e 3º quartíl = Q3), decis e percentis.
+-   Medidas de Dispersão (absoluta): variância (σ²), desvio padrão (σ), aplitude total (At) e amplitude interquartil (IQR)
+-   Medidas de Dispersão (relativa): coeficiente de variação (CV)
+-   Medidas de Forma: curtose e assimetria
+
+Aqui vale comentar que apesar de não darmos enfoque nas medidas relacionadas às **variáveis qualitativas**, muitas das discussões apresentadas aqui podem ser estendidas para as **variáveis categóricas** – neste caso tendo tabelas de frequência como nossas maiores aliadas.
+
+Voltando as medidas, para discutir melhor cada um dos grupos, vamos considerar as colunas numéricas da base de comerciais do Super Bowl:
+
+```{r}
+youtube %>% select(where(is.numeric)) 
+```
+
+Para facilitar a apresentação vamos filtrar algumas linhas e salvar os resultados em um objeto à parte:
+
+```{r}
+(youtube_dislike_count = 
+  youtube %>% slice(20:30) %>% pull(dislike_count))
+```
+
+Observe a tabela de frequência destes dados, qual o valor mais frequente?
+
+```{r}
+table(youtube_dislike_count)
+```
+
+Um parêntese aqui pra refletir: seria viável fazer uma tabela como esta no caso de estarmos trabalhando com muitos dados? E se estes dados tiverem uma natureza contínua? Teríamos uma coluna para cada valor? No caso de uma feature de salário por exemplo, faria sentido ter a contagem de pessoas que ganham $R\$$ 1.253,21, $R\$$ 1.253,22, e assim por diante? Ou faria mais sentido trabalhar com intervalos, pessoas que ganham entre $R\$$ 1.000,00 e $R\$$ 1.300,00 por exemplo? O segundo certo? Parabéns! Você já está iniciada (o) no conceito de Tabelas de Frequência para dados contínuos ;)
+
+Voltando aos nossos dados, vamos agora ordená-los:
+
+```{r}
+youtube_dislike_count %>% sort()
+```
+
+E fazer o cálculo de algumas estatísticas mais:
+
+```{r}
+youtube_dislike_count %>% skimr::skim() %>%  skimr::yank("numeric")
+```
+
+E agora, ao comparar a lista dos números ordenados com as estatísticas geradas, a média `r round(mean(youtube_dislike_count),2)` parece estar descrevendo bem os dados? Você diria que este valor é uma boa representação da quantidade de 'dislikes' das propagandas? Uma outra questão que chama atençao é: o quão grande é o desvio padrão (no caso `r round(sd(youtube_dislike_count),2)`)? Então eu te pergunto: o que aconteceu para que estes números fossem tão **misleading**, ou seja, tão enganosos em relação ao que ocorre na base de dados? E a resposta é: um outlier aconteceu! Um outlier, ou ponto atípico, se refere a uma observação, ou a um pequeno grupo de observações, que estão demasiadamente distantes do resto da amostra. E isto acaba influenciando algumas medidas de resumo, como é o caso da média, ou do desvio padrão (que tem o seu cálculo baseado na média). Uma forma de perceber a questão do outlier é notando o quão distante o valor mínimo ou máximo, estão da média, ou ainda . Neste cenário, trabalhar com medidas como a mediana (`r median(youtube_dislike_count)`) para a caracterização da tendencia central, e a amplitude do intervalo interquartil (`r IQR(youtube_dislike_count)`) como medida de dispersão, são alternativas interessantes, visto serem métricas robustas à presença de outliers.
+
+Por fim gostaria de comentar um pouco sobre a diferença entre medidas de natureza absoluta vs. natureza relativa. Esta diferenciação é útil, pois, ao trabalhar com métricas de natureza absoluta, vamos lidar com os resultados segundo a grandeza do dado original. O que nem sempre é interessante, particularmente no caso em que queremos comparar variáveis que possuam magnitudes muito diferentes. Por exemplo:
+
+```{r}
+youtube %>% select(dislike_count, view_count) %>% skimr::skim() %>%  skimr::yank("numeric")
+```
+
+Neste caso, o coeficiente de variação é mais informativo. Pois para as mesmas variáveis que vemos uma diferença relevante em termos de dispersão absoluta, ao trabalhar com a dispersão relativa, a conclusão altera. Avalie o exemplo abaixo:
+
+```{r}
+# dislike_count
+sd(youtube$dislike_count, na.rm = TRUE)
+(sd(youtube$dislike_count, na.rm = TRUE) / mean(youtube$dislike_count, na.rm = TRUE))
+
+# view_count
+sd(youtube$view_count, na.rm = TRUE)
+(sd(youtube$view_count, na.rm = TRUE) / mean(youtube$view_count, na.rm = TRUE))
+```
+
+Um último grupo de medidas de resumo seriam as medidas de forma, caso do coeficiente de curtose e o coeficiente de assimetria. Porém, alternativamente, vamos passar para a discussão sobre distribuição de frequência empírica, que irá nos dar uma visão mais ampla sobre como caracterizar o perfil dos dados.
+
+
+## 2. Distribuição Empírica
+
+Cada uma das estatísticas que vimos até aqui resume os dados em um único número. Isto tem uma vantagem prática indiscutível, mas conforme pudemos observar, trata-se de visões parciais. Neste sentido, é útil explorar como as variáveis se distribuem de maneira mais macro, mais geral. Para isto, temos a Distribuição Empírica dos dados, ou ainda Distribuição Amostral, que nos possibilita ter noção da frequência de ocorrência das observações, bem como suas chances de ocorrência. Para tal, é interessante considerar as seguintes características ao ler uma Distribuição Empírica:
+
+-   Concentração: ponto(s) ou intervalo(s) de concentração das observações
+-   Dispersão: o quão próximo ou distante as observações estão entre si
+-   Outliers: observações que se diferenciam de maneira significativa das demais
+-   Forma: aspectos de forma, como simetria ou assimetria (à esquerda ou direita)
+
+Antes de continuarmos, gostaria de comentar que: `distribuição` trata-se de um tema extenso, a partir do qual tópicos como: distribuições de probabilidade, definição do intervalo de tabelas de frequência, densidade Kernel, probabilidade a posteriori, e tantos outros poderiam ser abordados. Mas aqui vamos abstrair dos (importantes) detalhes técnicos, para focar na interpretação das distribuições empíricas.
+
+E para ilustrar esta discussão, considere a base de dados `lincoln_weather` do pacote `ggridges`, com informações meteorológicas de Lincoln, (EUA - Nebraska), no ano de 2016:
+
+```{r}
+ggridges::lincoln_weather %>% glimpse()
+```
+
+Uma observação rápida: perceba o ganho de produtividade que a função `janitor::clean_names()` nos possibilita aqui!
+
+```{r}
+ggridges::lincoln_weather %>% 
+  janitor::clean_names() %>% 
+  mutate(media_temperatura_c = (mean_temperature_f - 32)/1,8) %>% 
+  ggplot(aes(x = media_temperatura_c, y = month, fill = stat(x))) +
+  ggridges::geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_discrete(expand = c(0, 0)) +
+  scale_fill_viridis_c(name = "Temp. [C]", option = "C") +
+  coord_cartesian(clip = "off") +
+  labs(title = 'Temperaturas em Lincoln (USA-NE) no ano de 2016') +
+  ggridges::theme_ridges(font_size = 13, grid = TRUE) +
+  theme(axis.title.y = element_blank())
+```
+
+Agora compare a distribuição dos dados com as suas respectivas medidas de resumo, alguma diferença chama mais atenção? Comparando a densidade e as sumarizações de Julho, um mês que possuí uma distribuição simétrica, e do mês de Dezembro, ou Maio, que possuem distribuições assimétricas, como as métricas de resumo nos ajudam nesta descrição?
+
+```{r}
+ggridges::lincoln_weather %>% 
+  janitor::clean_names() %>% 
+  mutate(media_temperatura_c = (mean_temperature_f - 32)/1,8) %>% 
+  select(month, media_temperatura_c) %>% 
+  group_by(month) %>% 
+  skimr::skim() %>%  
+  skimr::yank("numeric")
+```
+
+Por fim, para reforçar a importância das distribuições, vou citar Laplace:
+
+> "The theory of probabilities is at bottom nothing but common sense reduced to calculus; it enables us to appreciate with exactness that which accurate minds feel with a sort of instinct for which ofttimes they are unable to account" (Laplace, 1812)
+
+Algo como: "No fundo, a teoria das probabilidades é apenas o senso comum expresso em números; nos permite apreciar com exatidão o que as mentes acuradas sentem com uma espécie de instinto pelo qual muitas vezes são incapazes de explicar". Pois bem, agora você é capaz :)
+
+
+## 3. Medidas de Associação
+
+Por fim vamos comentar de medidas que nos permitem reduzir a um único número a relação entre duas variáveis:
+
+-   Medidas de Dependência ou Associação (absoluta): covariância (cov)
+-   Medidas de Dependência ou Associação (relativa): correlação (ρ ou r)
+
+No caso da covariância temos a questão de ser uma métrica absoluta, tornando a interpretação mais desafiadora. Enquanto a correlação pode ser entendida como uma versão normalizada da covariância, permitindo uma leitura muito mais direta, visto ter como propriedade a variação entre -1 e 1. No caso em que o valor é próximo à um, temos o indício de uma **tendência positiva** entre as variáveis, indicando que ao desenhar um gráfico de dispersão (também conhecido como `scatter plot`) entre as duas variáveis, teremos os pontos próximos a uma linha reta crescente (coeficiente angular positivo):
+
+```{r, warning=FALSE}
+ggridges::lincoln_weather %>% 
+  janitor::clean_names() %>%
+  select(mean_temperature_f, mean_dew_point_f) %>% 
+  plot()
+```
+Já se o valor se aproximar de menos um, temos indícios de uma **associação negativa**. Por fim uma correlação próxima de zero significa que as observações não apresentam associações lineares, isto é, o gráfico de dispersão apresentaria um comportamento de pontos aleatórios ou ainda uma relação não-linear. Aqui mais alguns casos:
+
+
+```{r, warning=FALSE}
+ggridges::lincoln_weather %>% 
+  janitor::clean_names() %>%
+  select(contains("mean_")) %>% 
+  select(where(is.numeric)) %>% 
+  GGally::ggpairs(progress = FALSE)
+```
+
+Um ponto importante, mas que não aprofundaremos aqui, é a relação entre o cálculo de medidas de dependência e os diferentes tipos de variáveis. Em linhas gerais a depender do tipo da variável, temos diferentes cálculos de coeficientes de correlação, por exemplo: Pearson, Spearman, Kendall, entre outros.
+
+> Por fim é sempre importante lembrar que: correlação não significa causalidade! 
+
+Ou seja, não é porque existe uma correlação forte entre dois atributos, que um irá necessariamente causar a mudança de movimento no outro. Dois termos interessantes para pesquisar e entender melhor sobre este tipo de fenômeno: `variável de confusão` e `correlação espúria` – para este último, indico o site [Spurious Correlations](http://tylervigen.com/spurious-correlations).
+
+
+# Considerações Finais sobre EDA
+
+EDA é sobre iteração! Quanto mais você investiga os dados, mais informações terá para que os próximos passos da exploração sejam mais efetivos e **insightful** (esclarecedores). Aqui, ter uma abordagem curiosa e cientifica é extremamente importante, basicamente: pensar em hipóteses, investigá-las, criar conjecturas, e seguir iterando. Esta é, talvez, uma das melhores maneira de lidar com EDA, tanto por ser baseado no pensamento científico, quanto por nos ajudar a lidar com o dolorido fato de que: não sabemos o que vamos encontrar, e que tá tudo bem! Pois faz parte do processo! O John Tukey, um importante estatístico do século passado, visto por muitos como um dos pais da EDA, tem uma frase famosa que diz:
+
+> "EDA is an attitude, a state of flexibility, a willingness to look for those things that we believe are not there, as well as those we believe to be there" (Tukey, 1986).
+
+Em português seria algo como: "EDA é uma atitude, um estado de flexibilidade, uma vontade de procurar por coisas que acreditamos que não existem, assim como por coisas que acreditamos que estão lá", poético né?
+
+E para "procurar por coisas", quanto mais ferramentas você possuir, melhor. Aprender a arte de manusear, transformar e visualizar dados, por exemplo. E são estes os temas que veremos na sequência.
+
+Até lá ;)
+
+# MÃO NA MASSA!
+
+-   No R você irá encontrar dezenas de pacotes com o objetivo de facilitar o seu estudo, particularmente para a exploração descritiva de dados. Bibliotecas como: `visdat`, `naniar`, `DataExplorer`, entre tantas outras. Que tal explorar um pouco estes pacotes?
+
+-   Discutimos sobre distribuições empíricas utilizando o exemplo dado na [Seção 4.2.1 do livro Feature Engineering and Selection: A Practical Approach for Predictive Models](http://www.feat.engineering/visualizations-for-numeric-data-exploring-train-ridership-data.html). Neste mesmo capítulo são dados outros exemplos excelentes sobre como podemos ter *insights*, isto é, ter maior clareza a partir da distribuição dos dados. Recomendo que repasse por algumas destas discussões :)
+
+-   E em relação às distribuições de probabilidade, você já ouviu falar da Distribuição Normal (Gaussiana)? Ou talvez da Distribuição Poisson? Exponencial? Já refletiu sobre o porquê estudamos tantas distribuições? Para te ajudar a elaborar a resposta, avalie este [Aplicativo Shiny para explorar distribuições de probabilidade](https://antoinesoetewey.shinyapps.io/statistics-101/), e responda: considerando as características que foram citadas sobre a caracterização de distribuições, alguma das distribuições apresentadas teriam conclusões parecidas em termos de: concentração, dispersão, outliers e forma?
