@@ -58,7 +58,7 @@
         #qual state.division possui a maior renda (`Income`)? E a menor?
           state[state$Income == 6315,"state.division"]
           state[state$Income == max(state$Income), ]
-          state[state$Income == max(state$Income), c("state.division","state.name")]
+          #state[state$Income == max(state$Income), c("state.division","state.name")]
           state[state$Income == max(state$Income),"state.division"]
           as.character(state[state$Income == max(state$Income),"state.division"])
 
@@ -78,22 +78,25 @@
 # ::::: hands-on: exportação de base de dados -----
           
         #exporte os dados em um arquivo .csv
-          write.csv(state, "base_exportada.csv")
-          write.csv(state, "C:\\Users\\natyd\\Desktop\\base_exportada.csv")
-        
+          write.csv(state, file = "base_exportada.csv")
+          write.csv(state, "D:\\OneDrive\\Área de Trabalho\\base_exportada.csv")
+          
+          
         #em qual diretório o arquivo se encontra?
           getwd()
         
         #qual a função que altera o diretório
         #C:\\Users\\natyd\\Desktop
-        setwd("C:/Users/natyd/Desktop")
+        setwd("D:\\OneDrive\\Área de Trabalho")
         setwd()
         
-        
+
         #delete o objeto state e releia o arquivo
         rm(state)
         state
         state <- read.csv("base_exportada.csv")
+        #read.csv("D:/OneDrive/Área de Trabalho/temp_files/base_exportada.csv")
+        read.csv("./temp_files/base_exportada.csv")
         state
         
 # Importação/exportação -----
@@ -284,7 +287,8 @@
   #Considerando fluxos condicionais e de repetição, temos:
 
     #if ----- 
-    #se a declaração for verdade, então os comandos dentro das chaves `{}` serão executados: 
+    #se a declaração for verdade, então os comandos dentro das chaves `{}` 
+    # serão executados: 
             x <- 0
             
             if(x == 0){
@@ -296,36 +300,38 @@
             
             if(x != 0){
               print(x+1)
-            } else{print("não faça nada")}
+            } else{
+              print("não faça nada")
+              }
             
     
     #if-else -----
     # similar ao comando `if()` porém seguido de um segundo bloco, que será avaliado  
     # se, e somente se, o resultado do primeiro bloco for `FALSE`: 
             x <- 15
-            
-            if (x<=10) {
-                print("x é menor ou igual a 10")
-            } else if (x>10 & x<20) {
-                print("x está entre 10 e 20, intervalo aberto")
-            } else{
-                print("x é maior ou igual a 20")
-            }
+          
+          if (x <= 10) {
+            print("x é menor ou igual a 10")
+          } else if (x > 10 & x < 20) {
+            print("x está entre 10 e 20, intervalo aberto")
+          } else{
+            print("x é maior ou igual a 20")
+          }
     
     #ifelse -----
-   #versão mais simples, em que especificamos ambas as ações como parametro de uma função
+    #versão mais simples, em que especificamos ambas as ações como 
+    #parametro de uma função
             
             x <- "olar"
             
             ifelse(x == "olar", "flor.do.campo", "xovens")
-
             
     #for -----
     #uma sequência de instruções que são repetidas com cada um dos elementos especificados:
             x <- 1:3
             
             for(i in x){
-                print(i)
+                print(i + i)
             }
 
             #Podemos não utilizar as chaves caso as instruções sejam dadas 
@@ -350,7 +356,7 @@
     #repetição de um bloco de comandos até que certa condição não seja mais satisfeita:
             i <- 1
             while (i<=6){
-                print(i*i)
+                print(i)
                 i = i+1 #i++
             }
  
@@ -391,7 +397,7 @@
         
         celcius_fahrenheit <- function(temp_c){
           (temp_c * 9/5) + 32
-          warning("testit")
+          warning("test-it")
         }
         
         celcius_fahrenheit(temp_c = 25)
@@ -411,6 +417,10 @@
         ex_function <- function(x, y=1) x+y
         ex_function(1,0)
         ex_function(1)    
+        
+        #Podemos passar os argumentos para a função em ordens diferentes do que
+        # eles aparecem na definição, desde que explicite os argumentos
+        ex_function(y=0, x=1)
         
       #Ao definir funções, podemos salva-las em outros scripts e chama-las por meio da função `source()`, 
       #sendo necessário especificar apenas o nome do script (e o diretório caso este não se encontre em outro diretório).
@@ -455,5 +465,7 @@
 
   #	material da curso R: 
     # https://livro.curso-r.com/3-12-controle-de-fluxo.html 
-        
+      
+  #treine com a posit
+    # https://posit.cloud/learn/recipes
             

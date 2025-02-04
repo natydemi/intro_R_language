@@ -43,7 +43,7 @@
         select(where(is.character)) %>% 
         map(unique)
       
-      list.files(path = "aulas/", pattern='*.csv') %>% 
+      list.files(path = "aulas_scripts/", pattern='*.csv') %>% 
         map(read_csv) %>% 
         walk(glimpse)
     

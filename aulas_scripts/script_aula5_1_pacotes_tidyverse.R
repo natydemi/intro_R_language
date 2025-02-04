@@ -25,7 +25,7 @@
                    names_to = "year",
                    values_to = "cases") %>%
       ggplot(aes(x = year, y = cases)) +
-      geom_boxplot()
+        geom_boxplot()
     
     # OBS: a função pivot_longer chamava gather em versões anteriores
     
@@ -35,6 +35,7 @@
     
     who %>% 
       pivot_longer(cols = contains("new")) %>% 
+      filter(!is.na(value)) |> 
       glimpse()   
     
     #podemos agora ver qual a linha com maiores valores
@@ -175,6 +176,23 @@
               dados_gss_cat$rincome <- dados_gss_cat$rincome %>% fct_shift()
               dados_gss_cat$rincome %>% fct_count()
               
+              
+              starwars %>%
+                filter(!is.na(species)) %>%
+                mutate(species_cat = fct_lump(species, n = 3)) %>%
+                mutate(species_cat = fct_infreq(species_cat)) %>%
+                ggplot(aes(x = fct_rev(species_cat))) + 
+                  geom_bar() + 
+                  coord_flip()
+              
+              teste <- starwars %>%
+                filter(!is.na(species)) %>%
+                mutate(species_cat = fct_lump(species, n = 3)) %>%
+                mutate(species_cat = fct_infreq(species_cat)) 
+              
+              #exemplo a partir do esquisser
+              
+              
       #exercício: replique os exemplos da cheatsheet
         #https://rstudio.github.io/cheatsheets/html/factors.html     
               
@@ -183,7 +201,7 @@
       #https://stringr.tidyverse.org/
               
       #substituindo simbolos
-          dados_gss_cat %>% 
+            forcats::gss_cat %>% 
               mutate(rincome = str_replace_all(rincome,"to","-")) %>% 
               select(rincome) %>% 
               as_vector() %>% 
@@ -209,15 +227,14 @@
         dplyr::starwars %>%
           filter(!is.na(height)) %>%
           filter(!is.na(mass)) %>%
-          filter(!is.na(hair_color)) %>%
-          ggplot() +
-          aes(x = mass, y = height, colour = eye_color) +
-          geom_point(shape = "square", 
-                     size = 1.5) +
-          scale_color_hue(direction = 1) +
-          labs(caption = "gráfico aleatório feio") +
-          ggthemes::theme_excel() +
-          facet_wrap(vars(gender))
+          filter(!is.na(hair_color)) %>% 
+          ggplot(aes(x = mass, y = height, colour = eye_color)) +
+            geom_point(shape = "square", size = 1.5) +
+            geom_rug(size = 1.5) +
+            scale_color_hue(direction = 1, name = 'teste') +
+            labs(title = "gráfico aleatório feio") +
+            #ggthemes::theme_excel() +
+            facet_wrap(vars(gender))
         
     #exercício: faça os exercícios da seção "Visualize Data"
       # https://posit.cloud/learn/recipes 

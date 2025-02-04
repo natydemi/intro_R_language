@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 ```
 
+
 # Introdução
 
 Neste material, discutimos sobre a importância da visualização de dados, tanto para o processo de exploração dos dados, quanto para comunicação das descobertas, denominada aqui, etapa explanatória. No R nosso principal recurso para as visualizações é o pacote `ggplot2`, que implementa uma estrutura lógica denominada Gramática dos Gráficos.

@@ -78,7 +78,7 @@
 
 # Muito mais legível, né?
 
-#Para trabalhar com o pipe, precisamos carregar um das bibliotecas que  
+#Para trabalhar com o pipe, precisamos carregar uma das bibliotecas que  
 # possuam esta função, no caso, o pipe foi originalmente introduzido no R 
 # por meio da biblioteca `magrittr`. Mas, atualmente, diversas bibliotecas 
 # garantem que o pipe seja utilizado.
@@ -115,8 +115,7 @@ x %>%
 # nativa do R para versões mais recentes. Tendo como diferença mais marcante 
 # a sua alteração de layout: |> ao invés de %>%
 # Mas para utilizar tal recurso built-in no RStudio, é necessário indicar o 
-# interesse nas configurações da IDE (ao menos na versão que estou utilizando
-# hoje, que é a RStudio 2022.07)
+# interesse nas configurações da IDE (ao menos até a versão 2022.07 do RStudio)
 # Para tal acesse: `Tools > Global Options > Code` e dê o check na opção
 # `use native pipe operator |>`, note que para tal é necessário que você 
 # esteja utilizando o R na versão 4.1 ou maior.
