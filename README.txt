@@ -7,6 +7,15 @@
 # Página com o material abordado durante o curso: 
 https://bit.ly/intro_linguagemR_handout
 
+# 55º Programa De Verão (2026)
+# Ementa: https://www.ime.usp.br/verao/index.php/turmas/descricao/533
+# Pessoas monitoras: 
+	• Agatha Priscila Alves Nogueira (https://www.linkedin.com/in/agatha-nogueira/)
+	• Alan da Silva (https://www.linkedin.com/in/alan-silva-341600196)
+	• Carolina Rodrigues da Silva (https://www.linkedin.com/in/carolinardg/)
+	• Gabriela Aimee Scarpini Silva (https://www.linkedin.com/in/gabriela-scarpini/)
+
+
 # 54º Programa De Verão (2025)
 # Ementa: https://www.ime.usp.br/verao/index.php/turmas/descricao/505
 # Pessoas monitoras: 
