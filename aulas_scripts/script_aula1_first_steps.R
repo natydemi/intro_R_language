@@ -258,6 +258,13 @@
       #boxplot
       boxplot(mtcars)
       
+        #parenteses
+        library(dplyr)
+        mtcars_clean <- mtcars |> dplyr::select(-disp, -hp)
+        
+        boxplot(mtcars_clean)
+        
+      
       #como esta base faz parte do repertório básico do R, 
       # não a visualizamos na aba `Environment`, salvo se fizermos:
       data("mtcars")
