@@ -53,6 +53,7 @@
         
         #divisão
         9 / 3  
+      
         
         #multiplicação
         100 * 10 
@@ -283,6 +284,8 @@
       
       # agora a variável qsec em função de todas as demais:
       fit <- lm(qsec ~ ., data = mtcars)  
+      fit <- lm(qsec ~ hp+drat+wt, data = mtcars)  
+      fit <- lm(qsec ~ hp+drat^2+log(wt), data = mtcars)  
       summary(fit)
       plot(fit)
         

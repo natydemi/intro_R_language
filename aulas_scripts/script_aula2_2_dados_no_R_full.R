@@ -147,9 +147,11 @@
               
               #operações entre vetores de tamanhos diferentes
               1:3 + 1
+              1 + 1:3
               
               #operações entre vetores de tamanhos diferentes, múltiplos
-              1:3 != 1:6
+              1:3 == 1:6
+              1:3 == c(1:3, 1:3)
               
               #no caso de objetos não múltiplos o R retorna o resultado + um aviso
               1:3 == c(1:3,4)
