@@ -98,7 +98,7 @@ library(tidyverse)
   # Adicionalmente, questões como performance e consistência também apresentam 
   # melhorias em comparação aos data.frames.
 
-
+# note quetemos duas opções de pipe: |> e %>%
 
 # Selecionando colunas (por nome) -----
   #[ , ...], select()	e [ , .(...) , ]
@@ -173,10 +173,16 @@ library(tidyverse)
 # Criando sumarizações -----
   #apply(df[ , y], 2, ...), summarise()	e [ , ...(y), ]
   
+  #existem várias maneiras de fazer isto no R
   apply(dados_rbase[ , c("col1","col3")], 2, max)
   
-  dados_tidyverse %>% summarise(max_col1 = max(col1), max_col3 = max(col3))
-  
+  dados_tidyverse %>% summarise( max(col1), max(col3))
+    #dados_tidyverse %>% summarise( max(col1), max(col3))
+    #dados_tidyverse %>% summarise(across(c(col1, col3), max))
+    #dados_tidyverse %>% summarise(across(c(col1, col3), max, .names = "max_{.col}"))
+    #dados_tidyverse %>% summarise(across(where(is.numeric), max))
+    
+
   dados_data_table[ , .(max_col1 = max(col1), 
                         max_col3 = max(col3))]
 
@@ -186,7 +192,7 @@ library(tidyverse)
   
   aggregate(dados_rbase[,'col1'], by = list(dados_rbase$col2), sum) 
   
-  dados_tidyverse %>% group_by(col2) %>% summarise(col5 = sum(col1))
+  dados_tidyverse %>% group_by(col2) %>% summarise(col_sum = sum(col1))
   
   dados_data_table[ , .(col5 = sum(col1)), by = col2 ] 
 

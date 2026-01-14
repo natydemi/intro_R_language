@@ -334,15 +334,21 @@
             )
       
           #com ou sem o nome das colunas
-          data.frame(1:5, as.character(1:5), LETTERS[1:5])
+          data.frame(
+            1:5, 
+            as.character(1:5), 
+            LETTERS[1:5]
+            )
           
           
       #ou a partir de objetos existentes
           idade <- c(31,30,25,40)
           classe <- factor(c("D", "C", "C", "B"))
+              # classe <- factor(c("D", "C", "C", "B"), levels = c("A", "B", "C", "D", "E"))
               # no caso de trabalharmos como variável ordinal:
               # classe <- factor(c("D", "C", "C", "B"), ordered = T)
               # classe <- factor(c("D", "C", "C", "B"), levels = c("A", "B", "C", "D", "E"), ordered = T)
+              # classe <- factor(c("D", "C", "C", "B"), levels = rev(c("A", "B", "C", "D", "E")), ordered = T)
           flag <- c(TRUE,TRUE,NA,FALSE)
           ex_df <- data.frame(idade,classe,flag); ex_df
       
@@ -372,13 +378,16 @@
           #por vetores lógicos, e combinando as opções anteriores:
           ex_df[ex_df$idade>30, 1]
           ex_df[ex_df$idade >= 30 & ex_df$classe == "D", ]   
-          ex_df[ex_df$idade >= 30 | ex_df$classe == "B", ]   
+          ex_df[ex_df$idade >= 30 | ex_df$classe == "D", ]   
           
           
           #exemplos
           ex_df[rownames(ex_df)==4, ]
           ex_df[ex_df$flag == T, ]
           ex_df[is.na(ex_df$flag) , ]
+          
+          ex_df[ (ex_df$flag == T) & !(is.na(ex_df$flag)), ]
+          
           ex_df[ , (colnames(ex_df) %in% c("idade", "flag"))]
           ex_df[ , !(names(ex_df) %in% c("idade", "flag"))]
           
@@ -386,6 +395,7 @@
       #CLASSE
           class(ex_df)
           class(ex_df$idade)
+          class(ex_df[c("idade")])
           
       #OPERAÇÕES
           ex_df$idade + 1
