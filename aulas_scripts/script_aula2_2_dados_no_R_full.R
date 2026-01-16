@@ -243,7 +243,7 @@
     # >>> DATAS -----  
         #O R possui uma classe própria para objetos que armazenam datas. 
         # para transformar um elemento nesta classe podemos utilizar `as.Date()`
-            ex_date <- as.Date(c("1988-03-25", "2019-03-25"))
+            ex_date <- as.Date(c("1988-03-25", "2026-03-25"))
             typeof(ex_date)
             class(ex_date)
             
@@ -263,6 +263,8 @@
         #Desta forma podemos fazer cálculos cabíveis à dados desta natureza, como
             #quantidade de dias entre duas datas:
             ex_date[1] - ex_date[2]
+            
+            format(ex_date, "%Y")
 
                             
   #> MATRIZES -----
@@ -457,3 +459,5 @@
                 
   # cheatsheet: Data Structures
   # https://intellipaat.com/mediaFiles/2019/02/Data-structure-in-R-Cheat-Sheet-.png
+              
+            

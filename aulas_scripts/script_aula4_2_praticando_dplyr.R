@@ -88,6 +88,8 @@ titanic %>%
 
 #primeiras 5 linhas
 titanic %>% arrange(-Age) %>% slice(1:5)
+#alternativa:
+titanic %>% slice_max(Age, n=5)
 #top_n e o slice_max
 
 # mutate  ------ 
@@ -103,8 +105,17 @@ titanic %>%
   titanic |> 
     mutate(Survived_2 = ifelse(Survived == 1, "sobreviveu", "morreu")) |> 
     #select(contains("Survived"))
+    #relocate(Survived_2, .before = Age) |> 
     relocate(Survived_2, .before = everything()) |> 
     glimpse()
+  
+  #ex do pacote janitor
+  titanic |> 
+    select(Survived) |> 
+    mutate(Survived_2 = ifelse(Survived == 1, "sobreviveu", "morreu")) |>
+    janitor::tabyl(Survived) |> 
+    janitor::adorn_totals(where="row") |> 
+    janitor::adorn_pct_formatting()
 
 # summarise ------  
 titanic |>  
@@ -119,7 +130,17 @@ titanic |>
       sd_age = sd(Age, na.rm = T),
       IQR_age = IQR(Age, na.rm = T) 
       )
+  
+  #ex.2
+  titanic %>% select(Age) |> summarise(
+    Age_mean = mean(Age, na.rm=T),
+    Age_median = median(Age, na.rm=T),
+    Age_var = var(Age, na.rm = T),
+    Age_sd = sd(Age, na.rm = T),
+    Age_CV = Age_sd / Age_mean 
+  )
     
+  titanic %>% select(Age) |> ggplot(aes(Age)) +  geom_histogram()
     
 
 #este aqui dá errado! 
@@ -204,17 +225,22 @@ titanic_prep <- titanic |>
   #   .default = 99
   # ) ) |> 
   ## aprendendo a montar um case_when
-  mutate(Fare_histograma = case_when(
-    (Fare <5) ~ "faixa1_menorIgual10",
-    ((Fare > 10) & (Fare <= 40)) ~ "faixa2_entre10e40",
-    (Fare > 40) ~ "faixa3_maior40",
-    is.na(Fare) ~"missing",
-    TRUE ~ "falta_classificar"
+  mutate(Fare_histograma = 
+           case_when(
+             (Fare < 5) ~ "faixa1_menorIgual10",
+             ((Fare > 10) & (Fare <= 40)) ~ "faixa2_entre10e40",
+             (Fare > 40) ~ "faixa3_maior40",
+             is.na(Fare) ~"missing",
+             TRUE ~ "falta_classificar"
     )) |>         
   glimpse()  
       
 titanic_prep |> 
   count(Fare_histograma)
+
+
+#pacote bonus:
+skimr::skim(titanic)
       
        
     
