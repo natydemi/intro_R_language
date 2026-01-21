@@ -11,6 +11,8 @@
     #Redimensionamento de dados - exemplos da cheatsheet
     #case1 - table4a
     
+    pivot_longer(table4a, cols = 2:3)
+                 
     table4a %>% 
       pivot_longer(cols = 2:3,
                    names_to = "year",
@@ -53,8 +55,15 @@
     
     dados_world_bank_pop <- world_bank_pop %>%
       pivot_longer(cols = -(1:2), names_to = "year") %>%
-      mutate(value = round(value,0)) %>%
+      mutate(value = round(value,0)) %>% 
       pivot_wider(names_from = year) 
+    
+    dados_world_bank_pop <- world_bank_pop %>%
+      pivot_longer(cols = -(1:2), names_to = "year") %>%
+      mutate(value = round(value,0)) %>% 
+      pivot_wider(names_from = indicator) 
+    
+    dados_world_bank_pop
     
     #exercício: replique os exemplos da cheatsheet
     #https://rstudio.github.io/cheatsheets/html/tidyr.html
@@ -74,6 +83,9 @@
     dados_world_bank_pop
     
     #import
+    dados_world_bank_pop <- read_csv("dados_world_bank_pop.csv")
+    dados_world_bank_pop
+    
     dados_world_bank_pop <- read_csv("dados_world_bank_pop.csv", 
                                      col_names = T,
                                      cols(
@@ -84,6 +96,7 @@
                                        SP.URB.GROW = col_double(),
                                        SP.URB.TOTL = col_double()
                                      ))
+    dados_world_bank_pop
     #ou "dados_world_bank_pop.csv" %>% read_csv(col_names = TRUE)
     
     #hands-on: consulte o help das funções: col_skip e col_double, o que elas fazem? 
@@ -157,6 +170,7 @@
               dados_gss_cat %>% 
                   group_by(rincome) %>% 
                   summarise(n())
+              #dados_gss_cat %>% janitor::tabyl(rincome)
               
               #ou        
               dados_gss_cat$rincome %>% fct_count()
@@ -176,10 +190,22 @@
               dados_gss_cat$rincome <- dados_gss_cat$rincome %>% fct_shift()
               dados_gss_cat$rincome %>% fct_count()
               
+              dados_gss_cat |> 
+                #mutate(rincome = fct_shift(rincome)) |> 
+                mutate(rincome = fct_lump_min(rincome, min = 1000)) |> 
+                ggplot(aes(rincome)) + 
+                geom_bar() +
+                coord_flip()
+              
               
               starwars %>%
                 filter(!is.na(species)) %>%
                 mutate(species_cat = fct_lump(species, n = 3)) %>%
+                count(species_cat)
+              
+              starwars %>%
+                filter(!is.na(species)) %>%
+                mutate(species_cat = fct_lump(species, n = 3))  |> 
                 mutate(species_cat = fct_infreq(species_cat)) %>%
                 ggplot(aes(x = fct_rev(species_cat))) + 
                   geom_bar() + 
@@ -231,7 +257,7 @@
           ggplot(aes(x = mass, y = height, colour = eye_color)) +
             geom_point(shape = "square", size = 1.5) +
             geom_rug(size = 1.5) +
-            scale_color_hue(direction = 1, name = 'teste') +
+            scale_color_hue(direction = -1, name = 'teste') +
             labs(title = "gráfico aleatório feio") +
             #ggthemes::theme_excel() +
             facet_wrap(vars(gender))
