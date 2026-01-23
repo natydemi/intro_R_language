@@ -1,0 +1,90 @@
+---
+title: "Continue a sua jornada de aprendizado na Ciência de Dados com o R"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introdução
+
+Aqui iremos listar algumas das possibilidades de próximos passos, e gostaria de frisar a palavra POSSIBILIDADES. Pois a Ciência de Dados é muito ampla e multidisciplinar, então não se abale com a quantidade de conteúdos, aqui recomendo você se inspirar em filósofos como Sócrates "só sei que nada sei", ou ainda Paulo Freire "Ninguém ignora tudo. Ninguém sabe tudo. Todos nós sabemos alguma coisa. Todos nós ignoramos alguma coisa. Por isso aprendemos sempre".
+
+Dito isto, vamos lá!
+
+
+
+# Dicas para evoluir em Ciência de Dados
+
+-   Siga pessoas legais
+    - twitter [#rstats](https://twitter.com/search?q=%23RStats&src=typeahead_click&f=top)
+    - linkedin [{#olhaEu}](https://www.linkedin.com/in/nathaliademetrio/)]
+    
+-   Participe de grupos e eventos, existe muita coisa gratuita bacana por aí
+    - [satRday](https://satrdays.org/) 
+    - [tidytuesday](https://www.tidytuesday.com/) 
+  
+-   Crie o hábito de saber o que está rolando de novo (e vá por mim, sempre tem coisas novas interessantes!)
+    -   congressos: [rstudio::conf()](https://rstudio.com/conference/) é uma ótima pedida
+    -   newsletter: [Data Elixir](https://dataelixir.com/) é a minha preferida
+   
+Por fim, procure construir um mapa mental dos tópicos que você for tendo conhecimento. Você não precisa dominar tudo, mas ter uma noção do que se trata, e ter noção sobre em que contexto aquilo pode ser útil, é mais que suficiente (e recomendado!).
+
+
+Ah, e não deixe de compartilhar a sua jornada de evolução na linguagem! A comunidade R é muito receptiva, lembra que teve alguém que passou por todo o processo de submissão do CRAN, só para garantir que tivéssemos essa biblioteca no repositório oficial:
+
+```{r}
+set.seed(100) 
+praise::praise()
+
+#a função set.seed() serve para que a função praise() retorne sempre o mesmo output
+#que tal testar o que acontece se você rodar o praise sem o set.seed? 
+# DICA: rode o praise mais de uma vez! :)
+```
+
+
+
+# Dicas de pacotes R
+
+### Ponto de Partida
+
+-   tidyverse
+
+
+### Próximos passos
+
+-   tidymodels
+
+### Passos avançados
+
+-   Interoperabilidade R e Python: [reticulate](https://rstudio.github.io/reticulate/)
+-   Criar mapas: [leaflet](https://rstudio.github.io/leaflet/)
+-   Gerar memes: [memer](https://github.com/sctyner/memer)
+-   Trabalhar com deep learning e dados não estruturados: [torch](https://torch.mlverse.org/packages/)
+-   Automatizar processos: [usethis](https://github.com/r-lib/usethis)
+-   Modelagem bayesiana: [tidybayes](http://mjskay.github.io/tidybayes/)
+-   Analisar texto: [tidytext](https://github.com/juliasilge/tidytext)
+-   Desenvolver pacotes: [devtools](https://github.com/r-lib/devtools)
+-   Gerenciar dependências do R: [renv](https://rstudio.github.io/renv/articles/renv.html)
+-   Criar pipelines: [target](https://cran.r-project.org/web/packages/targets/vignettes/overview.html)
+-   Testar códigos: [testthat](https://testthat.r-lib.org/)
+-   Estruturar deploy de modelos: [vetiver](https://github.com/rstudio/vetiver-r)
+-   Gerenciar e analisar dados com o Hadoop: [RHadoop](https://github.com/RevolutionAnalytics/RHadoop/wiki)
+
+
+# Bibliografia recomendada
+
+Além dos links e bibliotecas comentados durante todo o curso, vou deixar o que entendo ser o top três para que você fique confortável com os temas vistos aqui:
+
+ - [R for data science](https://r4ds.had.co.nz/introduction.html)
+ - [Curso-R](https://www.curso-r.com/material/)
+ - [Rstudio Education](https://education.rstudio.com/)
+
+
+A grande dica é: trabalhe com versões de você mesma (o), para que amanhã saiba um pouco mais do que ontem. 
+
+No mais, vai lá e brilha! :)
+
+# Até a próxima! 
+😘

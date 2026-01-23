@@ -4,7 +4,8 @@
 
 
 #ex. de projetos ------
-    #portfólio R-ladies São Paulo: https://github.com/rladies/meetup-presentations_sao-paulo
+    #portfólio R-ladies São Paulo: 
+    #https://github.com/rladies/meetup-presentations_sao-paulo
 
     #dica: investigue outros capítulos do BR e do mundo! :)
     #https://rladies.org/
@@ -32,8 +33,6 @@
     #purrr:: programação funcional -----
       
       #https://purrr.tidyverse.org/
-      
-      titanic::titanic_train %>% glimpse
       
       starwars %>%
         purrr::map(is.na) %>% 
@@ -124,6 +123,8 @@
 #Machine Learning -----
   #Tidymodels
     #https://www.tidymodels.org/start/
+      
+      
 #Inference  -----
   #Infer
     #https://infer.netlify.app/

@@ -276,7 +276,7 @@
   #salvo como um arquivo HTML , PDFs, Word, slides, entre outros. 
         
   #E como criar? Dentro do RStudio, clique no menu:
-        #`Arquivo -> Novo Arquivo -> R Markdown...`
+        #`Arquivo / File -> Novo Arquivo -> R Markdown...`
         
   #Uma janela pop-up será aberta , dê um 'Título' ao documento e insira as 
   # informações do 'Autor' (seu nome) e selecione a saíde de interesse 

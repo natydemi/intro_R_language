@@ -359,6 +359,13 @@
                 print(i)
                 i = i+1 #i++
             }
+            
+            i <- 1
+            while (i<=6){
+              print(i)
+              i = i+1 #i++
+              if(i == 3) break()
+            }
  
     #extras ----- 
       #além dos comandos citados, existem ainda funções como: 
@@ -384,11 +391,14 @@
         #}
         
         #ex. 1
-        mean_nath <- function(vetor){
-           output <- sum(vetor)/length(vetor)
-           return(output)
+            
+        mean_nath <- function(input){
+          output <- sum(input) / length(input)
+          return(output)
         }
-        
+            
+            
+            
         #ex. 2
         celcius_fahrenheit <- function(temp_c){
             temp_f <- (temp_c * 9/5) + 32
@@ -454,8 +464,9 @@
     #extra -----
       #aqui duas maneiras alternativas de construir funções diretamente 
       # em outras funções
-        # avengers %>% summarise(across(contains("Death"), ~ sum(is.na(.x)))) %>% glimpse
-        # avengers %>% summarise(across(contains("Death"), function(x) sum(is.na(x)))) %>% glimpse
+        #starwars |> summarise(across(where(is.numeric), function(x) sum(is.na(x)) ))
+        #starwars |> summarise(across(where(is.numeric), ~ sum(is.na(.x)) ))
+        
 
 # ::::: Refs -----
   #	Point-and-click - Rbase

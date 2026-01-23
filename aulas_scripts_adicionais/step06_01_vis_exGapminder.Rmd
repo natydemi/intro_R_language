@@ -1,0 +1,2702 @@
+---
+title: "Visualização de Dados – Propósitos de Visualização"
+subtitle: "dados: gapminder"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+```{r}
+source("https://raw.githubusercontent.com/traffordDataLab/assets/601e80334e0d78dfe913685561196b8b6fc278a7/theme/ggplot2/theme_lab.R")
+
+theme_nath <- function () { 
+  theme_grey(base_size = 11.5, base_family = "Roboto") %+replace% 
+    theme(
+      # add padding to the plot
+      plot.margin = unit(rep(0.5, 4), "cm"),
+      # remove the plot background and border
+      plot.background = element_blank(),
+      panel.background = element_blank(),
+      panel.border = element_blank(),
+      # make the legend and strip background transparent
+      legend.background = element_rect(fill = "transparent", colour = NA),
+      legend.key = element_rect(fill = "transparent", colour = NA),
+      strip.background = element_rect(fill = "transparent", colour = NA),
+      # add light, dotted major grid lines only
+      panel.grid.major = element_line(linetype = "dotted", colour = "#757575", size = 0.3),
+      panel.grid.minor = element_blank(),
+      # remove the axis tick marks and hide axis lines
+      axis.ticks = element_blank(),
+      axis.line = element_line(color = "#FFFFFF", size = 0.3),
+      # modify the bottom margins of the title and subtitle
+      plot.title = element_text(size = 18, colour = "#757575", hjust = 0, margin = margin(b = 4)),
+      plot.subtitle = element_text(size = 12, colour = "#757575", hjust = 0, margin = margin(b = 10)),
+      # add padding to the caption
+      plot.caption = element_text(size = 10, colour = "#757575", hjust = 1, margin = margin(t = 15)),
+      # change to Open Sans for axes titles, tick labels, legend title and legend key, and strip text
+      axis.title = element_text(family = "Open Sans", size = 11, colour = "#757575", face = "plain", hjust = 1),
+      axis.text = element_text(family = "Open Sans", size = 10, colour = "#757575", face = "plain"),
+      legend.title = element_text(size = 12, colour = "#757575"),
+      legend.text = element_text(size = 10, colour = "#757575"),
+      strip.text = element_text(family = "Open Sans", size = 12, colour = "#757575", face = "plain")
+    )
+}
+
+#lista de cores da paleta
+#Set2 = c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3")
+
+```
+
+```{r class.source = 'fold-show'}
+library(tidyverse)
+library(patchwork)
+```
+
+# Introdução
+Este arquivo concentra as visualizações relacionadas aos dados do gapminder.
+
+# Dados
+
+Serão utilizados dados da iniciativa gapminder, disponibilizada em gapminder::gapminder e dslabs::gapminder, tendo que neste último algumas informações a mais são disponibilizadas. 
+
+## dslabs
+
+Esta base possui vários anos a mais que a base original, além de mais países, e as features `infant_mortality` e `fertility`. Contudo os valores das variáveis: population, gdp e life_expectancy, infos que também constam na base orginal do gapminder, possuem valores razoavelmente distintos (da base original, e um pouco distoantes dentro do próprio histórico).\
+No mais, após o merge com as bases originais, o `infant_mortality` particularmente apresenta muitos NAs, `gdp` também.
+
+
+```{r}
+dslabs <- dslabs::gapminder %>% 
+  #anos da base gapminder::gapminder
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 
+                     1982, 1987, 1992, 1997, 2002, 2007)) %>%  
+  select(-life_expectancy, -population, -gdp) %>% 
+  glimpse()
+```
+
+### view
+
+```{r}
+dslabs %>% DT::datatable()
+```
+
+
+## gapminder
+
+A base gapminder tratada tem um total de `r gapminder::gapminder %>% slice_max(year) %>% nrow()` países para cada um dos anos, com `r length(unique(gapminder::gapminder$year))` anos distintos, entre `r min(gapminder::gapminder$year)` e `r max(gapminder::gapminder$year)` .
+
+```{r}
+gapminder <- gapminder::gapminder %>%
+  left_join(gapminder::country_codes) %>% 
+  left_join(dslabs) %>% 
+  mutate(region = case_when(
+        country == "Afghanistan" ~ "Central Asia",
+        country == "Korea, Dem. Rep." ~ "Eastern Asia",
+        country == "Korea, Rep." ~ "Eastern Asia",
+        country == "Myanmar" ~ "Southeast Asia",
+        country == "Reunion" ~ "Eastern Africa",
+        country == "Sao Tome and Principe" ~ "Central Africa",
+        country == "Somalia" ~ "Eastern Africa",
+        country == "Taiwan" ~ "Eastern Asia",
+        country == "Turkey" ~ "Western Asia",
+        country == "Yemen, Rep." ~ "Western Asia",
+    TRUE ~ region)) %>% 
+  janitor::clean_names() %>% 
+  mutate(continent = recode(continent,
+                            "Asia" = "Ásia",
+                            "Europe" = "Europa", 
+                            "Africa" = "África", 
+                            "Americas" = "América", 
+                            "Oceania" = "Oceania")) %>% 
+  relocate(region, .after = continent) %>% 
+  glimpse()
+
+  #código complementar para identificar países sem região atribuída:
+  #gapminder %>%   filter(is.na(region)) %>% select(country, continent, region) %>%  unique() 
+```
+
+### view
+
+```{r}
+gapminder %>% DT::datatable()
+```
+
+
+## gapminder_full
+
+Já a base gapminder_full, tem variedade no números de países para `r length(unique(gapminder::gapminder_unfiltered$year))` anos distintos, entre `r min(gapminder::gapminder_unfiltered$year)` e `max(gapminder::gapminder_unfiltered$year)`. O ano com a maior quantidade de países é 2002, com `r gapminder::gapminder_unfiltered %>% slice_max(year) %>% nrow()` países
+
+```{r}
+gapminder_full <- gapminder::gapminder_unfiltered %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002, 2007)) %>%  
+  left_join(gapminder::country_codes) %>% 
+  left_join(dslabs) %>% 
+  mutate(region = case_when(
+      country == "Afghanistan" ~ "Central Asia",
+      country == "Korea, Dem. Rep." ~ "Eastern Asia",
+      country == "Korea, Rep." ~ "Eastern Asia",
+      country == "Myanmar" ~ "Southeast Asia",
+      country == "Reunion" ~ "Eastern Africa",
+      country == "Sao Tome and Principe" ~ "Central Africa",
+      country == "Somalia" ~ "Eastern Africa",
+      country == "Taiwan" ~ "Eastern Asia",
+      country == "Turkey" ~ "Western Asia",
+      country == "Yemen, Rep." ~ "Western Asia",
+  TRUE ~ region)) %>% 
+  mutate(region = case_when(
+      country == "Cyprus" ~ "Western Asia",
+      country == "French Guiana" ~ "South America",
+      country == "Guadeloupe" ~ "Caribbean",
+      country == "Martinique" ~ "Caribbean",
+      country == "Netherlands Antilles" ~ "South America",
+  TRUE ~ region)) %>% 
+  janitor::clean_names() %>% 
+  mutate(continent = recode(continent,
+                                 "Asia" = "Ásia",
+                                 "Europe" = "Europa",
+                                 "Africa" = "África",
+                                 "Americas" = "América",
+                                 "Oceania" = "Oceania")) %>%
+  relocate(region, .after = continent) %>% 
+  glimpse()
+
+```
+
+### view
+
+```{r}
+gapminder_full %>% DT::datatable()
+```
+
+# Magnitude
+
+Este capítulo se baseia nas análises feitas pelo @traffordDataLab
+
+## Qtd países por continente
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2002") %>% 
+  group_by(continent) %>% 
+  count() %>% 
+  ggplot(aes(x = continent, y = n, fill = continent), color = "white")  +
+    geom_col(alpha = 0.8) +
+    geom_text(aes(label = n), vjust = -0.5, size = 4, colour = "#757575") +
+    geom_hline(yintercept=0, color = "lightgrey") +
+    scale_fill_brewer(palette = "Set2") +
+    labs(title = "",
+         subtitle = "Contagem de Países por Continente, ano de 2002",
+         caption = "Fonte: gapminder.org |  @traffordDataLab",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() + 
+    scale_y_continuous(limits = c(0, 60)) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          #panel.grid = element_blank(),
+          axis.text.y=element_blank(),
+          legend.position = "none") 
+  
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2002") %>% 
+  group_by(continent) %>% 
+  count() %>% 
+  ggplot(aes(x = continent, y = n, fill = continent), color = "white")  +
+    geom_col(alpha = 0.8) +
+    geom_hline(yintercept=0, color = "lightgrey") +
+    scale_fill_brewer(palette = "Set2") +
+    labs(title = "",
+         subtitle = "Contagem de Países por Continente, ano de 2002",
+         caption = "Fonte: gapminder.org |  @traffordDataLab",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() + 
+    scale_y_continuous(limits = c(0, 60)) +
+    theme(panel.grid.major.x = element_blank(),
+          #panel.grid.major.y = element_blank(),
+          #panel.grid = element_blank(),
+          #axis.text.y=element_blank(),
+          legend.position = "none") 
+  
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2002") %>% 
+  group_by(continent) %>% 
+  count() %>% 
+  ggplot(aes(x = continent, y = n, fill = continent), color = "white")  +
+    geom_col(alpha = 0.8) +
+    geom_text(aes(label = n), vjust = -0.5, size = 4, colour = "#757575") +
+    geom_hline(yintercept=0, color = "lightgrey") +
+    scale_fill_brewer(palette = "Set2") +
+    labs(title = "",
+         subtitle = "Contagem de Países por Continente, ano de 2002",
+         caption = "Fonte: gapminder.org |  @traffordDataLab",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() + 
+    scale_y_continuous(limits = c(0, 60)) +
+    theme(panel.grid.major.x = element_blank(),
+          #panel.grid.major.y = element_blank(),
+          #panel.grid = element_blank(),
+          #axis.text.y=element_blank(),
+          legend.position = "none") 
+  
+```
+
+## Life_exp
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2002") %>% 
+  group_by(continent) %>% 
+  summarise(life_exp = mean(life_exp)) %>% 
+  ggplot(aes(x = continent, y = life_exp, fill = continent))  +
+  geom_col(fill = "#FFD92F", alpha = 0.8) +
+  geom_hline(yintercept=0, color = "lightgrey") +
+  labs(title = "",
+       subtitle = "Média Expectativa de Vida por Continente, ano de 2002",
+       caption = "Fonte: gapminder.org |  @traffordDataLab",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+  theme_nath() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2002") %>% 
+  group_by(continent) %>% 
+  summarise(life_exp = mean(life_exp)) %>% 
+  ggplot(aes(x = continent, y = life_exp, fill = continent))  +
+  geom_col(alpha = 0.8) +
+  geom_hline(yintercept=0, color = "lightgrey") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "",
+       subtitle = "Média Expectativa de Vida por Continente, ano de 2002",
+       caption = "Fonte: gapminder.org |  @traffordDataLab",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+  theme_nath() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none")
+```
+
+# Comparação
+
+## absoluta
+
+### agrupado
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952,  2002)) %>%
+  group_by(year, continent) %>% 
+  count() %>% 
+  ggplot(aes(x = year, y = n, group = continent, fill = continent)) + 
+  geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+  geom_hline(yintercept=0, color = "lightgrey") +
+  scale_x_continuous(breaks = c(1952, 2002), expand = c(0, 0)) +
+  scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "",
+       subtitle = "Contagem de Países por Continente, comparação por período",
+       caption = "Source: gapminder.org  |  @traffordDataLab",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+  theme_nath() +
+  scale_y_continuous(limits = c(0, 60)) +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "bottom")
+```
+
+
+```{r}
+gapminder_full 
+
+gapminder::gapminder_unfiltered %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952,  2002)) %>%
+  group_by(year, continent) %>% 
+  count() %>% 
+  mutate(year = as.character(year)) %>% 
+  ggplot(aes(x = continent, y = n, group = year, fill = continent)) + 
+  geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+  geom_hline(yintercept=0, color = "lightgrey") +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "",
+       subtitle = "Contagem de Países por Continente, comparação por período: 1952 vs. 2002",
+       caption = "Source: gapminder.org  |  @traffordDataLab",
+       x = NULL, y = NULL, fill = NULL) +
+  theme_nath() +
+  scale_y_continuous(limits = c(0, 60)) +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "bottom")
+```
+
+
+```{r}
+gapminder_full 
+
+gapminder::gapminder_unfiltered %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952,  2002)) %>%
+  group_by(year, continent) %>% 
+  count() %>% 
+  mutate(year = as.character(year)) %>% 
+  ggplot(aes(x = continent, y = n, group = year, 
+             fill = interaction(year, continent))) + 
+  geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+  geom_hline(yintercept=0, color = "lightgrey") +
+  scale_fill_manual(values = c("#66C2A5", "#388C72", "#FC8D62", "#FA4F0A", 
+                                  "#8DA0CB","#4964A1", "#E78AC3","#D42C94", 
+                                  "#A6D854", "#77A927")) +
+  labs(title = "",
+       subtitle = "Contagem de Países por Continente, comparação por período: 1952 vs. 2002",
+       caption = "Source: gapminder.org  |  @traffordDataLab",
+       x = NULL, y = NULL, fill = NULL) +
+  theme_nath() +
+  scale_y_continuous(limits = c(0, 60)) +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none")
+```
+
+```{r}
+(p1 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  #filter(year %in% c(1952,  1977, 2002)) %>%
+  group_by(year, continent) %>% 
+  count() %>% 
+  ggplot(aes(x = year, y = n, group = continent, fill = continent)) + 
+  geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+  geom_hline(yintercept=0, color = "lightgrey") +
+  #scale_x_continuous(breaks = c(1952,  1977, 2002), expand = c(0, 0)) +
+  scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "",
+       subtitle = "Contagem de Países por Continente, comparação por período",
+       caption = "Source: gapminder.org  |  @traffordDataLab",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+  theme_nath() +
+  scale_y_continuous(limits = c(0, 60)) +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "bottom"))
+```
+
+### agrupado + continent by years
+
+```{r}
+(p0 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  #filter(year %in% c(1952,  1977, 2002)) %>%
+  group_by(year, continent) %>% 
+  count() %>% 
+  ggplot(aes(x = year, y = n, group = continent, fill = continent)) + 
+  geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+   facet_wrap(. ~ continent) +
+  geom_hline(yintercept=0, color = "lightgrey") +
+  scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "",
+       subtitle = "Contagem de Países por Continente, comparação por período",
+       caption = "Source: gapminder.org  |  @traffordDataLab",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+  theme_nath() +
+  scale_y_continuous(limits = c(0, 60)) +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "none"))
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  #filter(year %in% c(1952,  1977, 2002)) %>%
+  group_by(year, continent) %>% 
+  count() %>% 
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = continent, y = n, group = year, fill = year)) + 
+  geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+  #facet_grid(. ~ year, scales = "free_x") +
+  scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(title = "",
+       subtitle = "Contagem de Países por Continente, de 1952 a 2002",
+       caption = "Source: Gapminder.org  |  @traffordDataLab",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+  theme_nath() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "bottom")
+```
+
+## absoluta e relativa não normalizada
+
+```{r}
+(p2 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  #filter(year %in% c(1952,  1977, 2002)) %>%
+  group_by(year, continent) %>% 
+  count() %>% 
+  ggplot(aes(x = year, y = n, fill = continent)) + 
+  geom_col(colour = "white", size = 0.2, alpha = 0.8) +
+  geom_hline(yintercept=0, color = "lightgrey") +
+  scale_x_continuous(breaks = c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002),
+                     expand = c(0, 0)) +
+  scale_fill_brewer(palette = "Set2") +
+  guides(fill = guide_legend(reverse = F)) +
+  labs(title = "",
+       subtitle = "Proporção da contagem de países por continente, comparação por período",
+       caption = "Source: gapminder.org  |  @traffordDataLab",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+  theme_nath() +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "right"))
+```
+
+## relativa
+
+```{r}
+(p3 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  #filter(year %in% c(1952,  1977, 2002)) %>%
+  group_by(year, continent) %>% 
+  count() %>% 
+  ggplot(aes(x = year, y = n, fill = continent)) + 
+  geom_col(position = "fill", colour = "white", size = 0.2, alpha = 0.8) +
+  scale_x_continuous(breaks = c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002), expand = c(0, 0)) +
+  scale_y_continuous(labels = scales::percent, expand = c(0, 0)) +
+  scale_fill_brewer(palette = "Set2") +
+  guides(fill = guide_legend(reverse = F)) +
+  labs(title = "",
+       subtitle = "Proporção da contagem de países por continente, comparação por período",
+       caption = "Source: gapminder.org  |  @traffordDataLab",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+  theme_nath() +
+ geom_hline(yintercept=0, color = "lightgrey") +
+  theme(panel.grid.major.x = element_blank(),
+        legend.position = "right"))
+```
+
+### clean versions
+
+```{r, eval = F}
+#patchwork::
+
+(p11 <- p1 +
+  theme(legend.position = "none") +
+  labs(subtitle = "",
+       caption = ""))
+```
+
+```{r, eval = F}
+(p22 <- p2 +
+  theme(legend.position = "none") +
+  labs(subtitle = "",
+       caption = ""))
+```
+
+```{r, eval = F}
+(p33 <- p3 +
+  theme(legend.position = "none") +
+  labs(subtitle = "",
+       caption = "") )
+  
+
+(p11 / p22 / p33)
+
+```
+
+# Relação
+
+## fertility x life_exp (2007)
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = fertility, y = life_exp, color = year, label = country))  +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.6) +
+    viridis::scale_color_viridis(discrete = T, direction = 1) +
+    labs(title = "",
+         #subtitle = "Expectativa de Vida vs. Fertilidade, comparação por período",
+         subtitle = "Expectativa de Vida vs. Fertilidade",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+
+```{r}
+plotly::ggplotly(p)
+```
+
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) 
+  
+(p <- temp %>% 
+  ggplot(aes(x = fertility, y = life_exp, color = year, label = country))  +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.1) +
+    geom_point(data = . %>% filter(country == "Japan"), 
+               shape=16, size  = 2, stroke = 0, color = "#21918c") +
+    ggrepel::geom_label_repel(data = . %>% filter(country == "Japan"), 
+                          color = "#21918c",
+                          max.overlaps = 50, 
+                          nudge_x = -.3, nudge_y = 3,
+                          segment.curvature = 0.5) +
+    scale_color_manual(values = c("#440154")) +
+    labs(title = "",
+         subtitle = "Expectativa de Vida vs. Fertilidade",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("2007")) %>%
+  mutate(year = as_factor(year)) 
+  
+(p <- temp %>% 
+  ggplot(aes(x = fertility, y = life_exp, color = year, label = country))  +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.1) +
+    geom_point(data = . %>% filter(country == "Japan"), 
+               shape=16, size  = 2, stroke = 0, color = "#21918c") +
+    ggrepel::geom_label_repel(data = . %>% filter(country == "Japan"), 
+                          color = "#21918c",
+                          max.overlaps = 50, 
+                          nudge_x = -.3, nudge_y = 3,
+                          segment.curvature = 0.5) +
+    geom_point(data = . %>% filter(country == "China"), 
+               shape=16, size  = 2, stroke = 0, color = "#21918c") +
+    ggrepel::geom_label_repel(data = . %>% filter(country == "China"), 
+                              color = "#21918c",
+                              max.overlaps = 50, 
+                              nudge_x = -.1, nudge_y = -1.5,
+                              box.padding = 1,
+                              segment.curvature = 0.5) +
+    scale_color_manual(values = c("#440154")) +
+    labs(title = "",
+         subtitle = "Expectativa de Vida vs. Fertilidade",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) 
+  
+(p <- temp %>% 
+  ggplot(aes(x = fertility, y = life_exp, color = year, label = country))  +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.1) +
+    # geom_point(data = . %>% filter(life_exp == max(life_exp)), 
+    #            color = "#21918c") +
+    # ggrepel::geom_label_repel(data = . %>% 
+    #                             filter(life_exp >70, fertility >3, fertility <4), 
+    #                   color = "#21918c",
+    #                   max.overlaps = 50, 
+    #                   nudge_x = -.3, nudge_y = 3,
+    #                   segment.curvature = 0.9) +
+    geom_point(data = . %>% filter(country == "Syria"),
+               shape=16, size  = 2, stroke = 0, color = "#21918c") +
+    ggrepel::geom_label_repel(data = . %>% filter(country == "Syria"), 
+                          color = "#21918c",
+                          max.overlaps = 50, 
+                          nudge_x = .3, nudge_y = 3,
+                          box.padding = 1,
+                          segment.curvature = 0.9) +
+    geom_point(data = . %>% filter(country == "Japan"), 
+               shape=16, size  = 2, stroke = 0, color = "#21918c") +
+    ggrepel::geom_label_repel(data = . %>% filter(country == "Japan"), 
+                          color = "#21918c",
+                          max.overlaps = 50, 
+                          nudge_x = -.3, nudge_y = 3,
+                          segment.curvature = 0.5) +
+    geom_point(data = . %>% filter(country == "China"), 
+               shape=16, size  = 2, stroke = 0, color = "#21918c") +
+    ggrepel::geom_label_repel(data = . %>% filter(country == "China"), 
+                              color = "#21918c",
+                              max.overlaps = 50, 
+                              nudge_x = -.1, nudge_y = -1.5,
+                              box.padding = 1,
+                              segment.curvature = 0.5) +
+    scale_color_manual(values = c("#440154")) +
+    labs(title = "",
+         subtitle = "Expectativa de Vida vs. Fertilidade",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = fertility, y = life_exp, color = year, label = country))  +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.6) +
+    geom_smooth(method = "lm") +
+    viridis::scale_color_viridis(discrete = T, direction = 1) +
+    labs(title = "",
+         #subtitle = "Expectativa de Vida vs. Fertilidade, comparação por período",
+         subtitle = "Expectativa de Vida vs. Fertilidade",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = fertility, y = life_exp, color = year, label = country))  +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.6) +
+    geom_smooth() +
+    viridis::scale_color_viridis(discrete = T, direction = 1) +
+    #scale_color_manual(values = c('#9ccb86','#cf597e', '#009392','#eeb479' )) +
+    labs(title = "",
+         #subtitle = "Expectativa de Vida vs. Fertilidade, comparação por período",
+         subtitle = "Expectativa de Vida vs. Fertilidade",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+
+### overplotting
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = fertility, y = life_exp, label = country))  +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.6, color = "#440154") +
+    #viridis::scale_color_viridis(discrete = T, direction = 1) +
+    labs(title = "",
+         #subtitle = "Expectativa de Vida vs. Fertilidade, comparação por período",
+         subtitle = "Expectativa de Vida vs. Fertilidade, 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  #filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = fertility, y = life_exp, label = country))  +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.6, color = "#440154") +
+    #viridis::scale_color_viridis(discrete = T, direction = 1) +
+    labs(title = "",
+         #subtitle = "Expectativa de Vida vs. Fertilidade, comparação por período",
+         subtitle = "Expectativa de Vida vs. Fertilidade, de 1952 a 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  #filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = fertility, y = life_exp, label = country))  +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.4, color = "#440154") +
+    #viridis::scale_color_viridis(discrete = T, direction = 1) +
+    labs(title = "",
+         #subtitle = "Expectativa de Vida vs. Fertilidade, comparação por período",
+         subtitle = "Expectativa de Vida vs. Fertilidade, de 1952 a 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  #filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = fertility, y = life_exp, label = country))  +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 0.3, color = "#440154") +
+    #viridis::scale_color_viridis(discrete = T, direction = 1) +
+    labs(title = "",
+         #subtitle = "Expectativa de Vida vs. Fertilidade, comparação por período",
+         subtitle = "Expectativa de Vida vs. Fertilidade, de 1952 a 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  #filter(year %in% c("2007")) %>%
+  #filter(continent == "Europa") %>%
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = fertility, y = life_exp, label = country))  +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    geom_point(shape=16, size  = 2, stroke = 0, alpha = 1, color = "#440154") +
+    #viridis::scale_color_viridis(discrete = T, direction = 1) +
+    labs(title = "",
+         #subtitle = "Expectativa de Vida vs. Fertilidade, comparação por período",
+         subtitle = "Expectativa de Vida vs. Fertilidade, de 1952 a 2007",
+        # caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(1, 8), minor_breaks = seq(1, 8, 1), n.breaks = 8) +
+    scale_y_continuous(limits = c(30, 87)) +
+    theme(#panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "right"))
+```
+
+
+```{r}
+#colorblindr::cvd_grid(p)
+```
+
+## continents
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  #filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  filter(year == "2007") %>%
+  #filter(continent == "Oceania") %>%
+  group_by(year, country, continent) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm=T),
+    fertility = mean(fertility, na.rm=T)
+  ) %>% 
+  ungroup() %>% 
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = fertility, y = life_exp, color = continent))  +
+    #ggplot(aes(x = continent, y = n, group = year, fill = year)) + 
+    #geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    #geom_text(aes(label = country), vjust = "inward") +
+    geom_point() +
+    geom_smooth(method = "glm") +
+    facet_grid(. ~ continent, scales = "free_x") +
+    scale_color_brewer(palette = "Set2") +
+    # labs(title = "",
+    #      subtitle = "Contagem de Países por Continente, de 1952 a 2002",
+    #      caption = "Source: Gapminder.org",
+    #      x = NULL,
+    #      y = NULL,
+    #      fill = NULL) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none"))
+
+# plotly::ggplotly(p)
+
+```
+
+
+
+## gdp_percap x life_exp
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  filter(year == "2002") %>%
+  #filter(continent == "Oceania") %>%
+  # group_by(year, country, continent) %>% 
+  # summarise(
+  #   life_exp = mean(life_exp, na.rm=T),
+  #   fertility = mean(fertility, na.rm=T)
+  # ) %>% 
+  # ungroup() %>% 
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = gdp_percap, y = life_exp, color = continent))  +
+    #ggplot(aes(x = continent, y = n, group = year, fill = year)) + 
+    #geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    #stat_summary(geom="point", fun.data = ~mean(.x,na.rm=T)) +
+    #geom_text(aes(label = country), vjust = "inward") +
+    geom_point() +
+    #geom_smooth(method = "glm") +
+    scale_color_brewer(palette = "Set2") +
+    # labs(title = "",
+    #      subtitle = "Contagem de Países por Continente, de 1952 a 2002",
+    #      caption = "Source: Gapminder.org",
+    #      x = NULL,
+    #      y = NULL,
+    #      fill = NULL) +
+    #scale_x_log10(labels = scales::dollar) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none"))
+
+# plotly::ggplotly(p)
+
+```
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  filter(year == "2002") %>%
+  #filter(continent == "Oceania") %>%
+  # group_by(year, country, continent) %>% 
+  # summarise(
+  #   life_exp = mean(life_exp, na.rm=T),
+  #   fertility = mean(fertility, na.rm=T)
+  # ) %>% 
+  # ungroup() %>% 
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = gdp_percap, y = life_exp, color = continent))  +
+    #ggplot(aes(x = continent, y = n, group = year, fill = year)) + 
+    #geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    #stat_summary(geom="point", fun.data = ~mean(.x,na.rm=T)) +
+    #geom_text(aes(label = country), vjust = "inward") +
+    geom_point(aes(size = pop)) +
+    #geom_smooth(method = "glm") +
+    scale_color_brewer(palette = "Set2") +
+    # labs(title = "",
+    #      subtitle = "Contagem de Países por Continente, de 1952 a 2002",
+    #      caption = "Source: Gapminder.org",
+    #      x = NULL,
+    #      y = NULL,
+    #      fill = NULL) +
+    #scale_x_log10(labels = scales::dollar) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none"))
+
+# plotly::ggplotly(p)
+
+```
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  filter(year == "2002") %>%
+  #filter(continent == "Oceania") %>%
+  # group_by(year, country, continent) %>% 
+  # summarise(
+  #   life_exp = mean(life_exp, na.rm=T),
+  #   fertility = mean(fertility, na.rm=T)
+  # ) %>% 
+  # ungroup() %>% 
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = gdp_percap, y = life_exp, color = continent))  +
+    #ggplot(aes(x = continent, y = n, group = year, fill = year)) + 
+    #geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    #stat_summary(geom="point", fun.data = ~mean(.x,na.rm=T)) +
+    #geom_text(aes(label = country), vjust = "inward") +
+    geom_point() +
+    #geom_smooth(method = "glm") +
+    facet_grid(. ~ continent, scales = "free_x") +
+    scale_color_brewer(palette = "Set2") +
+    # labs(title = "",
+    #      subtitle = "Contagem de Países por Continente, de 1952 a 2002",
+    #      caption = "Source: Gapminder.org",
+    #      x = NULL,
+    #      y = NULL,
+    #      fill = NULL) +
+    #scale_x_log10(labels = scales::dollar) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none"))
+
+# plotly::ggplotly(p)
+
+```
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  #filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  filter(year == "2007") %>%
+  filter(continent == "Europa") %>%
+  # group_by(year, country, continent) %>% 
+  # summarise(
+  #   life_exp = mean(life_exp, na.rm=T),
+  #   fertility = mean(fertility, na.rm=T)
+  # ) %>% 
+  # ungroup() %>% 
+  mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = gdp_percap, y = life_exp, color = continent))  +
+    #ggplot(aes(x = continent, y = n, group = year, fill = year)) + 
+    #geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    #stat_summary(geom="point", fun.data = ~mean(.x,na.rm=T)) +
+    #geom_text(aes(label = country), vjust = "inward") +
+    geom_point() +
+    #geom_smooth(method = "glm") +
+    facet_grid(. ~ continent, scales = "free_x") +
+    scale_color_brewer(palette = "Set2") +
+    # labs(title = "",
+    #      subtitle = "Contagem de Países por Continente, de 1952 a 2002",
+    #      caption = "Source: Gapminder.org",
+    #      x = NULL,
+    #      y = NULL,
+    #      fill = NULL) +
+    scale_x_continuous(labels = scales::dollar) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none"))
+
+# plotly::ggplotly(p)
+
+```
+
+
+# Evolução
+
+## fertility
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  #filter(year == "2007") %>% 
+  group_by(continent, year) %>% 
+  summarise(
+    NA_fertility = sum(is.na(fertility)),
+    mean_fertility = mean(fertility, na.rm = T),
+    ) %>% 
+  ggplot(aes(x = year, y = mean_fertility, color = continent))  +
+    #geom_point(color = "gray") +
+    #geom_line(aes(group = country), color = "gray") +
+    # geom_point(alpha = 0.3) +
+    geom_line() +
+    ggrepel::geom_label_repel(data = . %>% filter(year == 1962), aes(label = continent)) +
+    scale_colour_brewer(palette = "Set2") +
+    guides(fill = guide_legend(reverse = F)) +
+    labs(title = "",
+       subtitle = "...",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+          legend.position = "none")
+```
+
+
+## life_exp 
+
+### line 
+
+#### continent
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  # mutate(year = lubridate::year(lubridate::as_date(year))) %>% 
+  mutate(year = as.integer(year)) %>% 
+  ggplot(aes(x = year, y = life_exp))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(color = "#440154", size = 0.8) +
+    #geom_point(color = "#440154") +
+    #ggrepel::geom_label_repel(data = . %>% filter(year == 1962), aes(label = continent)) +
+    labs(title = "",
+         subtitle = "Evolução da expectativa de vida, média dos países",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    #scale_x_date(date_breaks = "1 year") +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          #panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "none")
+
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  # mutate(year = lubridate::year(lubridate::as_date(year))) %>% 
+  mutate(year = as.integer(year)) %>% 
+  ggplot(aes(x = year, y = life_exp))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(color = "#440154", size = 0.8) +
+    geom_point(color = "#440154") +
+    #ggrepel::geom_label_repel(data = . %>% filter(year == 1962), aes(label = continent)) +
+    labs(title = "",
+          subtitle = "Evolução da expectativa de vida, média dos países",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    #scale_x_date(date_breaks = "1 year") +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          #panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "none")
+
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  # mutate(year = lubridate::year(lubridate::as_date(year))) %>% 
+  mutate(year = as.integer(year)) %>% 
+  ggplot(aes(x = year, y = life_exp))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    #geom_line(color = "#440154", size = 0.8) +
+    geom_point(color = "#440154") +
+    #ggrepel::geom_label_repel(data = . %>% filter(year == 1962), aes(label = continent)) +
+    labs(title = "",
+          subtitle = "Evolução da expectativa de vida, média dos países",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    #scale_x_date(date_breaks = "1 year") +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          #panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "none")
+
+```
+
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  mutate(year = as.integer(year)) %>% 
+  ggplot(aes(x = year, y = life_exp))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(color = "#440154", size = 0.8) +
+    #geom_point(color = "#440154") +
+    ggrepel::geom_text_repel(data = . %>% filter(year == min(year)), 
+                             aes(label = round(life_exp,0)),
+                             color = "#440154", nudge_x = -1) +
+    ggrepel::geom_text_repel(data = . %>% filter(year == max(year)), 
+                             aes(label = round(life_exp,0)),
+                             color = "#440154", nudge_x = 1) +
+    labs(title = "",
+          subtitle = "Evolução da expectativa de vida, média dos países",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "none")
+
+```
+
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  mutate(year = as.integer(year)) %>% 
+  ggplot(aes(x = year, y = life_exp))  +
+    geom_vline(xintercept=1987, color = "lightgrey", linetype =2) +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(color = "#440154", size = 0.8) +
+    #geom_point(color = "#440154") +
+    ggrepel::geom_text_repel(data = . %>% filter(year == min(year)), 
+                             aes(label = round(life_exp,0)),
+                             color = "#440154", nudge_x = -1) +
+    ggrepel::geom_text_repel(data = . %>% filter(year == max(year)), 
+                             aes(label = round(life_exp,0)),
+                             color = "#440154", nudge_x = 1) +
+    ggrepel::geom_text_repel(data = . %>% filter(year == 1987), 
+                             aes(label = round(life_exp,0)),
+                             color = "#440154", nudge_y = 1) +
+    labs(title = "",
+           subtitle = "Evolução da expectativa de vida, média dos países",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "none")
+
+```
+
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(continent, year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  mutate(year = as.integer(year)) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(size = 0.8) +
+    labs(title = "",
+          subtitle = "Evolução da expectativa de vida, média dos continentes",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_color_brewer(palette = "Set2") +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "right")
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(continent, year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  mutate(year = as.integer(year)) 
+
+temp_new <-  temp %>%
+    filter(year == max(year)) %>%
+    distinct(continent, life_exp)
+
+legend_ord <- rev(levels(with(temp_new, reorder(continent, life_exp))))
+
+temp %>% 
+  mutate(continent = as_factor(continent)) %>% 
+  mutate(continent = forcats::fct_relevel(continent, 
+                      c( "FSU", "Europa", "América", "Oceania","Ásia","África"))) %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(size = 0.8) +
+    labs(title = "",
+           subtitle = "Evolução da expectativa de vida, média dos continentes",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_color_manual(
+      values = c("#E78AC3","#FC8D62",  "#A6D854", "#8DA0CB","#66C2A5")) +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "right")
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(continent, year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  mutate(year = as.integer(year)) 
+
+temp_new <-  temp %>%
+    filter(year == max(year)) %>% 
+    distinct(continent, life_exp)
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(size = 0.8) +
+    geom_point() +
+    labs(title = "",
+           subtitle = "Evolução da Expectativa de Vida, média de todos os países",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_color_brewer(palette = "Set2") +
+    scale_y_continuous(limits = c(40, 80), 
+                       sec.axis = dup_axis(
+                         breaks = temp_new$life_exp,
+                         labels = temp_new$continent,
+                         name = NULL)
+                       ) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "none")
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(continent, year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  mutate(year = as.integer(year)) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(size = 0.8) +
+    ggrepel::geom_text_repel(data = . %>% filter(year == 1962), aes(label = continent),
+                             vjust = 1, hjust = 0.1) +
+    labs(title = "",
+           subtitle = "Evolução da Expectativa de Vida, por continente",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_color_brewer(palette = "Set2") +
+    scale_y_continuous(limits = c(40, 80), guide = guide_axis(position = 'right')) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "none")
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(continent, year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  mutate(year = as.integer(year)) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(size = 0.8) +
+    ggrepel::geom_label_repel(data = . %>% filter(year == 1992), aes(label = continent)) +
+    # ggrepel::geom_text_repel(data = . %>% filter(year == max(year)), 
+    #                          aes(label = round(life_exp,0)),nudge_x = 1) +
+    # ggrepel::geom_text_repel(data = . %>% filter(year == min(year)), 
+    #                          aes(label = round(life_exp,0)), nudge_x = -1) +
+    labs(title = "",
+          subtitle = "Evolução da expectativa de vida, média dos continentes",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_color_brewer(palette = "Set2") +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          #axis.text.y=element_blank(),
+          legend.position = "none")
+
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(continent, year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  mutate(year = as.integer(year)) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(size = 0.8) +
+    ggrepel::geom_label_repel(data = . %>% filter(year == 1992), aes(label = continent)) +
+    # ggrepel::geom_text_repel(data = . %>% filter(year == max(year)), 
+    #                          aes(label = round(life_exp,0)),nudge_x = 1) +
+    # ggrepel::geom_text_repel(data = . %>% filter(year == min(year)), 
+    #                          aes(label = round(life_exp,0)), nudge_x = -1) +
+    labs(title = "",
+          subtitle = "Evolução da expectativa de vida, média dos continentes",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_color_brewer(palette = "Set2") +
+    scale_y_continuous(limits = c(40, 80), guide = guide_axis(position = 'right')) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          #axis.text.y=element_blank(),
+          legend.position = "none")
+
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(continent, year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  mutate(year = as.integer(year)) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(size = 0.8) +
+    ggrepel::geom_label_repel(data = . %>% filter(year == 1992), aes(label = continent)) +
+    ggrepel::geom_text_repel(data = . %>% filter(year == max(year)), 
+                             aes(label = round(life_exp,0)),nudge_x = 1) +
+    ggrepel::geom_text_repel(data = . %>% filter(year == min(year)), 
+                             aes(label = round(life_exp,0)), nudge_x = -1) +
+    labs(title = "",
+           subtitle = "Evolução da expectativa de vida, média dos continentes",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_color_brewer(palette = "Set2") +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          axis.text.y=element_blank(),
+          legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(continent, year) %>% 
+  summarise(
+    NA_fertility = sum(is.na(life_exp)),
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    #geom_point(color = "gray") +
+    #geom_line(aes(group = country), color = "gray") +
+    # geom_point(alpha = 0.3) +
+    geom_line(size = 0.8) +
+    ggrepel::geom_label_repel(data = . %>% filter(year == 1962), aes(label = continent)) +
+    scale_colour_brewer(palette = "Set2") +
+    labs(title = "",
+       subtitle = "...",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80), guide = guide_axis(position = 'right')) +
+    theme(panel.grid.major.x = element_blank(),
+          legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  ggplot(aes(x = year, y = life_exp))  +
+    scale_color_manual(values = c("#440154")) +
+    geom_point(alpha = 0.3, color="lightgrey") +
+    geom_line(aes(group = country), alpha = 0.3, color="lightgrey") +
+    geom_smooth(color = "#440154") + 
+    labs(title = "",
+       subtitle = "Evolução da expectativa de vida, média dos países",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          legend.position = "none")
+
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year >= 1962, year <= 2007) %>% 
+  group_by(year) %>% 
+  summarise(
+    life_exp = mean(life_exp, na.rm = T),
+    ) %>% 
+  # mutate(year = lubridate::year(lubridate::as_date(year))) %>% 
+  mutate(year = as.integer(year))
+
+temp2 <- tibble(
+  year = c(2007, 2008, 2009, 2010),
+  life_exp = c(67.8, 68, 68.2, 68.6),
+  upper_bound = c(68.1,68.5,69.2,70),
+  lower_bound = c(67.5,67.5,67,67.1))
+    
+temp %>% 
+  ggplot(aes(x = year, y = life_exp))  +
+    geom_hline(yintercept=40, color = "lightgrey") +
+    geom_line(color = "#440154", size = 0.8) +
+    #geom_point(color = "#440154") +
+    #ggrepel::geom_label_repel(data = . %>% filter(year == 1962), aes(label = continent)) +
+    geom_smooth(data=temp2, aes(x = year, y = life_exp, ymax=upper_bound, ymin=lower_bound), 
+              colour='#cf4446',  stat='identity', linetype = "twodash") +
+    labs(title = "",
+       subtitle = "Evolução da expectativa de vida, média dos países",
+           caption = "Source: Gapminder.org",
+           x = NULL,
+           y = NULL,
+           fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    #scale_x_date(date_breaks = "1 year") +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          #panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "none")
+```
+
+##### facet/ grouping
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  # filter(continent %in% c("América")) %>%
+  filter(year >= 1962, year <= 2007) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_point(alpha = 0.3, color="lightgrey", size = .5) +
+    geom_line(aes(group = country), alpha = 0.3, color="lightgrey") +
+    geom_smooth() + 
+  scale_colour_brewer(palette = "Set2") +
+  facet_wrap(continent ~ .) +
+    labs(title = "",
+       subtitle = "Evolução da expectativa de vida, média dos continentes",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1965, 2010), n.breaks = 4) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          legend.position = "none")
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  # filter(continent %in% c("América")) %>%
+  filter(year >= 1962, year <= 2007) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_point(alpha = 0.3, color="lightgrey", size = .5) +
+    geom_line(aes(group = country), alpha = 0.3, color="lightgrey") +
+    geom_smooth() + 
+  scale_colour_brewer(palette = "Set2") +
+  #facet_wrap(continent ~ .) +
+    labs(title = "",
+       subtitle = "Evolução da expectativa de vida, média dos continentes",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1965, 2010), n.breaks = 4) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          legend.position = "none")
+```
+
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  # filter(continent %in% c("América")) %>%
+  filter(year >= 1962, year <= 2007) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_point(size = .5, alpha = 0.6) +
+    geom_line(aes(group = country), alpha = 0.6) +
+    #geom_smooth() + 
+  scale_colour_brewer(palette = "Set2") +
+  facet_wrap(continent ~ .) +
+    labs(title = "",
+       subtitle = "Evolução da expectativa de vida, média dos continentes",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1965, 2010), n.breaks = 4) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          legend.position = "none")
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  # filter(continent %in% c("América")) %>%
+  filter(year >= 1962, year <= 2007) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_point(alpha = 0.6, size = .5) +
+    geom_line(aes(group = country), alpha = 0.6) +
+    #geom_smooth() + 
+  scale_colour_brewer(palette = "Set2") +
+  #facet_wrap(continent ~ .) +
+    labs(title = "",
+       subtitle = "Evolução da expectativa de vida, média dos continentes",
+       #caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1965, 2010), n.breaks = 4) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          legend.position = "none")
+```
+
+```{r}
+temp <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(continent %in% c("América")) %>%
+  filter(year >= 1962, year <= 2007) 
+
+temp %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+   scale_color_manual(values = c("#FC8D62")) +
+    geom_point(alpha = 0.3, color="lightgrey") +
+    geom_line(aes(group = country), alpha = 0.3, color="lightgrey") +
+    geom_smooth() + 
+    labs(title = "",
+       subtitle = "Evolução da expectativa de vida, média do continente Americano",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    scale_y_continuous(limits = c(40, 80)) +
+    scale_x_continuous(limits = c(1960, 2010), n.breaks = 10) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major.y = element_blank(),
+          legend.position = "none")
+```
+
+
+
+### line + variability (by countries)
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    #geom_point(color = "gray") +
+    #geom_line(aes(group = country), color = "gray") +
+    geom_point(alpha = 0.3) +
+    geom_line(aes(group = country), alpha = 0.3) +
+    scale_colour_brewer(palette = "Set2") +
+    guides(fill = guide_legend(reverse = F)) +
+    labs(title = "",
+       subtitle = "...",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank())
+```
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_point(alpha = 0.3, color = "lightgray") +
+    geom_line(aes(group = country), alpha = 0.3, color = "lightgray") +
+    geom_smooth() +
+    scale_colour_brewer(palette = "Set2") +
+    guides(fill = guide_legend(reverse = F)) +
+    labs(title = "",
+       subtitle = "...",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank())
+```
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    #geom_point(color = "gray") +
+    #geom_line(aes(group = country), color = "gray") +
+    geom_point(alpha = 0.3) +
+    geom_line(aes(group = country), alpha = 0.3) +
+    geom_smooth() +
+    scale_colour_brewer(palette = "Set2") +
+    guides(fill = guide_legend(reverse = F)) +
+    labs(title = "",
+       subtitle = "...",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank())
+```
+
+```{r}
+gapminder %>% 
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_point(alpha = 0.3, color="lightgrey") +
+    geom_line(aes(group = country), alpha = 0.3, color="lightgrey") +
+    geom_smooth() + 
+    facet_grid( continent ~ .) +
+    scale_colour_brewer(palette = "Set2") +
+    labs(title = "",
+       subtitle = "Evolução da Expectativa de Vida Média, por continente",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+          legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c(1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2002)) %>%
+  ggplot(aes(x = year, y = life_exp, color = continent))  +
+    geom_point(alpha = 0.3) +
+    geom_line(aes(group = country), alpha = 0.3) +
+    geom_smooth() + 
+    facet_grid( continent ~ .) +
+    scale_colour_brewer(palette = "Set2") +
+    labs(title = "",
+       subtitle = "...",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+          legend.position = "none")
+```
+
+
+
+
+### dot - 1962 vs. 2007
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(continent %in% c("América", "Ásia", "Europa")) %>% 
+  filter(year %in% c("1962", "2007")) %>% 
+  group_by(year, continent, region) %>%
+  summarise(
+    life_exp = mean(life_exp, na.rm=T)
+  ) %>% 
+  ungroup() %>%
+  mutate(year = as_factor(year)) %>% 
+  mutate(color = paste(continent,"-", region,"-", year)) %>% 
+  ggplot(aes(x = life_exp, y = region, color = color, label = year))  +
+    geom_line(aes(group = region), color = "lightgrey", size = 1.8, alpha = 0.3) +
+    geom_point() +
+    scale_color_manual(values = 
+                         c(rep(c("lightgrey", "#FC8D62"),4), 
+                           rep(c("lightgrey", "#8DA0CB"),6), 
+                           rep(c("lightgrey", "#E78AC3"),5))) +
+#Set2 = c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854", "#FFD92F", "#E5C494", "#B3B3B3")
+    #scale_colour_brewer(palette = "Set2") +
+    facet_grid(continent ~ ., scales = "free", space = "free_y") +
+    labs(title = "",
+       subtitle = "...",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = .05),
+          #panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = .05),
+          #strip.text.y.left = element_text(angle = 0),
+          strip.text.y = element_text(angle = 0),
+          legend.position = "none")) 
+
+```
+
+```{r}
+( p <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(continent %in% c("América", "Ásia", "Europa")) %>% 
+  filter(year %in% c("1962", "2007")) %>% 
+  group_by(year, continent, region) %>%
+  summarise(
+    life_exp = mean(life_exp, na.rm=T)
+  ) %>% 
+  ungroup() %>%
+  mutate(year = as_factor(year)) %>% 
+  mutate(color = paste(continent,"-", region,"-", year)) %>% 
+  ggplot(aes(x = life_exp, y = region, label = year, shape = year))  +
+    geom_line(aes(group = region, color = continent), size = 1.8, alpha = 0.3) +
+    geom_point(data = . %>% filter(year == "2007"), aes(color = continent), size = 2) +
+    geom_point(data = . %>% filter(year == "1962"), aes(color = continent), alpha = .6) +
+    scale_color_manual(values = c("#FC8D62", "#8DA0CB", "#E78AC3")) +
+    #scale_color_manual(values = c("#66C2A5", "#FC8D62", "#8DA0CB", "#E78AC3", "#A6D854")) +
+    #scale_colour_brewer(palette = "Set2") +
+    facet_grid(continent ~ ., scales = "free", space = "free_y") +
+    labs(title = "",
+       subtitle = "Evolução da Expectativa de Vida por subdivisões dos continentes",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme_nath() +
+    guides(color=FALSE) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = .05),
+          #panel.grid.minor = element_line(linetype = "dotted", colour = "lightgrey", size = .05),
+          #strip.text.y.left = element_text(angle = 0),
+          strip.text.y = element_text(angle = 0),
+          legend.position = "top")) 
+
+```
+
+
+
+
+# Distribuição
+
+## Países
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("1962", "2007")) %>% 
+  select(life_exp, year) %>% 
+  group_by(year) %>% 
+  skimr::skim()
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_histogram(bins = 11, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          # panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "none")
+
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp, y = after_stat(count/sum(count))))  +
+    geom_histogram(bins = 11, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+    scale_y_continuous(labels = scales::percent) +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          # panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "none")
+
+```
+
+
+
+
+```{r}
+p1 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_histogram(bins = 11, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    # scale_y_continuous(limits = c(0, 50)) +
+    theme(panel.grid.major.x = element_blank(),
+          # panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "none")
+
+p2 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 0.7, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+    labs(title = "",
+      caption = "Source: Gapminder.org",
+     x = NULL,
+     y = NULL,
+     fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          #axis.text.y=element_blank(),
+         legend.position = "none")
+
+p1 + p2
+  patchwork::plot_annotation(title = 'Distribuição da expectativa de vida dos países, ano de 2007') 
+```
+
+
+```{r}
+p1 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_histogram(bins = 11, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    # scale_y_continuous(limits = c(0, 50)) +
+    theme(panel.grid.major.x = element_blank(),
+          # panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+         legend.position = "none")
+
+p2 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 0.7, color = "#21918c", fill = "#21918c", alpha = 0.9) +  
+    geom_text(aes(x=50, y = 0.025, label = "Soma da área \n igual a 1"),
+            linetype="dashed", color = "#21918c") +
+    theme_nath() +
+    labs(title = "",
+      caption = "Source: Gapminder.org",
+     x = NULL,
+     y = NULL,
+     fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          #axis.text.y=element_blank(),
+         legend.position = "none")
+
+p1 + p2
+  patchwork::plot_annotation(title = 'Distribuição da expectativa de vida dos países, ano de 2007') 
+```
+
+
+```{r}
+p1 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_histogram(bins = 4, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+     labs(title = "",
+     x = NULL,
+     y = "contagem",
+     fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+
+p2 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_histogram(bins = 12, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+    labs(title = "",
+     x = NULL,
+     y = NULL,
+     fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+
+p3 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_histogram(bins = 25, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+    labs(title = "",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+
+p1 + p2 + p3 + 
+patchwork::plot_annotation(title = 'Histogramas com bins = 4, 12 e 25') 
+
+```
+
+```{r}
+p1 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 1.5, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+     labs(title = "",
+     x = NULL,
+     y = "densidade",
+     fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+
+
+p2 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 0.6, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+    labs(title = "",
+     x = NULL,
+     y = NULL,
+     fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+
+p3 <- gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 0.3, fill = "#440154", alpha = 0.9) +  
+    theme_nath() +
+    labs(title = "",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+
+p1 + p2 + p3 + 
+patchwork::plot_annotation(title = 'Densidades com ajuste bandwidth = 1.5, 0.7 e 0.4') 
+
+```
+
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 1, fill = "#440154", alpha = 0.4) +  
+    # geom_vline(aes(xintercept=mean(life_exp)), linetype="solid", color = "#21918c")+
+    # geom_text(aes(x=mean(life_exp)-3, y = 0.04, label = paste("média =", round(mean(life_exp),0))),
+    #           linetype="dashed", color = "#21918c") +
+    # geom_vline(aes(xintercept=mean(life_exp) - sd(life_exp)), linetype="dashed")+
+    # geom_vline(aes(xintercept=mean(life_exp) + sd(life_exp)), linetype="dashed")+
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          axis.text.y=element_blank(),
+          legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 1, fill = "#440154", alpha = 0.4) +  
+    geom_vline(aes(xintercept=mean(life_exp)), linetype="solid", color = "#21918c")+
+    geom_text(aes(x=mean(life_exp)-3, y = 0.04, label = paste("média =", round(mean(life_exp),0))),
+              linetype="dashed", color = "#21918c") +
+    # geom_vline(aes(xintercept=mean(life_exp) - sd(life_exp)), linetype="dashed")+
+    # geom_vline(aes(xintercept=mean(life_exp) + sd(life_exp)), linetype="dashed")+
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          axis.text.y=element_blank(),
+         legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 1, fill = "#440154", alpha = 0.4) +  
+  
+    geom_vline(aes(xintercept=mean(life_exp)), linetype="solid", color = "#21918c")+
+    geom_text(aes(x=mean(life_exp)-3, y = 0.04, label = paste("média =", round(mean(life_exp),0))),
+              linetype="dashed", color = "#21918c") +
+  
+    geom_vline(aes(xintercept=mean(life_exp) - sd(life_exp)), linetype="dashed", color = "#31688e")+
+    geom_text(aes(x=mean(life_exp)- sd(life_exp)-1, y = 0.04, 
+                  label = round(round(mean(life_exp),0) - sd(life_exp),0)),
+              linetype="dashed", color = "#31688e") +
+
+    geom_vline(aes(xintercept=mean(life_exp) + sd(life_exp)), linetype="dashed", color = "#31688e")+
+    geom_text(aes(x=mean(life_exp)+ sd(life_exp)+1, y = 0.04, 
+                  label = round(mean(life_exp) + sd(life_exp),0)),
+              linetype="dashed", color = "#31688e") +
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          axis.text.y=element_blank(),
+         legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 1, fill = "#440154", alpha = 0.4) +  
+  
+    geom_vline(aes(xintercept=mean(life_exp)), linetype="solid", color = "#21918c")+
+    geom_text(aes(x=mean(life_exp)-3, y = 0.04, label = paste("média =", round(mean(life_exp),0))),
+              linetype="dashed", color = "#21918c") +
+  
+    geom_vline(aes(xintercept=mean(life_exp) - sd(life_exp)), linetype="dashed", color = "#31688e")+
+    geom_text(aes(x=mean(life_exp)- sd(life_exp)-1, y = 0.04, 
+                  label = round(round(mean(life_exp),0) - sd(life_exp),0)),
+              linetype="dashed", color = "#31688e") +
+
+    geom_vline(aes(xintercept=mean(life_exp) + sd(life_exp)), linetype="dashed", color = "#31688e")+
+    geom_text(aes(x=mean(life_exp)+ sd(life_exp)+1, y = 0.04, 
+                  label = round(mean(life_exp) + sd(life_exp),0)),
+              linetype="dashed", color = "#31688e") +
+  
+    geom_vline(aes(xintercept=min(life_exp)), linetype="dotted", color = "darkgrey")+
+    geom_text(aes(x=min(life_exp)+1, y = 0.043, 
+                  label = round(min(life_exp),0)),
+              linetype="dashed", color = "darkgrey") +
+  
+    
+    geom_vline(aes(xintercept=max(life_exp)), linetype="dotted", color = "darkgrey")+
+    geom_text(aes(x=max(life_exp)-1, y = 0.043, 
+                  label = round(max(life_exp),0)),
+              linetype="dashed", color = "darkgrey") +
+  
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          axis.text.y=element_blank(),
+         legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 1, fill = "#440154", alpha = 0.4) +  
+  
+    geom_vline(aes(xintercept=median(life_exp)), linetype="solid", color = "#21918c")+
+    geom_text(aes(x=median(life_exp) - 4, y = 0.04, 
+                  label = paste("mediana = ", round(median(life_exp),0))),
+              linetype="dashed", color = "#21918c") +
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          axis.text.y=element_blank(),
+         legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 1, fill = "#440154", alpha = 0.4) +  
+  
+    geom_vline(aes(xintercept=median(life_exp)), linetype="solid", color = "#21918c")+
+    geom_text(aes(x=median(life_exp) - 4, y = 0.04, 
+                  label = paste("mediana = ", round(median(life_exp),0))),
+              linetype="dashed", color = "#21918c") +
+  
+    geom_vline(aes(xintercept=quantile(life_exp, 0.25)), linetype="dashed", color = "#31688e")+
+    geom_text(aes(x=quantile(life_exp, 0.25)-1, y = 0.04, 
+                  label = round(quantile(life_exp, 0.25),0)),
+              linetype="dashed", color = "#31688e") +
+
+    geom_vline(aes(xintercept=quantile(life_exp, 0.75)), linetype="dashed", color = "#31688e")+
+    geom_text(aes(x=quantile(life_exp, 0.75)+1, y = 0.04, 
+                  label = round(quantile(life_exp, 0.75),0)),
+              linetype="dashed", color = "#31688e") +
+  
+  
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          axis.text.y=element_blank(),
+         legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp))  +
+    geom_density(adjust = 1, fill = "#440154", alpha = 0.4) +  
+    geom_vline(aes(xintercept=mean(life_exp)), linetype="solid", color = "#21918c")+
+    geom_text(aes(x=mean(life_exp)-3, y = 0.04, label = paste("média =", round(mean(life_exp),0))),
+              linetype="dashed", color = "#21918c") +
+  
+    geom_vline(aes(xintercept=median(life_exp)), linetype="solid", color = "#fde725")+
+    geom_text(aes(x=median(life_exp) + 4, y = 0.03, 
+                  label = paste("mediana = ", round(median(life_exp),0))),
+              linetype="dashed", color = "#fde725") +
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          axis.text.y=element_blank(),
+         legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp, y =1))  +
+    # geom_violin(fill = "#440154", color = "#440154", alpha = 0.7) +  
+    geom_violin(width=1, fill = "#440154", color = "#440154", alpha = 0.4) +
+    geom_boxplot(width=0.2, fill = "white", color="#440154", alpha=0.4) +
+    # geom_text(aes(x=median(life_exp) - 4, y = 0.04, 
+    #               label = paste("mediana = ", round(median(life_exp),0))),
+    #           linetype="dashed", color = "#21918c") +
+    # 
+    # geom_text(aes(x=quantile(life_exp, 0.25)-1, y = 0.04, 
+    #               label = round(quantile(life_exp, 0.25),0)),
+    #           linetype="dashed", color = "#31688e") +
+    # 
+    # geom_text(aes(x=quantile(life_exp, 0.75)+1, y = 0.04, 
+    #               label = "3º quartil" ),
+    #           linetype="dashed", color = "#31688e") +
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+          axis.text.y=element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          legend.position = "none")
+```
+
+
+
+
+## Continentes
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("1962", "1977", "2007")) %>% 
+  mutate(year = forcats::fct_rev(as_factor(year))) %>% 
+  ggplot(aes(x = life_exp, y = year))  +
+    ggridges::geom_density_ridges(fill = "#440154", alpha = 0.4, scale = 0.85) +
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida dos países por ano",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    scale_x_continuous(limits = c(20, 90)) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          #axis.text.y=element_blank(),
+          legend.position = "none")
+```
+
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2007") %>%
+  ggplot(aes(x = life_exp, y = forcats::fct_rev(continent), color = continent, fill = continent))  +
+    ggridges::geom_density_ridges(alpha = 0.8) +
+    scale_fill_brewer(palette = "Set2") +
+    scale_color_brewer(palette = "Set2") +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida por continente, ano de 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    theme_nath() +
+    scale_x_continuous(limits = c(20, 90)) +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+```
+
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "1962") %>%
+  ggplot(aes(x = life_exp, y = forcats::fct_rev(continent), color = continent, fill = continent))  +
+    ggridges::geom_density_ridges(alpha = 0.8) +
+    scale_fill_brewer(palette = "Set2") +
+    scale_color_brewer(palette = "Set2") +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida por continente, ano de 1962",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    scale_x_continuous(limits = c(20, 90)) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("1962", "2007")) %>% 
+  ggplot(aes(x = life_exp, y = forcats::fct_rev(continent), 
+             color = interaction(year,continent), fill = interaction(year,continent)))  +
+    ggridges::geom_density_ridges(alpha = 0.4) +
+    scale_fill_manual(values = c("#66C2A5", "#388C72", "#FC8D62", "#FA4F0A", 
+                                  "#8DA0CB","#4964A1", "#E78AC3","#D42C94", 
+                                  "#A6D854", "#77A927")) +
+    scale_color_manual(values = c("#66C2A5", "#388C72", "#FC8D62", "#FA4F0A", 
+                                  "#8DA0CB","#4964A1", "#E78AC3","#D42C94", 
+                                  "#A6D854", "#77A927")) +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida por continente, 1962 e 2007",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    scale_x_continuous(limits = c(20, 90)) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+```
+## Region
+
+```{r}
+gapminder_full %>% 
+  filter(year == 2007) %>% 
+  group_by(region) %>%
+  select(life_exp) %>% 
+  skimr::skim()
+```
+
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year %in% c("1962", "1977", "2007")) %>% 
+  filter(continent == "Ásia") %>% 
+  mutate(year = forcats::fct_rev(as_factor(year))) %>% 
+  ggplot(aes(x = life_exp, y = year))  +
+    ggridges::geom_density_ridges(alpha = 0.8, color = "#4964A1", fill = "#8DA0CB") +
+    # scale_fill_manual(values = c("#A6D854", "#77A927")) +
+    # scale_color_manual(values = c("#A6D854", "#77A927")) +
+    theme_nath() +
+    labs(title = "",
+         subtitle = "Distribuição da expectativa de vida da Ásia por ano",
+         caption = "Source: Gapminder.org",
+         x = NULL,
+         y = NULL,
+         fill = NULL) +
+    scale_x_continuous(limits = c(20, 90)) +
+    theme(panel.grid.major.x = element_blank(),
+          panel.grid.major = element_line(linetype = "dotted", colour = "lightgrey", size = 0.2),
+          #axis.text.y=element_blank(),
+          legend.position = "none")
+```
+
+
+### boxplot
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == "2002") %>%
+  #filter(continent == "Oceania") %>%
+  #filter(country == "Australia") %>%
+  # group_by(year, country, continent) %>% 
+  # summarise(
+  #   life_exp = mean(life_exp, na.rm=T),
+  #   fertility = mean(fertility, na.rm=T)
+  # ) %>% 
+  # ungroup() %>% 
+  #mutate(year = as_factor(year)) %>% 
+  ggplot(aes(x = life_exp, y = continent, color = continent))  +
+    #ggplot(aes(x = continent, y = n, group = year, fill = year)) + 
+    #geom_col(position = "dodge", colour = "white", size = 0.2, alpha = 0.8) +
+    #scale_y_continuous(labels = scales::comma, expand = c(0, 0)) +
+    #stat_summary(geom="point", fun.data = ~mean(.x,na.rm=T)) +
+    geom_boxplot() +
+    #geom_smooth(method = "glm") +
+    #facet_grid(. ~ country, scales = "free_x") +
+    #scale_fill_brewer(palette = "Set2") +
+    scale_color_brewer(palette = "Set2") +
+    # labs(title = "",
+    #      subtitle = "Contagem de Países por Continente, de 1952 a 2002",
+    #      caption = "Source: Gapminder.org",
+    #      x = NULL,
+    #      y = NULL,
+    #      fill = NULL) +
+    theme_nath() +
+    theme(panel.grid.major.x = element_blank(),
+         legend.position = "none")
+```
+
+# Rascunhos
+
+## Treemap
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == 2002) %>%
+  mutate(gdp_percap = pop * gdp_percap) %>% 
+  group_by(year, country, continent) %>%
+  summarise(
+    life_exp = mean(life_exp, na.rm=T),
+    fertility = mean(fertility, na.rm=T),
+    gdp_percap = mean(gdp_percap, na.rm=T)
+  ) %>%
+  ungroup() %>%
+  ggplot(aes(area = gdp_percap, fill = country, subgroup = continent, label = country)) +
+    treemapify::geom_treemap() +
+    treemapify::geom_treemap_subgroup_border(colour = "grey10") +
+    treemapify::geom_treemap_subgroup_text(fontface = "bold", colour = "#f0f0f0", 
+                                           alpha = 0.7, place = "bottomleft") +
+    treemapify::geom_treemap_text(colour = "white", place = "centre", reflow = TRUE) +
+    #scale_fill_brewer(palette = "Set2") +
+    labs(title = "",
+         subtitle = "Country GDP by continent, 2002",
+         caption = "Source: Gapminder.org",
+         x = NULL, 
+         y = NULL, 
+         fill = NULL) +
+    theme_nath() +
+    theme(legend.position = "none")
+```
+
+```{r}
+gapminder_full %>% 
+  filter(continent != "FSU") %>% 
+  filter(year == 2002) %>%
+  mutate(gdp_percap = pop * gdp_percap) %>% 
+  group_by(year, country, continent) %>%
+  summarise(
+    life_exp = mean(life_exp, na.rm=T),
+    fertility = mean(fertility, na.rm=T),
+    gdp_percap = mean(gdp_percap, na.rm=T)
+  ) %>%
+  ungroup() %>%
+  ggplot(aes(area = gdp_percap, fill = continent, subgroup = continent, label = country)) +
+    treemapify::geom_treemap() +
+    treemapify::geom_treemap_subgroup_border(colour = "grey10") +
+    treemapify::geom_treemap_subgroup_text(fontface = "bold", colour = "#f0f0f0", 
+                                           alpha = 0.7, place = "bottomleft") +
+    treemapify::geom_treemap_text(colour = "white", place = "centre", reflow = TRUE) +
+    scale_fill_brewer(palette = "Set2") +
+    labs(title = "",
+         subtitle = "Country GDP by continent, 2002",
+         caption = "Source: Gapminder.org",
+         x = NULL, 
+         y = NULL, 
+         fill = NULL) +
+    theme_nath() +
+    theme(legend.position = "none")
+```
+
+## Lollipop + América
+
+```{r}
+gapminder_full %>%
+  filter(continent != "FSU") %>% 
+  filter(year == 2007) %>% 
+  filter(continent == "América") %>%
+  #filter(region %in% c("Canada", "United States", "Dominican Republic", "Netherlands Antilles")) %>%
+  ggplot(aes(life_exp, fct_reorder(region, life_exp))) + 
+    geom_point(color = "#FC8D62", alpha = 0.8) +
+    theme_nath() +
+    labs(title = "",
+       subtitle = "Expectativa de Vida dos países do continente Americano, 2007",
+         caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+        legend.position = "none")
+```
+
+```{r}
+gapminder_full %>%
+  filter(continent != "FSU") %>% 
+  filter(year == 2002) %>% 
+  filter(continent == "América") %>%
+  #filter(region %in% c("Canada", "United States", "Dominican Republic", "Netherlands Antilles")) %>%
+  ggplot(aes(life_exp, fct_reorder(region, life_exp))) + 
+    geom_point(color = "#FC8D62", alpha = 0.8) +
+    geom_point(data = . %>% filter(country == "Brazil"), color = "mediumpurple4", alpha = 0.8) +
+    geom_text(data = . %>% filter(country == "Brazil"), aes(label = country),
+              color = "mediumpurple4", alpha = 0.8, vjust = -0.8, size = 4) +
+    theme_nath() +
+    labs(title = "",
+       subtitle = "Expectativa de Vida dos países do continente Americano, 2007",
+       caption = "Source: Gapminder.org",
+       x = NULL,
+       y = NULL,
+       fill = NULL) +
+    theme(panel.grid.major.x = element_blank(),
+        legend.position = "none")
+```
+

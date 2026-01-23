@@ -1,0 +1,453 @@
+---
+title: "Contextualização do Pré Processamento de Dados"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, collapse = TRUE)
+```
+
+# Bibliotecas
+
+```{r}
+library(tidyverse)
+```
+
+
+# Introdução
+
+Neste material iremos discutir sobre desafios relacionados a etapa de preparação de dados, usualmente também conhecida pela abreviação `dataprep`. Aqui procuramos garantir que as informações estejam retratando de forma apropriada as variáveis que se propõem a representar. 
+
+
+# Pré-processamento
+
+A etapa de pré-processamento faz uso de todos os recursos que utilizamos até aqui. Contudo, tendo como enfoque garantir que o dado está sendo devidamente representado, queremos garantir a qualidade da informação! Algumas das ações que podemos relacionar a esta etapa, organizadas por grupos, são:
+
+- Importação
+  - Identificar unidade de análise 
+  - Agregar dados segundo a unidade identificada
+  - Tratar registros inválidos e linhas duplicadas
+  - Tornar únicos os nomes das colunas
+  - Combinar bases de dados
+
+
+- Perfil 
+  - Gerar metadados/metainformação dos dados
+  - Verificar tipos de dados e unidades de medida
+  - Corrigir formatações incorretas
+  - Identificar amostras tendenciosas 
+  
+  
+- Limpeza
+  - Remover colunas irrelevantes
+  - Filtrar observações fora do escopo de interesse
+
+
+- Ajustes pré modelagem (**dataprep**)
+  - Tratar dados faltantes (missing data)
+  - Aplicar codificações
+  - Aplicar padronizações
+
+
+Note que se tratam de ajustes que podem fazer a diferença entre o sucesso e o fracasso da sua análise, e não vou te enganar, isso dá trabalho! Algumas estimativas indicam que até 80% do tempo de uma análise de dados pode se concentrar aqui. Desde o entendimento da origem de um dado faltante, passando por problemas como abreviações e espaços extras indevidos, erros de digitação, diferença entre a magnitude dos dados, tudo isto pode afetar MUITO as suas conclusões. Sendo, portanto, uma etapa crucial para garantir que os dados estejam representando corretamente a realidade.
+
+
+## E no R? 
+
+Como nesta etapa o desafio é mais investigativo e julgamental do que em termos técnicos. Com o que foi visto nos módulos anteriores, você será capaz de endereçar os desafios aqui, apesar de existem pacotes que facilitam determinadas atividades, como por exemplo o `codemeta` que nos auxiliar com a criação de metadados, ou o pacote `naniar` que nos auxilia com dados faltantes (falaremos dele logo mais). Mas é importante ressaltar aqui que, em última instância, é uma questão de pesquisar um pacote que te ajude, algo como `library R missing data` no seu mecanismo de busca preferido, e você terá vários pacotes à disposição — DICA: pesquisas em inglês tendem a ser mais efetivas. A conclusão aqui é: o verdadeiro conhecimento nesta etapa é ter um horizonte sobre O QUE precisa ser feito, muito mais do que o COMO aplicar. 
+
+
+## Ajustes pré modelagem (dataprep)
+
+Apesar dos comentários acima, existe um grupo em particular que gostaria de comentar um pouco mais. No caso, os **ajustes pré modelagem**, ou ainda **dataprep**. Tais pré-processamentos são particularmente importantes pois podem ser obrigatórios a depender da técnica que você decida aplicar na etapa de modelagem (falaremos mais sobre esta etapa no próximo módulo). Isto porque algumas técnicas/algoritmos possuem algumas limitações, como por exemplo não ser possível trabalhar diretamente com features categóricas por exemplo. Sendo assim, teremos uma breve discussão sobre o que envolve cada um dos principais `dataprep`. No caso dos dados faltantes, visto a sua relevância para além do contexto de modelagem, daremos uma profundidade um pouco maior à discussão. 
+
+Como pacote de referência para pré-processamentos, utilizaremos o [`recipes`](https://recipes.tidymodels.org/), biblioteca que faz parte do meta-pacote `tidymodels`.
+
+
+### Aplicar codificações
+
+Muitas técnicas de modelagem utilizadas no contexto de análise de dados são capazes de lidar apenas com valores numéricos. De modo que, para que esses dados não sejam disperdiçados, utilizamos técnicas de Codificação de Variáveis, que nada mais é do que o processo de transformar a codificação de variáveis categóricas em numéricas, logo, adequadas às técnicas de modelagem que possuem tal restrição.
+
+Existem várias estratégias para fazer isso, sendo importante entender a natureza e características da variável em questão, para julgar qual é a técnica mais adequada para cada contexto. Algumas estratégias comuns são:
+
+- One Hot Encoding (`recipes::step_dummy(.x, one_hot = T)`): cria-se uma variável binária para cada categoria da variável original. No contexto de Machine Learning, esta é uma das codificações mais utilizadas.
+
+- Variáveis Dummy (`recipes::step_dummy()`): similar ao One Hot Encoding, mas aqui criaremos uma variável binária a menos. Isto porque uma das categorias da variável original, pode ser representada pela exclusão das demais. No contexto de Modelagem Estatística, esta é uma das codificações mais utilizadas.
+
+- Tokenize (`recipes::step_tokenize()`): divisão de uma cadeia de caracteres em partes menores.
+
+- Hash  (`textrecipes::step_dummy_hash()`): similar ao One Hot Encoding, mas usualmente utilizado para features de alta cardinalidade.
+
+- Label Encoding: cada categoria passa a ser representada por um número.
+
+- Frequency Encoding: O valor numérico atribuído a cada categoria é a frequência que tal categoria apresenta.
+
+Aqui é importante ter em conta pontos como: quantidade de categorias existentes, nosso interesse em manter a interpretabilidade dos resultados, ou ainda pontos relacionados a própria modelagem (como questões de multicolineariedade). Este [artigo do pacote recipes](https://recipes.tidymodels.org/articles/Dummies.html), discute algumas opções relacionadas a features categóricas
+
+
+### Aplicar padronizações
+
+Conforme comentado, as técnicas de modelagem lidam, em geral, com valores numéricos. E quando temos variáveis com magnitudes e variações muito diferentes como, por exemplo, idade e salário, o modelo pode assumir que a variável de maior magnitude é mais relevante, e dar um peso maior para ela – o que muitas vezes não é verdade. Por isso utilizamos técnicas de padronização, que são métodos para fazer com que as variáveis tenham uma escala parecida, ou ainda, fixa. Com isso garantimos que cada variável tenha uma contribuição parecida no modelo e, em alguns casos, essa técnica também torna o processo de modelagem mais rápido.
+
+Vamos repassar um exemplo:
+
+```{r}
+dados::casas %>% 
+  select(where(is.numeric)) %>% 
+  glimpse()
+```
+
+```{r}
+dados_porao <- dados::casas %>% 
+  select(lote_area, venda_valor, acima_solo_num_comodos, alvenaria_area) 
+
+
+p1 <- dados_porao %>% 
+  pivot_longer(everything()) %>% 
+  ggplot(aes(value, name, color = name)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(legend.position = "bottom", legend.title=element_blank()) +
+  labs(x = "", y = "") 
+
+
+p2 <- dados_porao %>% 
+  scale() %>% 
+  as_tibble() %>% 
+  pivot_longer(everything()) %>% 
+  ggplot(aes(name, value, color = name)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(x = "", y = "") +
+  ggtitle("Standardization Z-Score") +
+  guides(x = "none")
+
+
+p3 <- dados_porao %>% 
+  mutate(across(everything(), ~scales::rescale(.x, to = c(0, 1)))) %>% 
+  pivot_longer(everything()) %>% 
+  ggplot(aes(name, value, color = name)) +
+  geom_boxplot() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(x = "", y = "") +
+  ggtitle("Min-Max Scaling") +
+  guides(x = "none")
+```
+
+```{r warning=FALSE, fig.width = 7, fig.height = 5}
+library(patchwork)
+
+p1 / (p2 + p3) + 
+  plot_annotation(title = 'Features Numéricas')
+```
+
+Note a similaridade desta discussão com o módulo sobre as investigações iniciais, particularmente a questão de medidas de sumarização absolutas vs. relativas ;)
+
+
+### Tratar dados faltantes (missing)
+
+Aqui, nosso objetivo primário deve ser entender qual o mecanismo que causou a ausência dos dados. Tendo como referência a discussão feita no [Capítulo 08 do livro Feature Engineering and Selection: A Practical Approach for Predictive Models](http://www.feat.engineering/handling-missing-data.html), temos como três principais causas de ausência de dados:
+
+
+- **Deficiência Estrutural** : a ausência nada mais é do que a representação de um cenário, na prática é quase como uma opção de resposta da variável Por exemplo: considere uma entrevista em que pessoas respondam sobre possuírem ou não um imóvel e, para aqueles que responderam que possuem um bem, há uma segunda pergunta, para que indiquem o tipo do imóvel (casa ou apartamento, por exemplo). De modo que, para a segunda pergunta, poderíamos ter dados faltantes para aqueles que responderam não possuir imóveis na primeira pergunta. Aqui os dados faltantes poderiam ser substituídos por "não possuem imóvel"
+
+
+- **Causas Específicas** : a ocorrência de eventos específicos é um dos mecanismos que gera a ausência do dado. Como exemplo, podemos considerar dados provenientes de um estudo clínico, tendo como uma das variáveis a informação sobre a recuperação do paciente, no caso, "sim" ou "não". E aqui os dados faltantes poderiam ter maior prevalência justo entre os pacientes que não se recuperaram, ou que interromperam o acompanhamento devido a efeitos adversos relacionados à comorbidade ou ao próprio tratamento. 
+ 
+- **Ocorrências Aleatórias** : quando não é possível identificar a causa da ausência dos dados, tampouco se há, ou não, uma concentração em algum subgrupo da população.
+
+Em termos de endereçamento, existem diferentes modos de atuar. Podemos:
+
+ 
+- Criar uma categoria para representar os dados faltantes
+- Imputar valores (por meio de sumarizações como média, técnicas baseadas em modelos, entre outros)
+- Deletar a informação por meio da exclusão das observações, ou da respectiva variável 
+
+Tendo que, para cada uma dessas estratégias, é requerido algum grau de investigação e decisão, por exemplo: ao decidir por uma imputação de dados, qual será o valor da imputação? A média da coluna? A mediana? Utilizaremos alguma técnica baseada em modelos?  E a resposta aqui é: depende! No contexto em que os seus dados faltantes. 
+
+Vamos agora comentar um pouco sobre o ferramental relacionado aos valores faltantes.
+
+#### no R
+
+Uma vez que você conhece a fonte de origem dos valores faltantes, pode concluir que substitui-los é o melhor caminho. Por exemplo, você pode saber que todos os valores de "N/A", "NA" e "Não disponível" ou -99 ou -1 devem estar ausentes.
+
+
+
+#### pacote tidyr
+
+Comentando um pouco sobre o ferramental, o pacote `tidyr` possui algumas funções para tratar missing data, são elas:
+
+  - `drop_na()` - excluí todas as linhas que apresentam elementos faltantes nas colunas específicadas – no caso em que nenhuma coluna é especificada, todas as colunas são consideras. 
+  - `fill()` - substituí os dados faltantes pelo valor mais recente da referida coluna.
+  - `replace_na()` - substituí os dados faltantes por um valor especificado
+  .
+  
+Alguns exemplos simples
+```{r}
+#base para exemplo
+  airquality[1:5,] 
+
+#exemplo: exclusão das linhas identificadas com NA
+  airquality[1:5,] %>% drop_na() 
+  airquality[1:5,] %>% fill(c(Ozone, Solar.R)) 
+  airquality[1:5,] %>% replace_na(list(Ozone=0, Solar.R=0)) 
+
+```
+
+
+Mas existem pacotes mais robustos, como é o exemplo do pacote naniar:
+
+
+#### pacote naniar
+
+O pacote [naniar](https://github.com/njtierney/naniar) fornece recursos para facilitar o resumo, visualização e manipulação de dados ausentes, garantindo inclusive a integração com o pacote ggplot2 e com o universo tidyverse. Vamos conhecer algumas funções considerando a base de dados `airquality`: 
+
+```{r}
+ggplot(airquality, 
+       aes(x = Solar.R, 
+           y = Ozone)) + 
+  naniar::geom_miss_point()
+```
+
+
+```{r}
+naniar::gg_miss_var(airquality)
+```
+
+
+
+
+```{r}
+naniar::gg_miss_var(airquality, facet = Month)
+```
+
+Para avaliar a análise completa [acesse](https://cran.r-project.org/web/packages/naniar/vignettes/getting-started-w-naniar.html).
+
+
+
+# Feature Engineering
+
+Na wikipedia, a definição de Feature Engineering, o que em português seria algo como Engenharia de Atributos é: "descoberta de variáveis, é o processo de usar o conhecimento da área de negócio, para extrair features (características, propriedades, atributos)". E é exatamente disto que se trata, de traduzir o conhecimento existente em features, de modo que o fenômeno que estamos estudando esteja melhor representado. Gosto muito de pensar na palavra: eloquente :) 
+
+E para ajudar na tangibilização deste conceito, organizei alguns "grupos" que podem nos ajudar a dar um horizonte maior sobre as possibilidades:
+
+
+- **Evolução** ~ cálculo de tendência, sazonalidade e calendário:
+  - Coeficiente angular, média móvel, dia da semana, etc.
+
+- **Representação** ~ ajuste de unidades de medida:
+	- Recencia, contagem, proporção, etc.
+
+- **Relações funcionais** ~ descrição por meio de funções matemáticas:
+  - Transformação Box-cox, splines, etc.
+
+- **Referências** ~ informações relacionadas à área de estudo:
+  - Market Share, Pesquisas, Dados IBGE, etc.
+
+
+Em termos ferramentais, aqui estamos novamente no contexto em que saber o que fazer é mais desafiador do que a execução em si. Ainda assim, construir features pode ter suas dificuldades, particularmente se estivermos tratando de dados menos usuais: como textos, datas e fatores. Seguem alguns exemplos destas classes de objetos, considerando os respectivos pacotes do tidyverse que podem nos ajudar no processo de construção de tais informações.
+
+
+## textos (stringr)
+
+Variáveis de texto são muito comuns nos bancos de dados e, geralmente, dão bastante trabalho para serem manipuladas. Mas não criemos pânico, pois o pacote {stringr}, do `tidyverse` nos fornece recursos para este desafio em uma sintaxe unificada, que auxilia tanto a memorização das funções quanto a leitura do código. Como regras básica do pacote: as funções de manipulação de texto começam com `str_`, então caso você esqueça o nome de uma função, basta digitar `stringr::str_` e apertar TAB para ver quais são as opções :)
+
+O primeiro argumento da função é sempre uma string ou um vetor de strings. Como principais funções temos:
+
+ - `str_detect()` - identificar a presença de padrões em uma string
+ - `str_count()` - contabiliza o número de vezes que um padrão é encontrado
+ - `str_replace()` - substitui um dado padrão em uma string
+ - `str_to_lower()` - converter strings maiúsculas e minúsculas
+
+
+```{r}
+#ex.: Quantos `blue` existem na coluna skin_color?
+
+starwars %>% 
+    #mutate(index_blue = ifelse(skin_color == "blue", "linhas com", "linhas sem")) %>% 
+    mutate(index_blue = ifelse( str_detect(skin_color, "blue") ,
+                                "linhas com", "linhas sem")) %>% 
+    group_by(index_blue) %>% 
+    count
+```
+
+
+```{r}
+#exemplo: como obter a quantidade de palavras contendo a string "berry"
+  fruit %>% 
+    str_count("berry") %>% 
+    sum()
+    
+```
+
+
+### Cheat Sheet
+
+```{r , echo=FALSE,, fig.align = "center", fig.cap="Cheat Sheet stringr"}
+knitr::include_graphics('https://raw.githubusercontent.com/rstudio/cheatsheets/main/pngs/thumbnails/strings-cheatsheet-thumbs.png')
+```
+
+
+## datas (lubridate)
+
+Trabalhar com datas em qualquer linguagem de programação costuma dar alguma dor de cabeça, muitas vezes com as lógicas sendo alteradas de acordo com o tipo do objeto que você está usando (data, hora, data/hora). Contudo, com o pacote {lubridate} passamos a ter recursos para praticamente todas as etapas que envolvem a manipulação de dados, alguns exemplos:
+
+ - `as_date()` - converter um objeto para uma data ou hora 
+ - `wday()` - retorna o dia da semana como um número decimal 
+ - `today()` - retorna a data corrente 
+ - `floor_date()` - arredonda para o limite inferior mais próximo da unidade de tempo
+
+```{r, error=TRUE, message=F}
+#exemplo: retorna erro por não ser uma data válida
+  birthday <- lubridate::dmy("29/02/1971")
+  
+#data ok
+  birthday <- lubridate::dmy("29/02/1972"); birthday
+  
+#carregando `lubridate`, tornando o prefixo `lubridate::` desnecessário
+  library(lubridate)
+  
+#obtenção do dia da semana da data especificada
+  wday(birthday, label = TRUE)
+
+```
+
+
+As funções date() e as_date() assumem que a ordem segue o padrão da língua inglesa: ano-mês-dia (ymd). A função dmy() resolve esse problema estabelecendo explicitamente a ordem dia-mês-ano. Existem funções para todas as ordens possíveis: dmy(), mdy(), myd(), ymd(), ydm() etc.
+
+Uma grande facilidade que essas funções trazem é poder criar objetos com classe date a partir de números e strings em diversos formatos.
+
+```{r}
+data_string <- "21-10-2015"
+class(data_string)
+## [1] "character"
+
+data_date <- date(data_string)
+class(data_date)
+## [1] "Date"
+data_date
+## [1] "0021-10-20"
+
+data_as_date <- as_date(data_string)
+## Warning: All formats failed to parse. No formats found.
+class(data_as_date)
+## [1] "Date"
+data_as_date
+## [1] NA
+
+data_mdy <- dmy(data_string)
+class(data_mdy)
+## [1] "Date"
+data_mdy
+## [1] "2015-10-21"
+```
+
+```{r}
+#lubridate::
+
+library(lubridate)
+
+dmy(21102015)
+## [1] "2015-10-21"
+dmy("21102015")
+## [1] "2015-10-21"
+dmy("21/10/2015")
+## [1] "2015-10-21"
+dmy("21.10.2015")
+## [1] "2015-10-21"
+
+temp1 <- ymd_hms("2010-08-03 00:50:50") ; temp1
+temp2 <- date(temp1) - today() ; temp2
+temp3 <- temp1 + months(3) + weeks(1) ; temp3
+
+rm(temp1, temp2, temp3)
+```
+
+
+### Cheat Sheet
+
+```{r , echo=FALSE,, fig.align = "center", fig.cap="Cheat Sheet lubridate"}
+knitr::include_graphics('https://raw.githubusercontent.com/rstudio/cheatsheets/main/pngs/thumbnails/lubridate-cheatsheet-thumbs.png')
+```
+
+
+## fatores (forcats)
+
+Fatores contemplam uma classe importante para lidar com dados ordinais, ou ainda dados nominais, mas que apresentam poucas categorias. Porém, apesar da importância, é usual ser uma classe subutilizada devido a confusão com dados do tipo character. A minha dica aqui é: você quer pré especificar as categorias possíveis da variável? Classe social, profissão, grupo sanguíneo? Trabalhe com fatores. É algo mais caótico, ou de maior cardinalidade, como nome de cidades, trabalhe com characteres. E para aplicar fatores no R, termos o {forcats} As principais funções do forcats servem para alterar a ordem e modificar os níveis de um fator:
+
+- `fct_count()` - conta o número de valores de cada nível
+- `fct_relevel()` - reordenar os níveis dos fatores
+- `fct_explicit_na()` - adicionar o NA como um dos níveis
+- `fct_lump_min()` - agrupa categorias que apresentam uma frequência menor que um valor pré-especificado
+
+
+```{r}
+#base para exemplo
+  gss_cat %>% glimpse
+
+#exemplo: contabilizando a quantidade de raças declaradas 
+  gss_cat$race %>% 
+  fct_count() 
+```
+
+```{r}
+starwars %>% 
+  mutate(gender = fct_explicit_na(gender)) %>% 
+  group_by(gender) %>% 
+  count
+## # A tibble: 3 x 2
+## # Groups:   gender [3]
+##   gender        n
+##   <fct>     <int>
+## 1 feminine     17
+## 2 masculine    66
+## 3 (Missing)     4
+
+starwars %>% 
+    mutate(gender = fct_explicit_na(gender)) %>% 
+    mutate(gender = fct_relevel(gender)) %>% 
+    ggplot(aes(gender, height, color = gender)) + 
+    geom_boxplot()
+```
+
+### Cheat Sheet
+
+```{r , echo=FALSE,, fig.align = "center", fig.cap="Cheat Sheet forcats"}
+knitr::include_graphics('https://i1.wp.com/www.rstudio.com/blog/cheat-sheet-updates/forcats.png?w=584&ssl=1')
+```
+
+# Considerações Finais
+
+Visto existirem muitos termos que são relacionados aos temas discutidos neste módulo, e os próprios temas não terem divisões muito claras, montei um pequeno resumo que espero que ajude:
+
+- **Pré-processamento** trata de: representação, qualidade e limpeza. Tem como termos próximos, isto é, termos que possuem objetivos próximos, e/ou que irão retornar discussões importantes relacionadas ao mesmo desafio: Data Wrangling, Data Munging, Data Cleaning, Cleansing  e Data Integrity.
+
+- **Engenharia de Atributos**: Eloquência, Interpretabilidade, e Otimização de processamento. E tem como termos próximos, seguindo a mesma lógica do tópico anterior: Feature Engineering, Feature Extraction, Feature Selection e Data Transformation.
+
+
+Sempre vale lembrar sobre como termos em inglês retornam mais resultados do que os materiais em Português. "Engenharia de Atributos" por exemplo soa até estranho para os ouvidos, pois o mais usual é a denominação "Feature Engineering".
+ 
+ 
+
+# MÃO NA MASSA!
+
+- o pacote `naniar` se mostrou uma ferramenta interessante no contexto de `missing data`, mas não exploramos todos os seus recursos. Por exemplo, a sequência de funções abaixo nos possibilita avaliar se existe uma mudança na distribuição dos dados faltantes. Considerando o output gráfico, você diria que estamos lidando com qual tipo de missing aqui? Parece ser o caso de dados faltantes aleatórios? 
+
+```{r}
+naniar::oceanbuoys %>%
+    naniar::bind_shadow() %>%
+    ggplot(aes(x = air_temp_c,
+               fill = humidity_NA)) +
+        geom_histogram()
+```
+
+
+- O livro [Feature Engineering and Selection: A Practical Approach for Predictive Models](http://www.feat.engineering/) é uma das minhas referências preferidas! Não apenas pelos excelentes cases e discussões, mas por procurar desenvolver o(a) leitor(a) não apenas em termos técnicos, mas também com a intuição das técnicas. A tarefa aqui é: leia a seção de introdução de cada um dos capítulos para evoluir nos assuntos aqui abordados. Recomendo particularmente a leitura sobre encoding, do capítulo 5.
+
+- o pacote `recipes` é extensivamente discutido no livro [Tidy Modeling with R](https://www.tmwr.org/pre-proc-table.html), da Julia Silge e Max Kuhn (mesmo autor do livro citado acima). Que tal dar uma checada no Apêndice deste livro, e se familiarizar com os pré-processamentos que são apresentados por lá :)
+
+
+
+
